@@ -1,0 +1,36 @@
+[versions]
+agp = "8.13.2"
+android-compileSdk = "36"
+android-minSdk = "24"
+kotlin = "2.3.0"
+
+[libraries]
+plugin-android = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+plugin-kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+
+[plugins]
+android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+
+#[versions]
+## --- Toolchain (固有有名詞) ---
+#kotlin = "2.1.0"
+#agp = "8.7.3"
+#
+## --- KotlinX Family (一般名詞・ファミリー) ---
+## ルール: 一般名詞の衝突回避 ＋ ファミリーの統一感
+#kotlinx-coroutines = "1.10.1"
+#kotlinx-serialization = "1.8.0"
+#kotlinx-datetime = "0.6.0"
+## atomicfu などが増えた場合もここに "kotlinx-atomicfu" として追加
+#
+## --- Android / Firebase (ブランド名) ---
+#firebase-android-bom = "33.7.0"
+#
+## --- Tools (固有有名詞) ---
+## ルール: 固有のプロダクト名なので Prefix なしでシンプルに
+#skie = "0.10.0"
+#dokka = "1.9.20"
+## 長いので "bcv" 等の略称も可だが、明示性を優先してそのまま
+#binaryCompatibilityValidator = "0.17.0"
+#spotless = "6.25.0"
