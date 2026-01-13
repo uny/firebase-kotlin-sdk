@@ -21,5 +21,7 @@ rootProject.name = "firebase-kotlin-sdk"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 include(
-    ":firebase-common"
+    ":firebase-ai",
+    ":firebase-app",
+    ":firebase-common",
 )
