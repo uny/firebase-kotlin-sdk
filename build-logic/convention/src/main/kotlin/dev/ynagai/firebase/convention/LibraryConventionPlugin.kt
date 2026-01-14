@@ -9,7 +9,7 @@ import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
-class MultiplatformLibraryConventionPlugin : Plugin<Project> {
+class LibraryConventionPlugin : Plugin<Project> {
     @Suppress("UnstableApiUsage")
     override fun apply(target: Project) {
         with(target) {
@@ -26,6 +26,9 @@ class MultiplatformLibraryConventionPlugin : Plugin<Project> {
                     compilerOptions {
                         jvmTarget.set(JvmTarget.JVM_21)
                     }
+                }
+                compilerOptions {
+                    freeCompilerArgs.add("-Xexpect-actual-classes")
                 }
                 sourceSets.all {
                     val name = this.name.lowercase()

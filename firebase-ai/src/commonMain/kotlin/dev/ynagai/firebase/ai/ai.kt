@@ -1,7 +1,7 @@
 package dev.ynagai.firebase.ai
 
-import dev.ynagai.firebase.Firebase
+import dev.ynagai.firebase.firebase
 
-expect val Firebase.ai: FirebaseAI
+expect val firebase.ai: FirebaseAI
 
 expect class FirebaseAI

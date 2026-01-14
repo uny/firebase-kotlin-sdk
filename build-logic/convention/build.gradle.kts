@@ -13,7 +13,7 @@ gradlePlugin {
     plugins {
         register("multiplatformLibrary") {
             id = "dev.ynagai.firebase.library"
-            implementationClass = "dev.ynagai.firebase.convention.MultiplatformLibraryConventionPlugin"
+            implementationClass = "dev.ynagai.firebase.convention.LibraryConventionPlugin"
         }
     }
 }

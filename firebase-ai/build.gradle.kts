@@ -32,7 +32,7 @@ kotlin {
             implementation(libs.firebase.android.ai)
         }
         commonMain.dependencies {
-            implementation(project(":firebase-app"))
+            implementation(projects.firebaseApp)
         }
     }
 }
