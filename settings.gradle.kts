@@ -1,6 +1,7 @@
 pluginManagement {
     includeBuild("build-logic")
     repositories {
+        maven("https://packages.jetbrains.team/maven/p/kt/dev")
         google()
         mavenCentral()
         gradlePluginPortal()
@@ -11,6 +12,7 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
     repositories {
+        maven("https://packages.jetbrains.team/maven/p/kt/dev")
         google()
         mavenCentral()
     }

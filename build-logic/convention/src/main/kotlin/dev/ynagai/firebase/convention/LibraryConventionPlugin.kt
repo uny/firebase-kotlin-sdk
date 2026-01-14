@@ -16,7 +16,6 @@ class LibraryConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.android.kotlin.multiplatform.library")
                 apply("org.jetbrains.kotlin.multiplatform")
-                apply("io.github.frankois944.spmForKmp")
             }
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
             extensions.configure<KotlinMultiplatformExtension> {
@@ -28,25 +27,11 @@ class LibraryConventionPlugin : Plugin<Project> {
                     }
                 }
                 compilerOptions {
-                    freeCompilerArgs.add("-Xexpect-actual-classes")
-                }
-                sourceSets.all {
-                    val name = this.name.lowercase()
-                    if (name.contains("ios") ||
-                        name.contains("apple") ||
-                        name.contains("macos") ||
-                        name.contains("tvos") ||
-                        name.contains("watchos") ||
-                        name.contains("visionos")
-                    ) {
-                        languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
-                    }
+//                    freeCompilerArgs.add("-Xexpect-actual-classes")
                 }
                 sourceSets.apply {
                     androidMain.dependencies {
                         implementation(project.dependencies.platform(libs.findLibrary("firebase-bom").get()))
-                    }
-                    commonMain.dependencies {
                     }
                 }
             }

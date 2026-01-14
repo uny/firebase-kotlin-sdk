@@ -4,8 +4,7 @@ android-compileSdk = "36"
 android-minSdk = "24"
 firebase-apple = "12.8.0"
 firebase-bom = "34.7.0"
-kotlin = "2.3.0"
-spm4kmp = "1.4.5"
+kotlin = "2.2.21-titan-211"
 
 [libraries]
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
@@ -17,4 +16,3 @@ plugin-kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin",
 [plugins]
 android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-spm4kmp = { id = "io.github.frankois944.spmForKmp", version.ref = "spm4kmp" }
