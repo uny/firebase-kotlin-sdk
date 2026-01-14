@@ -1,4 +1,8 @@
 package dev.ynagai.firebase
 
-actual class FirebaseApp internal constructor(internal val ios: FirebaseAppBridge.FirebaseApp) {
-}
+import FirebaseAppBridge.FirebaseApp as AppleFirebaseApp
+
+actual val Firebase.app: FirebaseApp
+    get() = FirebaseApp(AppleFirebaseApp())
+
+actual class FirebaseApp(val apple: AppleFirebaseApp)

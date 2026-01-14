@@ -1,8 +1,17 @@
 package dev.ynagai.firebase.ai
 
-import dev.ynagai.firebase.firebase
+import FirebaseAIBridge.FirebaseAI as AppleFirebaseAI
+import dev.ynagai.firebase.Firebase
+import dev.ynagai.firebase.FirebaseApp
 
-actual val firebase.ai: FirebaseAI
-    get() = TODO("Not yet implemented")
+@Suppress("UNUSED_PARAMETER")
+actual fun Firebase.ai(
+    app: FirebaseApp,
+    backend: GenerativeBackend
+): FirebaseAI = FirebaseAI(
+    AppleFirebaseAI.ai(backend.apple)
+)
 
-actual class FirebaseAI
+actual class FirebaseAI internal constructor(
+    internal val apple: AppleFirebaseAI
+)
