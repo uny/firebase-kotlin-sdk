@@ -4,3 +4,5 @@ build/
 .idea/
 .kotlin/
 StartYourBridgeHere.swift
+.DS_Store
+.build/

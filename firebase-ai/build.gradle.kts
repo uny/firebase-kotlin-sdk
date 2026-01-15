@@ -1,6 +1,10 @@
+import dev.ynagai.firebase.convention.configureAppleBridge
+
 plugins {
     id("dev.ynagai.firebase.library")
 }
+
+configureAppleBridge(schemeName = "FirebaseAIBridge")
 
 kotlin {
     androidLibrary {

@@ -28,15 +28,6 @@
       }
     },
     {
-      "identity" : "firebase-objc-sdk",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/uny/firebase-objc-sdk.git",
-      "state" : {
-        "branch" : "feature/firebase-ai",
-        "revision" : "323b8fb6e6f0d34c96efde9e092f12656ec06b45"
-      }
-    },
-    {
       "identity" : "google-ads-on-device-conversion-ios-sdk",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/googleads/google-ads-on-device-conversion-ios-sdk",

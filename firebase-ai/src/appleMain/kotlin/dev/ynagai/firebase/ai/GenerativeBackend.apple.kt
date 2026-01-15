@@ -1,12 +1,14 @@
 package dev.ynagai.firebase.ai
 
-import FirebaseAIBridge.Backend
+import kotlinx.cinterop.ExperimentalForeignApi
+import dev.ynagai.firebase.ai.cinterop.FIRBackend
 
+@OptIn(ExperimentalForeignApi::class)
 actual class GenerativeBackend internal constructor(
-    internal val apple: Backend
+    internal val apple: FIRBackend
 ) {
     actual companion object {
         actual fun googleAI(): GenerativeBackend =
-            GenerativeBackend(Backend.googleAI())
+            GenerativeBackend(FIRBackend.googleAI())
     }
 }

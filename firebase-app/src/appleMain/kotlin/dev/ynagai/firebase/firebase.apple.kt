@@ -1,8 +1,11 @@
 package dev.ynagai.firebase
 
-import FirebaseAppBridge.FirebaseApp as AppleFirebaseApp
+import dev.ynagai.firebase.app.cinterop.KTFFirebaseApp
+import kotlinx.cinterop.ExperimentalForeignApi
 
+@OptIn(ExperimentalForeignApi::class)
 actual val Firebase.app: FirebaseApp
-    get() = FirebaseApp(AppleFirebaseApp())
+    get() = FirebaseApp(KTFFirebaseApp.app()!!)
 
-actual class FirebaseApp(val apple: AppleFirebaseApp)
+@OptIn(ExperimentalForeignApi::class)
+actual class FirebaseApp(val apple: KTFFirebaseApp)
