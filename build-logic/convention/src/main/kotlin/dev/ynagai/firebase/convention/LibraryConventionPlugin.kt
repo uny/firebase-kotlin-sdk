@@ -26,9 +26,8 @@ class LibraryConventionPlugin : Plugin<Project> {
                         jvmTarget.set(JvmTarget.JVM_21)
                     }
                 }
-                compilerOptions {
-//                    freeCompilerArgs.add("-Xexpect-actual-classes")
-                }
+                iosArm64()
+                iosSimulatorArm64()
                 sourceSets.apply {
                     androidMain.dependencies {
                         implementation(project.dependencies.platform(libs.findLibrary("firebase-bom").get()))
