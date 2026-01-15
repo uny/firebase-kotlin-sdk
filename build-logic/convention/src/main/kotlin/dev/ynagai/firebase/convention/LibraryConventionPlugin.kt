@@ -4,7 +4,10 @@ import com.android.build.api.dsl.androidLibrary
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.api.file.Directory
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Exec
+import org.gradle.api.tasks.TaskProvider
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.register
@@ -47,85 +50,111 @@ class LibraryConventionPlugin : Plugin<Project> {
     }
 }
 
+/**
+ * iOS platform configuration for xcodebuild and cinterop.
+ */
+private sealed class ApplePlatform(
+    val displayName: String,
+    val sdkName: String,
+    val derivedDataSubdir: String,
+) {
+    /** iOS Device (arm64) */
+    data object Device : ApplePlatform(
+        displayName = "iOS",
+        sdkName = "iphoneos",
+        derivedDataSubdir = "Device",
+    )
+
+    /** iOS Simulator (arm64) */
+    data object Simulator : ApplePlatform(
+        displayName = "iOS Simulator",
+        sdkName = "iphonesimulator",
+        derivedDataSubdir = "Simulator",
+    )
+
+    /** xcodebuild output directory name (e.g., "Release-iphoneos") */
+    val configurationDir: String get() = "Release-$sdkName"
+
+    /** Directory name for generated module maps (e.g., "GeneratedModuleMaps-iphoneos") */
+    val generatedModuleMapsDir: String get() = "GeneratedModuleMaps-$sdkName"
+
+    companion object {
+        fun fromKotlinTargetName(name: String): ApplePlatform =
+            if (name.contains("Simulator", ignoreCase = true)) Simulator else Device
+    }
+}
+
 fun Project.configureAppleBridge(schemeName: String) {
-    val nativeWrapperDir = rootProject.layout.projectDirectory.dir("native/firebase-apple-bridge")
-    val baseDerivedDataDir = layout.buildDirectory.dir("DerivedData/${schemeName}")
-    fun getDerivedDataPath(isSimulator: Boolean) =
-        baseDerivedDataDir.map { it.dir(if (isSimulator) "Simulator" else "Device") }
-    val buildAppleBridgeDevice = tasks.register<Exec>("buildAppleBridgeDevice") {
-        group = "build"
-        description = "Builds the $schemeName framework for iOS Device"
-        val derivedDataPath = getDerivedDataPath(isSimulator = false)
-        inputs.dir(nativeWrapperDir)
-        outputs.dir(derivedDataPath)
-        workingDir = nativeWrapperDir.asFile
-        commandLine(
-            "xcodebuild", "build",
-            "-scheme", schemeName,
-            "-configuration", "Release",
-            "-destination", "generic/platform=iOS",
-            "-derivedDataPath", derivedDataPath.get().asFile.absolutePath,
-            "SKIP_INSTALL=NO",
-            "BUILD_LIBRARY_FOR_DISTRIBUTION=YES"
-        )
-    }
-    val buildAppleBridgeSimulator = tasks.register<Exec>("buildAppleBridgeSimulator") {
-        group = "build"
-        description = "Builds the $schemeName framework for iOS Simulator"
-        val derivedDataPath = getDerivedDataPath(isSimulator = true)
-        inputs.dir(nativeWrapperDir)
-        outputs.dir(derivedDataPath)
-        workingDir = nativeWrapperDir.asFile
-        commandLine(
-            "xcodebuild", "build",
-            "-scheme", schemeName,
-            "-configuration", "Release",
-            "-destination", "generic/platform=iOS Simulator",
-            "-derivedDataPath", derivedDataPath.get().asFile.absolutePath,
-            "SKIP_INSTALL=NO",
-            "BUILD_LIBRARY_FOR_DISTRIBUTION=YES"
-        )
-    }
+    val nativeSourceDir = rootProject.layout.projectDirectory.dir("native/firebase-apple-bridge")
+    val baseDerivedDataDir = layout.buildDirectory.dir("DerivedData/$schemeName")
+
+    fun derivedDataDir(platform: ApplePlatform): Provider<Directory> =
+        baseDerivedDataDir.map { it.dir(platform.derivedDataSubdir) }
+
+    // Register xcodebuild tasks for each platform
+    val buildTasks = mapOf(
+        ApplePlatform.Device to registerXcodeBuildTask(schemeName, ApplePlatform.Device, nativeSourceDir, derivedDataDir(ApplePlatform.Device)),
+        ApplePlatform.Simulator to registerXcodeBuildTask(schemeName, ApplePlatform.Simulator, nativeSourceDir, derivedDataDir(ApplePlatform.Simulator)),
+    )
+
     extensions.configure<KotlinMultiplatformExtension> {
         targets.withType<KotlinNativeTarget>().configureEach {
-            val target = this
-            val isSimulator = target.name.contains("Simulator", ignoreCase = true)
+            val platform = ApplePlatform.fromKotlinTargetName(name)
+            val derivedData = derivedDataDir(platform)
+
             compilations.getByName("main") {
                 val cinterop = cinterops.create(project.name) {
                     definitionFile.set(project.file("src/appleMain/cinterop/${project.name}.def"))
-                    val derivedDataPath = getDerivedDataPath(isSimulator)
-                    val platformSuffix = if (isSimulator) "iphonesimulator" else "iphoneos"
-                    val platformName = "Release-$platformSuffix"
-                    val productsDir = derivedDataPath.map { it.dir("Build/Products/$platformName") }
-                    val productsDirPath = productsDir.get().asFile.absolutePath
-                    val packageFrameworksDirPath = productsDir.get().dir("PackageFrameworks").asFile.absolutePath
 
-                    // GeneratedModuleMaps contains the module map and Swift headers generated by xcodebuild
-                    val generatedModuleMapsDir = derivedDataPath.map {
-                        it.dir("Build/Intermediates.noindex/GeneratedModuleMaps-$platformSuffix")
-                    }
-                    val generatedModuleMapsDirPath = generatedModuleMapsDir.get().asFile.absolutePath
-                    val moduleMapPath = generatedModuleMapsDir.get().file("$schemeName.modulemap").asFile.absolutePath
+                    val productsDir = derivedData.map { it.dir("Build/Products/${platform.configurationDir}") }
+                    val generatedModuleMapsDir = derivedData.map { it.dir("Build/Intermediates.noindex/${platform.generatedModuleMapsDir}") }
 
+                    // Compiler options for clang
                     compilerOpts(
                         "-fmodules",
-                        "-fmodule-map-file=$moduleMapPath",
-                        "-I$generatedModuleMapsDirPath",
-                        "-F$productsDirPath",
-                        "-F$packageFrameworksDirPath"
+                        "-fmodule-map-file=${generatedModuleMapsDir.get().file("$schemeName.modulemap").asFile.absolutePath}",
+                        "-I${generatedModuleMapsDir.get().asFile.absolutePath}",
+                        "-F${productsDir.get().asFile.absolutePath}",
+                        "-F${productsDir.get().dir("PackageFrameworks").asFile.absolutePath}",
                     )
+
+                    // Header search paths
                     includeDirs(generatedModuleMapsDir.get().asFile)
                     includeDirs(productsDir.get().asFile)
                     includeDirs(productsDir.get().dir("PackageFrameworks").asFile)
                 }
+
                 tasks.named(cinterop.interopProcessingTaskName).configure {
-                    if (isSimulator) {
-                        dependsOn(buildAppleBridgeSimulator)
-                    } else {
-                        dependsOn(buildAppleBridgeDevice)
-                    }
+                    dependsOn(buildTasks.getValue(platform))
                 }
             }
         }
     }
+}
+
+/**
+ * Registers an xcodebuild task for the specified platform.
+ */
+private fun Project.registerXcodeBuildTask(
+    schemeName: String,
+    platform: ApplePlatform,
+    nativeSourceDir: Directory,
+    derivedDataDir: Provider<Directory>,
+): TaskProvider<Exec> = tasks.register<Exec>("buildAppleBridge${platform.derivedDataSubdir}") {
+    group = "build"
+    description = "Builds the $schemeName framework for ${platform.displayName}"
+
+    inputs.dir(nativeSourceDir)
+    outputs.dir(derivedDataDir)
+    workingDir = nativeSourceDir.asFile
+
+    commandLine(
+        "xcodebuild", "build",
+        "-scheme", schemeName,
+        "-configuration", "Release",
+        "-destination", "generic/platform=${platform.displayName}",
+        "-derivedDataPath", derivedDataDir.get().asFile.absolutePath,
+        "SKIP_INSTALL=NO",
+        "BUILD_LIBRARY_FOR_DISTRIBUTION=YES",
+    )
 }
