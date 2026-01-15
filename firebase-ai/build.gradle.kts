@@ -1,15 +1,20 @@
-import dev.ynagai.firebase.convention.configureAppleBridge
-
 plugins {
     id("dev.ynagai.firebase.library")
 }
-
-configureAppleBridge(schemeName = "FirebaseAIBridge")
 
 kotlin {
     androidLibrary {
         namespace = "dev.ynagai.firebase.ai"
     }
+
+    swiftPMDependencies {
+        `package`(
+            url = url("https://github.com/uny/firebase-objc-sdk.git"),
+            version = branch("feature/firebase-ai"),
+            products = listOf(product("FirebaseAILogicObjC")),
+        )
+    }
+
     sourceSets {
         androidMain.dependencies {
             implementation(libs.firebase.android.ai)

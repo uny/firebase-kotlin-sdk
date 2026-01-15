@@ -1,4 +1,0 @@
-language = Objective-C
-modules = FirebaseAppBridge
-package = dev.ynagai.firebase.app.cinterop
-linkerOpts = -framework FirebaseAppBridge
