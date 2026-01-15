@@ -29,6 +29,9 @@ class LibraryConventionPlugin : Plugin<Project> {
                 }
                 iosArm64()
                 iosSimulatorArm64()
+                compilerOptions {
+                    freeCompilerArgs.add("-Xexpect-actual-classes")
+                }
                 sourceSets.apply {
                     androidMain.dependencies {
                         implementation(

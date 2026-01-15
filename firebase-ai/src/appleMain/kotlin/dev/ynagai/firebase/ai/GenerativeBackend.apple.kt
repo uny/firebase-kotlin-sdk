@@ -1,14 +1,14 @@
 package dev.ynagai.firebase.ai
 
 import kotlinx.cinterop.ExperimentalForeignApi
-import swiftPMImport.firebase.kotlin.sdk.firebase.ai.KTFBackend
+import swiftPMImport.firebase.kotlin.sdk.firebase.ai.KFBBackend
 
 @OptIn(ExperimentalForeignApi::class)
 actual class GenerativeBackend internal constructor(
-    internal val apple: KTFBackend
+    internal val apple: KFBBackend
 ) {
     actual companion object {
         actual fun googleAI(): GenerativeBackend =
-            GenerativeBackend(KTFBackend.googleAI()!!)
+            GenerativeBackend(KFBBackend.googleAI()!!)
     }
 }
