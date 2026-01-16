@@ -20,5 +20,14 @@ actual fun Firebase.ai(
 
 @OptIn(ExperimentalForeignApi::class)
 actual class FirebaseAI internal constructor(
-    internal val apple: KFBFirebaseAI
-)
+    internal val apple: KFBFirebaseAI,
+) {
+    actual fun generativeModel(
+        modelName: String,
+        generationConfig: GenerationConfig?,
+        safetySettings: List<SafetySetting>?,
+        systemInstruction: Content?,
+    ): GenerativeModel {
+        TODO("iOS implementation pending")
+    }
+}

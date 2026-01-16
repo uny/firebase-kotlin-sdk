@@ -21,6 +21,7 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(projects.firebaseApp)
+            implementation(libs.kotlinx.coroutines.core)
         }
     }
 }

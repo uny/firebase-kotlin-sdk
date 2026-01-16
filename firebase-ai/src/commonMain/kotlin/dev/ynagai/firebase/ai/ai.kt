@@ -10,4 +10,11 @@ expect fun Firebase.ai(
     useLimitedUseAppCheckTokens: Boolean = false,
 ): FirebaseAI
 
-expect class FirebaseAI
+expect class FirebaseAI {
+    fun generativeModel(
+        modelName: String,
+        generationConfig: GenerationConfig? = null,
+        safetySettings: List<SafetySetting>? = null,
+        systemInstruction: Content? = null,
+    ): GenerativeModel
+}

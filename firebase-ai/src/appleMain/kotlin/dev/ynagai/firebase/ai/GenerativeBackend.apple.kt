@@ -10,5 +10,8 @@ actual class GenerativeBackend internal constructor(
     actual companion object {
         actual fun googleAI(): GenerativeBackend =
             GenerativeBackend(KFBBackend.googleAI())
+
+        actual fun vertexAI(location: String): GenerativeBackend =
+            GenerativeBackend(KFBBackend.vertexAIWithLocation(location))
     }
 }

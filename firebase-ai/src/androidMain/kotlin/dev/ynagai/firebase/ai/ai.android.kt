@@ -20,4 +20,18 @@ actual fun Firebase.ai(
 
 actual class FirebaseAI internal constructor(
     internal val android: AndroidFirebaseAI
-)
+) {
+    actual fun generativeModel(
+        modelName: String,
+        generationConfig: GenerationConfig?,
+        safetySettings: List<SafetySetting>?,
+        systemInstruction: Content?,
+    ): GenerativeModel = GenerativeModel(
+        android.generativeModel(
+            modelName = modelName,
+            generationConfig = generationConfig?.toAndroid(),
+            safetySettings = safetySettings?.map { it.toAndroid() },
+            systemInstruction = systemInstruction?.toAndroid(),
+        )
+    )
+}
