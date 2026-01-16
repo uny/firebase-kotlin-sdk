@@ -8,9 +8,14 @@ import dev.ynagai.firebase.FirebaseApp
 
 actual fun Firebase.ai(
     app: FirebaseApp,
-    backend: GenerativeBackend
+    backend: GenerativeBackend,
+    useLimitedUseAppCheckTokens: Boolean,
 ): FirebaseAI = FirebaseAI(
-    AndroidFirebase.ai(app.android, backend.android)
+    AndroidFirebase.ai(
+        app = app.android,
+        backend = backend.android,
+        useLimitedUseAppCheckTokens = useLimitedUseAppCheckTokens,
+    ),
 )
 
 actual class FirebaseAI internal constructor(

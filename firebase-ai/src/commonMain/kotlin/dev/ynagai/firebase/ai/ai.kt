@@ -6,7 +6,8 @@ import dev.ynagai.firebase.app
 
 expect fun Firebase.ai(
     app: FirebaseApp = Firebase.app,
-    backend: GenerativeBackend = GenerativeBackend.googleAI()
+    backend: GenerativeBackend = GenerativeBackend.googleAI(),
+    useLimitedUseAppCheckTokens: Boolean = false,
 ): FirebaseAI
 
 expect class FirebaseAI

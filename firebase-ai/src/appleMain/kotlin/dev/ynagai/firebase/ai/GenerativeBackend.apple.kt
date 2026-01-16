@@ -9,6 +9,6 @@ actual class GenerativeBackend internal constructor(
 ) {
     actual companion object {
         actual fun googleAI(): GenerativeBackend =
-            GenerativeBackend(KFBBackend.googleAI()!!)
+            GenerativeBackend(KFBBackend.googleAI())
     }
 }

@@ -4,6 +4,7 @@ android-compileSdk = "36"
 android-minSdk = "24"
 firebase-apple = "12.8.0"
 firebase-bom = "34.7.0"
+firebase-objc = "0.1.0"
 kotlin = "2.2.21-titan-211"
 
 [libraries]

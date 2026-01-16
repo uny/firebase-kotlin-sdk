@@ -10,7 +10,7 @@ kotlin {
     swiftPMDependencies {
         `package`(
             url = url("https://github.com/uny/firebase-objc-sdk.git"),
-            version = branch("feature/firebase-ai"),
+            version = from(libs.versions.firebase.objc.get()),
             products = listOf(product("FirebaseAILogicObjC")),
         )
     }

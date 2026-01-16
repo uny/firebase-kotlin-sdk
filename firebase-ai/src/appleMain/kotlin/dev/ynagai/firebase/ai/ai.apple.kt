@@ -9,12 +9,13 @@ import dev.ynagai.firebase.FirebaseApp
 actual fun Firebase.ai(
     app: FirebaseApp,
     backend: GenerativeBackend,
+    useLimitedUseAppCheckTokens: Boolean,
 ): FirebaseAI = FirebaseAI(
     KFBFirebaseAI.firebaseAIWithApp(
         app = app.apple,
         backend = backend.apple,
-        useLimitedUseAppCheckTokens = false
-    )
+        useLimitedUseAppCheckTokens = useLimitedUseAppCheckTokens,
+    ),
 )
 
 @OptIn(ExperimentalForeignApi::class)
