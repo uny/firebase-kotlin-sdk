@@ -24,7 +24,7 @@ class LibraryConventionPlugin : Plugin<Project> {
                 apply("signing")
             }
             group = "dev.ynagai.firebase"
-            version = findProperty("VERSION_NAME")?.toString() ?: "0.1.0-SNAPSHOT"
+            version = findProperty("version").toString()
 
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
             extensions.configure<KotlinMultiplatformExtension> {
