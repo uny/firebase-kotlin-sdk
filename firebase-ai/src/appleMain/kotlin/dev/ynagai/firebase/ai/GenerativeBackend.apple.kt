@@ -1,7 +1,7 @@
 package dev.ynagai.firebase.ai
 
 import kotlinx.cinterop.ExperimentalForeignApi
-import swiftPMImport.firebase.kotlin.sdk.firebase.ai.KFBBackend
+import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBBackend
 
 @OptIn(ExperimentalForeignApi::class)
 actual class GenerativeBackend internal constructor(

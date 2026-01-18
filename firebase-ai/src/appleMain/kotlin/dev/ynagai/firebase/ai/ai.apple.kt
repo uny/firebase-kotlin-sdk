@@ -1,9 +1,9 @@
 package dev.ynagai.firebase.ai
 
-import kotlinx.cinterop.ExperimentalForeignApi
-import swiftPMImport.firebase.kotlin.sdk.firebase.ai.KFBFirebaseAI
 import dev.ynagai.firebase.Firebase
 import dev.ynagai.firebase.FirebaseApp
+import kotlinx.cinterop.ExperimentalForeignApi
+import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBFirebaseAI
 
 @OptIn(ExperimentalForeignApi::class)
 actual fun Firebase.ai(
