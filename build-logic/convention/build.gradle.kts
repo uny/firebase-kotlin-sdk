@@ -7,6 +7,7 @@ group = "dev.ynagai.firebase.buildlogic"
 dependencies {
     compileOnly(libs.plugin.android)
     compileOnly(libs.plugin.kotlin)
+    compileOnly(libs.plugin.publish)
 }
 
 gradlePlugin {

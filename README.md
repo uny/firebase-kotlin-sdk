@@ -2,7 +2,7 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/dev.ynagai.firebase/firebase-ai.svg)](https://search.maven.org/search?q=g:dev.ynagai.firebase)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![CI](https://github.com/pois0/firebase-kotlin-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/pois0/firebase-kotlin-sdk/actions/workflows/ci.yml)
+[![CI](https://github.com/uny/firebase-kotlin-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/uny/firebase-kotlin-sdk/actions/workflows/ci.yml)
 
 A Kotlin Multiplatform SDK for Firebase, with a focus on Firebase AI (Generative AI) capabilities.
 
@@ -189,7 +189,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 ## License
 
 ```
-Copyright 2024 pois0
+Copyright 2025 Yuki Nagai
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
