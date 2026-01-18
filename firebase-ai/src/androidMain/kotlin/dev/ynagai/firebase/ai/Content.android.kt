@@ -6,11 +6,14 @@ import com.google.firebase.ai.type.Part as AndroidPart
 import com.google.firebase.ai.type.TextPart as AndroidTextPart
 import com.google.firebase.ai.type.InlineDataPart as AndroidInlineDataPart
 
-internal fun Content.toAndroid(): AndroidContent = androidContent(role ?: "user") {
-    parts.forEach { part ->
-        when (part) {
-            is TextPart -> text(part.text)
-            is InlineDataPart -> inlineData(part.data, part.mimeType)
+internal fun Content.toAndroid(): AndroidContent {
+    val contentParts = this.parts
+    return androidContent(role ?: "user") {
+        for (part in contentParts) {
+            when (part) {
+                is TextPart -> text(part.text)
+                is InlineDataPart -> inlineData(part.data, part.mimeType)
+            }
         }
     }
 }
@@ -23,5 +26,5 @@ internal fun AndroidContent.toCommon(): Content = Content(
 internal fun AndroidPart.toCommon(): Part = when (this) {
     is AndroidTextPart -> TextPart(text)
     is AndroidInlineDataPart -> InlineDataPart(mimeType, inlineData)
-    else -> TextPart(this.toString())
+    else -> throw IllegalArgumentException("Unknown AndroidPart type: ${this::class.simpleName}")
 }

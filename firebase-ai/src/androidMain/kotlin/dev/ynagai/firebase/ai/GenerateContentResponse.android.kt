@@ -39,6 +39,10 @@ internal fun AndroidHarmCategory.toCommon(): HarmCategory = when (this) {
     AndroidHarmCategory.SEXUALLY_EXPLICIT -> HarmCategory.SEXUALLY_EXPLICIT
     AndroidHarmCategory.DANGEROUS_CONTENT -> HarmCategory.DANGEROUS_CONTENT
     AndroidHarmCategory.CIVIC_INTEGRITY -> HarmCategory.CIVIC_INTEGRITY
+    AndroidHarmCategory.IMAGE_HATE -> HarmCategory.IMAGE_HATE
+    AndroidHarmCategory.IMAGE_DANGEROUS_CONTENT -> HarmCategory.IMAGE_DANGEROUS_CONTENT
+    AndroidHarmCategory.IMAGE_HARASSMENT -> HarmCategory.IMAGE_HARASSMENT
+    AndroidHarmCategory.IMAGE_SEXUALLY_EXPLICIT -> HarmCategory.IMAGE_SEXUALLY_EXPLICIT
     else -> HarmCategory.UNKNOWN
 }
 

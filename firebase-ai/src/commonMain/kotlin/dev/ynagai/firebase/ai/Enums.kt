@@ -18,6 +18,14 @@ enum class HarmCategory {
     DANGEROUS_CONTENT,
     /** Content that may undermine civic integrity. */
     CIVIC_INTEGRITY,
+    /** Image content classified as hateful. */
+    IMAGE_HATE,
+    /** Image content classified as dangerous. */
+    IMAGE_DANGEROUS_CONTENT,
+    /** Image content classified as harassment. */
+    IMAGE_HARASSMENT,
+    /** Image content classified as sexually explicit. */
+    IMAGE_SEXUALLY_EXPLICIT,
 }
 
 /**
@@ -26,16 +34,16 @@ enum class HarmCategory {
  * Used with [SafetySetting] to control sensitivity of content filtering.
  */
 enum class HarmBlockThreshold {
-    /** Threshold is unspecified. */
-    UNSPECIFIED,
     /** Block content with low probability of harm and above. */
-    BLOCK_LOW_AND_ABOVE,
+    LOW_AND_ABOVE,
     /** Block content with medium probability of harm and above. */
-    BLOCK_MEDIUM_AND_ABOVE,
+    MEDIUM_AND_ABOVE,
     /** Only block content with high probability of harm. */
-    BLOCK_ONLY_HIGH,
+    ONLY_HIGH,
     /** Do not block any content (use with caution). */
-    BLOCK_NONE,
+    NONE,
+    /** Turn off the safety filter entirely. Same as NONE but without metadata. */
+    OFF,
 }
 
 /**
@@ -80,8 +88,6 @@ enum class FinishReason {
     SPII,
     /** Function call was malformed. */
     MALFORMED_FUNCTION_CALL,
-    /** Image content failed safety checks. */
-    IMAGE_SAFETY,
 }
 
 /**
