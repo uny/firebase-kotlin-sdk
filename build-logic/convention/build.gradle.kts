@@ -11,7 +11,7 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        register("multiplatformLibrary") {
+        register("library") {
             id = "dev.ynagai.firebase.library"
             implementationClass = "dev.ynagai.firebase.convention.LibraryConventionPlugin"
         }
