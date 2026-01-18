@@ -1,8 +1,33 @@
 # --- Gradle ---
 .gradle/
 build/
+local.properties
+
+# --- IDE ---
 .idea/
+*.iml
+
+# --- Kotlin ---
 .kotlin/
-StartYourBridgeHere.swift
+
+# --- macOS ---
 .DS_Store
+
+# --- Xcode / iOS ---
+*.xcuserstate
+xcuserdata/
+DerivedData/
+.swiftpm/
+Pods/
 .build/
+
+# --- Swift PM Bridge ---
+StartYourBridgeHere.swift
+
+# --- Misc ---
+*.hprof
+captures/
+*.jks
+
+# --- Cursor IDE ---
+.cursor/
