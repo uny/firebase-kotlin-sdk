@@ -1,0 +1,71 @@
+package dev.ynagai.firebase.ai
+
+/**
+ * Represents content that can be sent to or received from a generative AI model.
+ *
+ * Content consists of a role (e.g., "user" or "model") and a list of [Part]s
+ * that make up the message body.
+ *
+ * @property role The role of the content creator. Typically "user" for user messages
+ *                or "model" for AI responses.
+ * @property parts The list of content parts (text, images, etc.).
+ *
+ * @see content DSL function for building Content instances
+ */
+data class Content(
+    val role: String? = null,
+    val parts: List<Part> = emptyList(),
+)
+
+/**
+ * A part of [Content] that can be sent to or received from a model.
+ *
+ * Implementations include:
+ * - [TextPart]: Plain text content
+ * - [InlineDataPart]: Binary data like images
+ *
+ * @see TextPart
+ * @see InlineDataPart
+ */
+sealed interface Part
+
+/**
+ * A text part of content.
+ *
+ * @property text The text content.
+ */
+data class TextPart(val text: String) : Part
+
+/**
+ * An inline binary data part of content, typically used for images.
+ *
+ * @property mimeType The MIME type of the data (e.g., "image/png", "image/jpeg").
+ * @property data The raw binary data.
+ *
+ * @sample
+ * ```kotlin
+ * val imagePart = InlineDataPart(
+ *     mimeType = "image/png",
+ *     data = imageByteArray
+ * )
+ * ```
+ */
+data class InlineDataPart(
+    val mimeType: String,
+    val data: ByteArray,
+) : Part {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || this::class != other::class) return false
+        other as InlineDataPart
+        if (mimeType != other.mimeType) return false
+        if (!data.contentEquals(other.data)) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = mimeType.hashCode()
+        result = 31 * result + data.contentHashCode()
+        return result
+    }
+}
