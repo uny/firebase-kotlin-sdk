@@ -7,15 +7,18 @@ firebase-bom = "34.8.0"
 firebase-objc = "0.1.1"
 kotlin = "2.2.21-titan-211"
 kotlinx-coroutines = "1.10.2"
+publish = "0.36.0"
 
 [libraries]
-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
-firebase-android-ai = { group = "com.google.firebase", name = "firebase-ai" }
-firebase-android-common = { group = "com.google.firebase", name = "firebase-common" }
-kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
-plugin-android = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
-plugin-kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
+firebase-android-ai = { module = "com.google.firebase:firebase-ai" }
+firebase-android-common = { module = "com.google.firebase:firebase-common" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+plugin-android = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+plugin-publish = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "publish" }
 
 [plugins]
 android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+publish = { id = "com.vanniktech.maven.publish", version.ref = "publish" }

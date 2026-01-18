@@ -7,7 +7,6 @@ package dev.ynagai.firebase.ai
  * before sending it to the model.
  *
  * @property totalTokens The total number of tokens in the content.
- * @property totalBillableCharacters The total number of billable characters, if available.
  *
  * @sample
  * ```kotlin
@@ -17,5 +16,4 @@ package dev.ynagai.firebase.ai
  */
 data class CountTokensResponse(
     val totalTokens: Int,
-    val totalBillableCharacters: Int? = null,
 )

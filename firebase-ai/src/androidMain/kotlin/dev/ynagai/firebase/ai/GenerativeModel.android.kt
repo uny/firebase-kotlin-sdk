@@ -38,5 +38,4 @@ actual class GenerativeModel internal constructor(
 
 internal fun AndroidCountTokensResponse.toCommon(): CountTokensResponse = CountTokensResponse(
     totalTokens = totalTokens,
-    totalBillableCharacters = totalBillableCharacters,
 )
