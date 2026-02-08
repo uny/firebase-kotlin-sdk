@@ -1,0 +1,24 @@
+package dev.ynagai.firebase.firestore
+
+import kotlinx.coroutines.flow.Flow
+
+expect open class Query {
+    fun whereEqualTo(field: String, value: Any?): Query
+    fun whereNotEqualTo(field: String, value: Any?): Query
+    fun whereLessThan(field: String, value: Any): Query
+    fun whereLessThanOrEqualTo(field: String, value: Any): Query
+    fun whereGreaterThan(field: String, value: Any): Query
+    fun whereGreaterThanOrEqualTo(field: String, value: Any): Query
+    fun whereArrayContains(field: String, value: Any): Query
+    fun whereArrayContainsAny(field: String, values: List<Any>): Query
+    fun whereIn(field: String, values: List<Any>): Query
+    fun whereNotIn(field: String, values: List<Any>): Query
+    fun orderBy(field: String, direction: Direction = Direction.ASCENDING): Query
+    fun limit(limit: Long): Query
+    fun startAt(vararg fieldValues: Any): Query
+    fun startAfter(vararg fieldValues: Any): Query
+    fun endAt(vararg fieldValues: Any): Query
+    fun endBefore(vararg fieldValues: Any): Query
+    suspend fun get(source: Source = Source.DEFAULT): QuerySnapshot
+    val snapshots: Flow<QuerySnapshot>
+}

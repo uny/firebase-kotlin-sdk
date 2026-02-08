@@ -26,4 +26,5 @@ include(
     ":firebase-ai",
     ":firebase-app",
     ":firebase-common",
+    ":firebase-firestore",
 )

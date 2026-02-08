@@ -13,6 +13,7 @@ publish = "0.36.0"
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
 firebase-android-ai = { module = "com.google.firebase:firebase-ai" }
 firebase-android-common = { module = "com.google.firebase:firebase-common" }
+firebase-android-firestore = { module = "com.google.firebase:firebase-firestore" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 plugin-android = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
