@@ -62,7 +62,7 @@ actual open class Query internal constructor(internal open val android: AndroidQ
         get() = callbackFlow {
             val listener = android.addSnapshotListener { snapshot, error ->
                 if (error != null) {
-                    close(error)
+                    close(error.toCommon())
                 } else if (snapshot != null) {
                     trySend(QuerySnapshot(snapshot))
                 }

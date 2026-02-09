@@ -28,7 +28,7 @@ actual class FirebaseFirestore internal constructor(
         awaitResult { callback ->
             apple.runTransactionWithBlock(
                 { firTransaction, _ ->
-                    func(Transaction(firTransaction!!))
+                    func(Transaction(firTransaction ?: throw FirebaseFirestoreException("Transaction is unexpectedly null", FirestoreExceptionCode.INTERNAL)))
                 },
                 completion = { result, error ->
                     @Suppress("UNCHECKED_CAST")

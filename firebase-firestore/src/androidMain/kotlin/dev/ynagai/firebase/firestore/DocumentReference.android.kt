@@ -45,7 +45,7 @@ actual class DocumentReference internal constructor(
         get() = callbackFlow {
             val listener = android.addSnapshotListener { snapshot, error ->
                 if (error != null) {
-                    close(error)
+                    close(error.toCommon())
                 } else if (snapshot != null) {
                     trySend(DocumentSnapshot(snapshot))
                 }

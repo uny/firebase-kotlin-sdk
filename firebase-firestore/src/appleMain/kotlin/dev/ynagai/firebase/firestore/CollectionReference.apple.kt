@@ -36,7 +36,17 @@ actual class CollectionReference internal constructor(
                 if (error != null) {
                     continuation.resumeWithException(error.toException())
                 } else {
-                    continuation.resume(DocumentReference(docRef!!))
+                    val ref = docRef
+                    if (ref != null) {
+                        continuation.resume(DocumentReference(ref))
+                    } else {
+                        continuation.resumeWithException(
+                            FirebaseFirestoreException(
+                                "addDocument returned a null document reference.",
+                                FirestoreExceptionCode.UNKNOWN
+                            )
+                        )
+                    }
                 }
             }
         }
