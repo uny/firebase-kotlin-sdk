@@ -26,16 +26,16 @@ actual class FieldValue internal constructor(internal val apple: FIRFieldValue) 
     }
 }
 
-@OptIn(ExperimentalForeignApi::class)
 internal fun Map<String, Any?>.toAppleData(): Map<Any?, *> =
-    mapValues { (_, value) ->
-        when (value) {
-            is FieldValue -> value.apple
-            is Map<*, *> -> {
-                @Suppress("UNCHECKED_CAST")
-                (value as Map<String, Any?>).toAppleData()
-            }
-            is List<*> -> value.map { if (it is FieldValue) it.apple else it }
-            else -> value
-        }
+    mapValues { (_, value) -> toAppleValue(value) }
+
+@OptIn(ExperimentalForeignApi::class)
+private fun toAppleValue(value: Any?): Any? = when (value) {
+    is FieldValue -> value.apple
+    is Map<*, *> -> {
+        @Suppress("UNCHECKED_CAST")
+        (value as Map<String, Any?>).toAppleData()
     }
+    is List<*> -> value.map { toAppleValue(it) }
+    else -> value
+}

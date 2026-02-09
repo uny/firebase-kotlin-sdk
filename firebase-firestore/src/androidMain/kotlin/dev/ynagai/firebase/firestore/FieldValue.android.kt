@@ -14,14 +14,14 @@ actual class FieldValue internal constructor(internal val android: AndroidFieldV
 }
 
 internal fun Map<String, Any?>.toAndroidData(): Map<String, Any?> =
-    mapValues { (_, value) ->
-        when (value) {
-            is FieldValue -> value.android
-            is Map<*, *> -> {
-                @Suppress("UNCHECKED_CAST")
-                (value as Map<String, Any?>).toAndroidData()
-            }
-            is List<*> -> value.map { if (it is FieldValue) it.android else it }
-            else -> value
-        }
+    mapValues { (_, value) -> toAndroidValue(value) }
+
+private fun toAndroidValue(value: Any?): Any? = when (value) {
+    is FieldValue -> value.android
+    is Map<*, *> -> {
+        @Suppress("UNCHECKED_CAST")
+        (value as Map<String, Any?>).toAndroidData()
     }
+    is List<*> -> value.map { toAndroidValue(it) }
+    else -> value
+}
