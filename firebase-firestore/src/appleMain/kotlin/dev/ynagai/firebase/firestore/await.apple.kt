@@ -7,14 +7,18 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 @OptIn(ExperimentalForeignApi::class)
-internal suspend fun <T> awaitResult(block: (callback: (T?, NSError?) -> Unit) -> Unit): T =
+internal suspend fun <T : Any> awaitResult(block: (callback: (T?, NSError?) -> Unit) -> Unit): T =
     suspendCancellableCoroutine { continuation ->
         block { result, error ->
-            if (error != null) {
-                continuation.resumeWithException(error.toException())
-            } else {
-                @Suppress("UNCHECKED_CAST")
-                continuation.resume(result as T)
+            when {
+                error != null -> continuation.resumeWithException(error.toException())
+                result != null -> continuation.resume(result)
+                else -> continuation.resumeWithException(
+                    FirebaseFirestoreException(
+                        "Operation completed without error but returned null result.",
+                        FirestoreExceptionCode.INTERNAL
+                    )
+                )
             }
         }
     }

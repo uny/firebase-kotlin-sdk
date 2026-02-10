@@ -3,7 +3,11 @@ package dev.ynagai.firebase.firestore
 import dev.ynagai.firebase.Firebase
 import dev.ynagai.firebase.FirebaseApp
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.coroutines.suspendCancellableCoroutine
+import platform.Foundation.NSError
 import swiftPMImport.dev.ynagai.firebase.firebase.firestore.FIRFirestore
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 @OptIn(ExperimentalForeignApi::class)
 actual fun Firebase.firestore(app: FirebaseApp): FirebaseFirestore =
@@ -25,14 +29,19 @@ actual class FirebaseFirestore internal constructor(
     actual fun batch(): WriteBatch = WriteBatch(apple.batch())
 
     actual suspend fun <T> runTransaction(func: Transaction.() -> T): T =
-        awaitResult { callback ->
+        suspendCancellableCoroutine { continuation ->
             apple.runTransactionWithBlock(
                 { firTransaction, _ ->
                     func(Transaction(firTransaction ?: throw FirebaseFirestoreException("Transaction is unexpectedly null", FirestoreExceptionCode.INTERNAL)))
                 },
-                completion = { result, error ->
-                    @Suppress("UNCHECKED_CAST")
-                    callback(result as T?, error)
+                completion = { result: Any?, error: NSError? ->
+                    when {
+                        error != null -> continuation.resumeWithException(error.toException())
+                        else -> {
+                            @Suppress("UNCHECKED_CAST")
+                            continuation.resume(result as T)
+                        }
+                    }
                 },
             )
         }
