@@ -8,9 +8,8 @@ import swiftPMImport.dev.ynagai.firebase.firebase.firestore.FIRQuerySnapshot
 actual class QuerySnapshot internal constructor(
     internal val apple: FIRQuerySnapshot,
 ) {
-    @Suppress("UNCHECKED_CAST")
     actual val documents: List<DocumentSnapshot>
-        get() = (apple.documents as List<FIRDocumentSnapshot>).map { DocumentSnapshot(it) }
+        get() = apple.documents.filterIsInstance<FIRDocumentSnapshot>().map { DocumentSnapshot(it) }
 
     actual val isEmpty: Boolean
         get() = apple.documents.isEmpty()
