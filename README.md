@@ -12,6 +12,7 @@ A Kotlin Multiplatform SDK for Firebase, with a focus on Firebase AI (Generative
 |--------|-------------|
 | `firebase-app` | Core Firebase App initialization |
 | `firebase-ai` | Firebase AI (Generative AI with Gemini) |
+| `firebase-firestore` | Cloud Firestore (real-time database) |
 | `firebase-common` | Shared utilities and types |
 
 ## Supported Platforms
@@ -32,6 +33,7 @@ firebase-kotlin-sdk = "0.1.0"
 [libraries]
 firebase-app = { module = "dev.ynagai.firebase:firebase-app", version.ref = "firebase-kotlin-sdk" }
 firebase-ai = { module = "dev.ynagai.firebase:firebase-ai", version.ref = "firebase-kotlin-sdk" }
+firebase-firestore = { module = "dev.ynagai.firebase:firebase-firestore", version.ref = "firebase-kotlin-sdk" }
 ```
 
 ### Dependencies
@@ -44,6 +46,7 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.firebase.app)
             implementation(libs.firebase.ai)
+            implementation(libs.firebase.firestore)
         }
     }
 }
@@ -51,105 +54,10 @@ kotlin {
 
 ## Usage
 
-### Initialize Firebase AI
+See each module's README for detailed usage and examples:
 
-```kotlin
-import dev.ynagai.firebase.Firebase
-import dev.ynagai.firebase.ai.ai
-import dev.ynagai.firebase.ai.GenerativeBackend
-
-// Using Google AI (default)
-val ai = Firebase.ai()
-
-// Using Vertex AI
-val ai = Firebase.ai(backend = GenerativeBackend.vertexAI("us-central1"))
-```
-
-### Create a Generative Model
-
-```kotlin
-import dev.ynagai.firebase.ai.generationConfig
-
-val model = ai.generativeModel(
-    modelName = "gemini-2.0-flash",
-    generationConfig = generationConfig {
-        temperature = 0.7f
-        maxOutputTokens = 1024
-    }
-)
-```
-
-### Generate Content
-
-```kotlin
-// Simple text generation
-val response = model.generateContent("Explain quantum computing in simple terms")
-println(response.text)
-
-// Streaming response
-model.generateContentStream("Tell me a story").collect { chunk ->
-    print(chunk.text)
-}
-```
-
-### Multi-turn Chat
-
-```kotlin
-val chat = model.startChat()
-
-val response1 = chat.sendMessage("My name is Alice")
-println(response1.text)
-
-val response2 = chat.sendMessage("What's my name?")
-println(response2.text) // References "Alice" from context
-
-// Stream chat responses
-chat.sendMessageStream("Tell me more").collect { chunk ->
-    print(chunk.text)
-}
-```
-
-### Content DSL
-
-Build complex content with text and images:
-
-```kotlin
-import dev.ynagai.firebase.ai.content
-
-val content = content {
-    text("What's in this image?")
-    inlineData("image/png", imageBytes)
-}
-
-val response = model.generateContent(content)
-```
-
-### Safety Settings
-
-Configure content filtering:
-
-```kotlin
-import dev.ynagai.firebase.ai.SafetySetting
-import dev.ynagai.firebase.ai.HarmCategory
-import dev.ynagai.firebase.ai.HarmBlockThreshold
-
-val model = ai.generativeModel(
-    modelName = "gemini-2.0-flash",
-    safetySettings = listOf(
-        SafetySetting(HarmCategory.HARASSMENT, HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE),
-        SafetySetting(HarmCategory.HATE_SPEECH, HarmBlockThreshold.BLOCK_LOW_AND_ABOVE)
-    )
-)
-```
-
-### Count Tokens
-
-Estimate token usage before generation:
-
-```kotlin
-val tokenResponse = model.countTokens("Hello, world!")
-println("Tokens: ${tokenResponse.totalTokens}")
-```
+- **[Firebase AI](firebase-ai/README.md)** — Generative AI with Gemini (text generation, streaming, chat, content DSL)
+- **[Firebase Firestore](firebase-firestore/README.md)** — Cloud Firestore (CRUD, queries, real-time listeners, transactions)
 
 ## Platform Setup
 

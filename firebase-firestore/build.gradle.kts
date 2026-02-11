@@ -20,7 +20,7 @@ kotlin {
             implementation(libs.firebase.android.firestore)
         }
         commonMain.dependencies {
-            implementation(projects.firebaseApp)
+            api(projects.firebaseApp)
             implementation(libs.kotlinx.coroutines.core)
         }
     }

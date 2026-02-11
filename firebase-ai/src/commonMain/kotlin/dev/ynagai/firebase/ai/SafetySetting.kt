@@ -14,8 +14,8 @@ package dev.ynagai.firebase.ai
  * val model = ai.generativeModel(
  *     modelName = "gemini-2.0-flash",
  *     safetySettings = listOf(
- *         SafetySetting(HarmCategory.HARASSMENT, HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE),
- *         SafetySetting(HarmCategory.HATE_SPEECH, HarmBlockThreshold.BLOCK_LOW_AND_ABOVE)
+ *         SafetySetting(HarmCategory.HARASSMENT, HarmBlockThreshold.MEDIUM_AND_ABOVE),
+ *         SafetySetting(HarmCategory.HATE_SPEECH, HarmBlockThreshold.LOW_AND_ABOVE)
  *     )
  * )
  * ```

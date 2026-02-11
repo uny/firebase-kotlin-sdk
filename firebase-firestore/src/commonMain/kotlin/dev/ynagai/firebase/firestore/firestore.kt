@@ -2,9 +2,9 @@ package dev.ynagai.firebase.firestore
 
 import dev.ynagai.firebase.Firebase
 import dev.ynagai.firebase.FirebaseApp
-import dev.ynagai.firebase.app
 
-expect fun Firebase.firestore(app: FirebaseApp = Firebase.app): FirebaseFirestore
+expect val Firebase.firestore: FirebaseFirestore
+expect fun Firebase.firestore(app: FirebaseApp): FirebaseFirestore
 
 expect class FirebaseFirestore {
     fun collection(collectionPath: String): CollectionReference
