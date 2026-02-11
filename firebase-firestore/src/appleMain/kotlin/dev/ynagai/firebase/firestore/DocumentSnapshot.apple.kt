@@ -34,4 +34,10 @@ actual class DocumentSnapshot internal constructor(
 
     actual fun getBoolean(field: String): Boolean? =
         apple.valueForField(field) as? Boolean
+
+    actual fun getTimestamp(field: String): Timestamp? {
+        // TODO: FIRTimestamp from FirebaseCore is not directly importable in cinterop.
+        //  Implement when the cinterop def includes FirebaseCore headers or a wrapper is added.
+        return null
+    }
 }

@@ -18,3 +18,8 @@ internal fun Source.toAndroid(): com.google.firebase.firestore.Source = when (th
     Source.CACHE -> com.google.firebase.firestore.Source.CACHE
     Source.SERVER -> com.google.firebase.firestore.Source.SERVER
 }
+
+internal fun MetadataChanges.toAndroid(): com.google.firebase.firestore.MetadataChanges = when (this) {
+    MetadataChanges.EXCLUDE -> com.google.firebase.firestore.MetadataChanges.EXCLUDE
+    MetadataChanges.INCLUDE -> com.google.firebase.firestore.MetadataChanges.INCLUDE
+}

@@ -24,6 +24,7 @@ data class GenerationConfig(
     val maxOutputTokens: Int? = null,
     val stopSequences: List<String>? = null,
     val responseMimeType: String? = null,
+    val responseSchema: Schema? = null,
 )
 
 /**
@@ -53,6 +54,8 @@ class GenerationConfigBuilder {
     var stopSequences: List<String>? = null
     /** Desired MIME type of the response. */
     var responseMimeType: String? = null
+    /** Schema for structured JSON response output. */
+    var responseSchema: Schema? = null
 
     internal fun build(): GenerationConfig = GenerationConfig(
         temperature = temperature,
@@ -62,6 +65,7 @@ class GenerationConfigBuilder {
         maxOutputTokens = maxOutputTokens,
         stopSequences = stopSequences,
         responseMimeType = responseMimeType,
+        responseSchema = responseSchema,
     )
 }
 

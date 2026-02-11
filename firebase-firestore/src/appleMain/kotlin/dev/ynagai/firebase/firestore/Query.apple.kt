@@ -75,4 +75,18 @@ actual open class Query internal constructor(internal open val apple: FIRQuery) 
             }
             awaitClose { listener.remove() }
         }
+
+    actual fun snapshots(metadataChanges: MetadataChanges): Flow<QuerySnapshot> =
+        callbackFlow {
+            val listener = apple.addSnapshotListenerWithIncludeMetadataChanges(
+                metadataChanges == MetadataChanges.INCLUDE
+            ) { snapshot, error ->
+                if (error != null) {
+                    close(error.toException())
+                } else if (snapshot != null) {
+                    trySend(QuerySnapshot(snapshot))
+                }
+            }
+            awaitClose { listener.remove() }
+        }
 }

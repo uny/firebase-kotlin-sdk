@@ -25,4 +25,9 @@ actual class DocumentSnapshot internal constructor(
     actual fun getDouble(field: String): Double? = android.getDouble(field)
 
     actual fun getBoolean(field: String): Boolean? = android.getBoolean(field)
+
+    actual fun getTimestamp(field: String): Timestamp? =
+        android.getTimestamp(field)?.let {
+            Timestamp(seconds = it.seconds, nanoseconds = it.nanoseconds)
+        }
 }

@@ -57,4 +57,18 @@ actual class DocumentReference internal constructor(
             }
             awaitClose { listener.remove() }
         }
+
+    actual fun snapshots(metadataChanges: MetadataChanges): Flow<DocumentSnapshot> =
+        callbackFlow {
+            val listener = apple.addSnapshotListenerWithIncludeMetadataChanges(
+                metadataChanges == MetadataChanges.INCLUDE
+            ) { snapshot, error ->
+                if (error != null) {
+                    close(error.toException())
+                } else if (snapshot != null) {
+                    trySend(DocumentSnapshot(snapshot))
+                }
+            }
+            awaitClose { listener.remove() }
+        }
 }
