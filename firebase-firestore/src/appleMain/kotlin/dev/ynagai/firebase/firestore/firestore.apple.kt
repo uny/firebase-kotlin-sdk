@@ -10,6 +10,10 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 @OptIn(ExperimentalForeignApi::class)
+actual val Firebase.firestore: FirebaseFirestore
+    get() = FirebaseFirestore(FIRFirestore.firestore())
+
+@OptIn(ExperimentalForeignApi::class)
 actual fun Firebase.firestore(app: FirebaseApp): FirebaseFirestore =
     FirebaseFirestore(FIRFirestore.firestoreForApp(app.apple))
 

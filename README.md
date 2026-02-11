@@ -12,6 +12,7 @@ A Kotlin Multiplatform SDK for Firebase, with a focus on Firebase AI (Generative
 |--------|-------------|
 | `firebase-app` | Core Firebase App initialization |
 | `firebase-ai` | Firebase AI (Generative AI with Gemini) |
+| `firebase-firestore` | Cloud Firestore (real-time database) |
 | `firebase-common` | Shared utilities and types |
 
 ## Supported Platforms
@@ -32,6 +33,7 @@ firebase-kotlin-sdk = "0.1.0"
 [libraries]
 firebase-app = { module = "dev.ynagai.firebase:firebase-app", version.ref = "firebase-kotlin-sdk" }
 firebase-ai = { module = "dev.ynagai.firebase:firebase-ai", version.ref = "firebase-kotlin-sdk" }
+firebase-firestore = { module = "dev.ynagai.firebase:firebase-firestore", version.ref = "firebase-kotlin-sdk" }
 ```
 
 ### Dependencies
@@ -44,6 +46,7 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.firebase.app)
             implementation(libs.firebase.ai)
+            implementation(libs.firebase.firestore)
         }
     }
 }
@@ -136,8 +139,8 @@ import dev.ynagai.firebase.ai.HarmBlockThreshold
 val model = ai.generativeModel(
     modelName = "gemini-2.0-flash",
     safetySettings = listOf(
-        SafetySetting(HarmCategory.HARASSMENT, HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE),
-        SafetySetting(HarmCategory.HATE_SPEECH, HarmBlockThreshold.BLOCK_LOW_AND_ABOVE)
+        SafetySetting(HarmCategory.HARASSMENT, HarmBlockThreshold.MEDIUM_AND_ABOVE),
+        SafetySetting(HarmCategory.HATE_SPEECH, HarmBlockThreshold.LOW_AND_ABOVE)
     )
 )
 ```
@@ -149,6 +152,70 @@ Estimate token usage before generation:
 ```kotlin
 val tokenResponse = model.countTokens("Hello, world!")
 println("Tokens: ${tokenResponse.totalTokens}")
+```
+
+## Firebase Firestore
+
+### Get a Firestore Instance
+
+```kotlin
+import dev.ynagai.firebase.Firebase
+import dev.ynagai.firebase.firestore.firestore
+
+val db = Firebase.firestore
+```
+
+### Add and Read Data
+
+```kotlin
+// Add a document
+val docRef = db.collection("users").add(
+    mapOf("name" to "Alice", "age" to 30L)
+)
+
+// Read a document
+val snapshot = db.collection("users").document("alice").get()
+val name = snapshot.getString("name")
+```
+
+### Query Documents
+
+```kotlin
+val query = db.collection("users")
+    .whereEqualTo("city", "Tokyo")
+    .orderBy("age")
+    .limit(10)
+
+val results = query.get()
+results.forEach { doc ->
+    println("${doc.id}: ${doc.data}")
+}
+```
+
+### Real-time Updates
+
+```kotlin
+db.collection("users").document("alice").snapshots.collect { snapshot ->
+    println("Current data: ${snapshot.data}")
+}
+```
+
+### Transactions and Batched Writes
+
+```kotlin
+// Transaction
+db.runTransaction {
+    val snapshot = get(docRef)
+    val newCount = (snapshot.getLong("count") ?: 0) + 1
+    update(docRef, mapOf("count" to newCount))
+}
+
+// Batched write
+db.batch().apply {
+    set(docRef1, mapOf("name" to "Alice"))
+    update(docRef2, mapOf("age" to 31L))
+    delete(docRef3)
+}.commit()
 ```
 
 ## Platform Setup

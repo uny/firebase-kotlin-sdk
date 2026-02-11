@@ -63,6 +63,7 @@ actual class SomeFirebaseClass internal constructor(
 * `:firebase-app`: Core initialization (FirebaseApp, FirebaseOptions).
 * `:firebase-ai`: Generative AI (Vertex AI/Google AI) wrappers.
 * `:firebase-common`: Shared utilities.
+* `:firebase-firestore`: Cloud Firestore (CRUD, queries, transactions, batched writes, real-time listeners).
 
 ## Naming Conventions
 

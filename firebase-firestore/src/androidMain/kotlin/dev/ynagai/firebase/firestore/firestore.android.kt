@@ -5,6 +5,9 @@ import dev.ynagai.firebase.Firebase
 import dev.ynagai.firebase.FirebaseApp
 import kotlinx.coroutines.tasks.await
 
+actual val Firebase.firestore: FirebaseFirestore
+    get() = FirebaseFirestore(AndroidFirebaseFirestore.getInstance())
+
 actual fun Firebase.firestore(app: FirebaseApp): FirebaseFirestore =
     FirebaseFirestore(AndroidFirebaseFirestore.getInstance(app.android))
 
