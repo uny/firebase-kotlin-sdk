@@ -35,6 +35,19 @@ internal suspend fun await(block: (callback: (NSError?) -> Unit) -> Unit): Unit 
     }
 
 @OptIn(ExperimentalForeignApi::class)
+internal suspend fun <T : Any> awaitNullableResult(block: (callback: (T?, NSError?) -> Unit) -> Unit): T? =
+    suspendCancellableCoroutine { continuation ->
+        block { result, error ->
+            when {
+                error != null -> continuation.resumeWithException(
+                    error.toFirebaseAIException()
+                )
+                else -> continuation.resume(result)
+            }
+        }
+    }
+
+@OptIn(ExperimentalForeignApi::class)
 internal fun NSError.toFirebaseAIException(): FirebaseAIException =
     FirebaseAIException(
         message = localizedDescription,

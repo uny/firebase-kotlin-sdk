@@ -1,8 +1,10 @@
 package dev.ynagai.firebase.ai
 
 import kotlinx.cinterop.ExperimentalForeignApi
+import platform.Foundation.NSNumber
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBBlockReason
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBCandidate
+import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBCitation
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBCitationMetadata
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBFinishReason
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBGenerateContentResponse
@@ -78,8 +80,17 @@ private fun KFBBlockReason.toCommonBlockReason(): BlockReason = when (rawValue()
 }
 
 @OptIn(ExperimentalForeignApi::class)
+@Suppress("UNCHECKED_CAST")
 internal fun KFBCitationMetadata.toCommon(): CitationMetadata = CitationMetadata(
-    citations = emptyList(),
+    citations = (citations() as? List<KFBCitation>)?.map { it.toCommon() } ?: emptyList(),
+)
+
+@OptIn(ExperimentalForeignApi::class)
+private fun KFBCitation.toCommon(): Citation = Citation(
+    startIndex = (startIndex() as? NSNumber)?.intValue,
+    endIndex = (endIndex() as? NSNumber)?.intValue,
+    uri = uri(),
+    license = license(),
 )
 
 @OptIn(ExperimentalForeignApi::class)

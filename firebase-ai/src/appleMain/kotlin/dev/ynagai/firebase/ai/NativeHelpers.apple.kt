@@ -8,8 +8,11 @@ import platform.Foundation.create
 import platform.posix.memcpy
 
 @OptIn(ExperimentalForeignApi::class)
-internal fun ByteArray.toNSData(): NSData = usePinned { pinned ->
-    NSData.create(bytes = pinned.addressOf(0), length = size.toULong())
+internal fun ByteArray.toNSData(): NSData {
+    if (isEmpty()) return NSData()
+    return usePinned { pinned ->
+        NSData.create(bytes = pinned.addressOf(0), length = size.toULong())
+    }
 }
 
 @OptIn(ExperimentalForeignApi::class)

@@ -36,8 +36,9 @@ actual class DocumentSnapshot internal constructor(
         apple.valueForField(field) as? Boolean
 
     actual fun getTimestamp(field: String): Timestamp? {
-        // TODO: FIRTimestamp from FirebaseCore is not directly importable in cinterop.
-        //  Implement when the cinterop def includes FirebaseCore headers or a wrapper is added.
-        return null
+        throw UnsupportedOperationException(
+            "getTimestamp() is not yet supported on iOS. " +
+                "FIRTimestamp from FirebaseCore is not directly importable in cinterop."
+        )
     }
 }

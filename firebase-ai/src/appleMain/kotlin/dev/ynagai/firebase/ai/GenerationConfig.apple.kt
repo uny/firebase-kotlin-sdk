@@ -15,4 +15,7 @@ internal fun GenerationConfig.toApple(): KFBGenerationConfig = KFBGenerationConf
     frequencyPenalty = null,
     stopSequences = stopSequences,
     responseMIMEType = responseMimeType,
+    responseSchema = responseSchema?.toApple(),
+    responseModalities = null,
+    thinkingConfig = null,
 )

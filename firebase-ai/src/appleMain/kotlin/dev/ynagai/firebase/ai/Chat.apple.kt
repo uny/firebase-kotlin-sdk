@@ -1,8 +1,14 @@
 package dev.ynagai.firebase.ai
 
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.ObjCObjectVar
+import kotlinx.cinterop.alloc
+import kotlinx.cinterop.memScoped
+import kotlinx.cinterop.ptr
+import kotlinx.cinterop.value
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import platform.Foundation.NSError
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBChat
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBGenerateContentResponse
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBModelContent
@@ -29,9 +35,33 @@ actual class Chat internal constructor(
         return result.toCommon()
     }
 
-    actual fun sendMessageStream(content: Content): Flow<GenerateContentResponse> =
-        flow { emit(sendMessage(content)) }
+    actual fun sendMessageStream(content: Content): Flow<GenerateContentResponse> = flow {
+        val stream = memScoped {
+            val errorPtr = alloc<ObjCObjectVar<NSError?>>()
+            val result = apple.sendMessageStream(listOf(content.toApple()), error = errorPtr.ptr)
+            errorPtr.value?.let { throw it.toFirebaseAIException() }
+            result ?: throw FirebaseAIException("Failed to create message stream")
+        }
+        while (true) {
+            val response = awaitNullableResult<KFBGenerateContentResponse> { callback ->
+                stream.nextWithCompletionHandler(callback)
+            } ?: break
+            emit(response.toCommon())
+        }
+    }
 
-    actual fun sendMessageStream(prompt: String): Flow<GenerateContentResponse> =
-        flow { emit(sendMessage(prompt)) }
+    actual fun sendMessageStream(prompt: String): Flow<GenerateContentResponse> = flow {
+        val stream = memScoped {
+            val errorPtr = alloc<ObjCObjectVar<NSError?>>()
+            val result = apple.sendMessageStreamText(prompt, error = errorPtr.ptr)
+            errorPtr.value?.let { throw it.toFirebaseAIException() }
+            result ?: throw FirebaseAIException("Failed to create message stream")
+        }
+        while (true) {
+            val response = awaitNullableResult<KFBGenerateContentResponse> { callback ->
+                stream.nextWithCompletionHandler(callback)
+            } ?: break
+            emit(response.toCommon())
+        }
+    }
 }

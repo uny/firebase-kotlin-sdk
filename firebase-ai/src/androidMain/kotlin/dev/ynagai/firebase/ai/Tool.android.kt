@@ -17,6 +17,7 @@ internal fun FunctionDeclaration.toAndroid(): AndroidFunctionDeclaration {
         name = name,
         description = description,
         parameters = schemaMap,
+        optionalParameters = optionalParameters,
     )
 }
 

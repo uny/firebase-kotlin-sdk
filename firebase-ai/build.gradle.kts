@@ -18,6 +18,7 @@ kotlin {
     sourceSets {
         androidMain.dependencies {
             implementation(libs.firebase.android.ai)
+            implementation(libs.kotlinx.serialization.json)
         }
         commonMain.dependencies {
             api(projects.firebaseApp)

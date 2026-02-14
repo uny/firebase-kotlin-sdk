@@ -18,8 +18,14 @@ internal fun Content.toApple(): KFBModelContent {
                 data = part.data.toNSData(),
                 mimeType = part.mimeType,
             )
-            is FunctionCallPart -> KFBTextPart(text = "")
-            is FunctionResponsePart -> KFBTextPart(text = "")
+            is FunctionCallPart -> KFBFunctionCallPart(
+                name = part.name,
+                args = part.args as Map<Any?, *>,
+            )
+            is FunctionResponsePart -> KFBFunctionResponsePart(
+                name = part.name,
+                response = part.response as Map<Any?, *>,
+            )
         }
     }
     return KFBModelContent(role = role ?: "user", parts = appleParts)
