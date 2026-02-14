@@ -12,4 +12,5 @@ expect class DocumentReference {
     suspend fun update(data: Map<String, Any?>): Unit
     suspend fun delete(): Unit
     val snapshots: Flow<DocumentSnapshot>
+    fun snapshots(metadataChanges: MetadataChanges): Flow<DocumentSnapshot>
 }

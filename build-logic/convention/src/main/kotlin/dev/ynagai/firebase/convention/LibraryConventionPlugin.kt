@@ -45,6 +45,10 @@ class LibraryConventionPlugin : Plugin<Project> {
                             )
                         )
                     }
+                    commonTest.dependencies {
+                        implementation(libs.findLibrary("kotlin-test").get())
+                        implementation(libs.findLibrary("kotlinx-coroutines-test").get())
+                    }
                 }
             }
             extensions.configure<MavenPublishBaseExtension> {

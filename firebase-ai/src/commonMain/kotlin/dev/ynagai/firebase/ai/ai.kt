@@ -59,5 +59,7 @@ expect class FirebaseAI {
         generationConfig: GenerationConfig? = null,
         safetySettings: List<SafetySetting>? = null,
         systemInstruction: Content? = null,
+        tools: List<Tool>? = null,
+        toolConfig: ToolConfig? = null,
     ): GenerativeModel
 }

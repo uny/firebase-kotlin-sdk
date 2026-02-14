@@ -27,7 +27,17 @@ actual class FirebaseAI internal constructor(
         generationConfig: GenerationConfig?,
         safetySettings: List<SafetySetting>?,
         systemInstruction: Content?,
-    ): GenerativeModel {
-        TODO("iOS implementation pending")
-    }
+        tools: List<Tool>?,
+        toolConfig: ToolConfig?,
+    ): GenerativeModel = GenerativeModel(
+        apple.generativeModelWithModelName(
+            modelName = modelName,
+            generationConfig = generationConfig?.toApple(),
+            safetySettings = safetySettings?.map { it.toApple() },
+            tools = tools?.map { it.toApple() },
+            toolConfig = toolConfig?.toApple(),
+            systemInstruction = systemInstruction?.toApple(),
+            requestOptions = null,
+        ),
+    )
 }

@@ -69,4 +69,16 @@ actual open class Query internal constructor(internal open val android: AndroidQ
             }
             awaitClose { listener.remove() }
         }
+
+    actual fun snapshots(metadataChanges: MetadataChanges): Flow<QuerySnapshot> =
+        callbackFlow {
+            val listener = android.addSnapshotListener(metadataChanges.toAndroid()) { snapshot, error ->
+                if (error != null) {
+                    close(error.toCommon())
+                } else if (snapshot != null) {
+                    trySend(QuerySnapshot(snapshot))
+                }
+            }
+            awaitClose { listener.remove() }
+        }
 }

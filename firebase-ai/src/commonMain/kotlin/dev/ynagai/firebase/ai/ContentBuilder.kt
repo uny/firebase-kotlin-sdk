@@ -38,6 +38,26 @@ class ContentBuilder {
         parts.add(InlineDataPart(mimeType, data))
     }
 
+    /**
+     * Adds a function call part to the content.
+     *
+     * @param name The name of the function to call.
+     * @param args The arguments for the function call.
+     */
+    fun functionCall(name: String, args: Map<String, Any?>) {
+        parts.add(FunctionCallPart(name, args))
+    }
+
+    /**
+     * Adds a function response part to the content.
+     *
+     * @param name The name of the function that was called.
+     * @param response The response data from the function.
+     */
+    fun functionResponse(name: String, response: Map<String, Any?>) {
+        parts.add(FunctionResponsePart(name, response))
+    }
+
     internal fun build(): List<Part> = parts.toList()
 }
 

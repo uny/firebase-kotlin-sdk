@@ -26,12 +26,16 @@ actual class FirebaseAI internal constructor(
         generationConfig: GenerationConfig?,
         safetySettings: List<SafetySetting>?,
         systemInstruction: Content?,
+        tools: List<Tool>?,
+        toolConfig: ToolConfig?,
     ): GenerativeModel = GenerativeModel(
         android.generativeModel(
             modelName = modelName,
             generationConfig = generationConfig?.toAndroid(),
             safetySettings = safetySettings?.map { it.toAndroid() },
             systemInstruction = systemInstruction?.toAndroid(),
+            tools = tools?.map { it.toAndroid() },
+            toolConfig = toolConfig?.toAndroid(),
         )
     )
 }

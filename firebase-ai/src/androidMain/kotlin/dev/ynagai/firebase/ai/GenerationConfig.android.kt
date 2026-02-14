@@ -10,4 +10,5 @@ internal fun GenerationConfig.toAndroid() = androidGenerationConfig {
     this@toAndroid.maxOutputTokens?.let { maxOutputTokens = it }
     this@toAndroid.stopSequences?.let { stopSequences = it }
     this@toAndroid.responseMimeType?.let { responseMimeType = it }
+    this@toAndroid.responseSchema?.let { responseSchema = it.toAndroid() }
 }

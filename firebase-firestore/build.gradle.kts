@@ -1,5 +1,6 @@
 plugins {
     id("dev.ynagai.firebase.library")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
@@ -22,6 +23,7 @@ kotlin {
         commonMain.dependencies {
             api(projects.firebaseApp)
             implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.serialization.json)
         }
     }
 }

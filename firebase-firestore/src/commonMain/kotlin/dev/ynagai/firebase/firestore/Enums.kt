@@ -10,3 +10,8 @@ enum class Source {
     CACHE,
     SERVER,
 }
+
+enum class MetadataChanges {
+    EXCLUDE,
+    INCLUDE,
+}

@@ -34,4 +34,11 @@ actual class DocumentSnapshot internal constructor(
 
     actual fun getBoolean(field: String): Boolean? =
         apple.valueForField(field) as? Boolean
+
+    actual fun getTimestamp(field: String): Timestamp? {
+        throw UnsupportedOperationException(
+            "getTimestamp() is not yet supported on iOS. " +
+                "FIRTimestamp from FirebaseCore is not directly importable in cinterop."
+        )
+    }
 }

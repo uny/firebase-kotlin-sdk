@@ -21,4 +21,5 @@ expect open class Query {
     fun endBefore(vararg fieldValues: Any): Query
     suspend fun get(source: Source = Source.DEFAULT): QuerySnapshot
     val snapshots: Flow<QuerySnapshot>
+    fun snapshots(metadataChanges: MetadataChanges): Flow<QuerySnapshot>
 }
