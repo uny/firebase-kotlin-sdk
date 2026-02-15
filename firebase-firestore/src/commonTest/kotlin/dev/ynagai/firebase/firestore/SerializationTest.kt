@@ -7,6 +7,7 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class SerializationTest {
@@ -70,6 +71,18 @@ class SerializationTest {
         val map = emptyMap<String, Any?>()
         val json = mapToJsonElement(map)
         assertTrue(json.isEmpty())
+    }
+
+    @Test
+    fun mapToJsonElementWithTimestamp() {
+        val map = mapOf<String, Any?>(
+            "createdAt" to Timestamp(seconds = 1707994800, nanoseconds = 123456789)
+        )
+        val json = mapToJsonElement(map)
+        val ts = json["createdAt"]?.jsonObject
+        assertNotNull(ts)
+        assertEquals("1707994800", ts["seconds"]?.jsonPrimitive?.content)
+        assertEquals("123456789", ts["nanoseconds"]?.jsonPrimitive?.content)
     }
 
     @Test
