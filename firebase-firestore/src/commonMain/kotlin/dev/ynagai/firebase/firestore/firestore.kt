@@ -7,6 +7,7 @@ expect val Firebase.firestore: FirebaseFirestore
 expect fun Firebase.firestore(app: FirebaseApp): FirebaseFirestore
 
 expect class FirebaseFirestore {
+    var settings: FirebaseFirestoreSettings
     fun collection(collectionPath: String): CollectionReference
     fun document(documentPath: String): DocumentReference
     fun collectionGroup(collectionId: String): Query
