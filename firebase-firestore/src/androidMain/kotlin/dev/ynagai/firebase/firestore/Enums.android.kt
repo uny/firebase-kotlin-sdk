@@ -23,3 +23,7 @@ internal fun MetadataChanges.toAndroid(): com.google.firebase.firestore.Metadata
     MetadataChanges.EXCLUDE -> com.google.firebase.firestore.MetadataChanges.EXCLUDE
     MetadataChanges.INCLUDE -> com.google.firebase.firestore.MetadataChanges.INCLUDE
 }
+
+internal fun AggregateSource.toAndroid(): com.google.firebase.firestore.AggregateSource = when (this) {
+    AggregateSource.SERVER -> com.google.firebase.firestore.AggregateSource.SERVER
+}

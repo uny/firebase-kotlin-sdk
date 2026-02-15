@@ -15,3 +15,7 @@ enum class MetadataChanges {
     EXCLUDE,
     INCLUDE,
 }
+
+enum class AggregateSource {
+    SERVER,
+}
