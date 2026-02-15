@@ -25,6 +25,16 @@ data class GenerateContentResponse(
             ?.filterIsInstance<TextPart>()
             ?.joinToString("") { it.text }
             ?.takeIf { it.isNotEmpty() }
+
+    /**
+     * Convenience property to extract function calls from the first candidate.
+     *
+     * Returns `null` if there are no candidates or no function call parts.
+     */
+    val functionCalls: List<FunctionCallPart>?
+        get() = candidates.firstOrNull()?.content?.parts
+            ?.filterIsInstance<FunctionCallPart>()
+            ?.takeIf { it.isNotEmpty() }
 }
 
 /**

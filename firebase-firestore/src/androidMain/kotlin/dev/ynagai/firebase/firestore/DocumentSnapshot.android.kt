@@ -14,6 +14,12 @@ actual class DocumentSnapshot internal constructor(
     actual val exists: Boolean
         get() = android.exists()
 
+    actual val metadata: SnapshotMetadata
+        get() = SnapshotMetadata(
+            hasPendingWrites = android.metadata.hasPendingWrites(),
+            isFromCache = android.metadata.isFromCache,
+        )
+
     actual fun getData(): Map<String, Any?>? = android.data
 
     actual fun get(field: String): Any? = android.get(field)

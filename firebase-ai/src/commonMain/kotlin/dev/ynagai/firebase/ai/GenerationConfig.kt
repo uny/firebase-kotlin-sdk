@@ -25,7 +25,15 @@ data class GenerationConfig(
     val stopSequences: List<String>? = null,
     val responseMimeType: String? = null,
     val responseSchema: Schema? = null,
+    val responseModalities: List<ResponseModality>? = null,
+    val presencePenalty: Float? = null,
+    val frequencyPenalty: Float? = null,
 )
+
+/**
+ * Modalities for generated content.
+ */
+enum class ResponseModality { TEXT, IMAGE, AUDIO }
 
 /**
  * DSL marker for the generation config builder.
@@ -56,6 +64,12 @@ class GenerationConfigBuilder {
     var responseMimeType: String? = null
     /** Schema for structured JSON response output. */
     var responseSchema: Schema? = null
+    /** Modalities for generated content. */
+    var responseModalities: List<ResponseModality>? = null
+    /** Penalizes tokens that have already appeared in the output. Range: -2.0 to 2.0. */
+    var presencePenalty: Float? = null
+    /** Penalizes tokens based on their frequency in the output. Range: -2.0 to 2.0. */
+    var frequencyPenalty: Float? = null
 
     internal fun build(): GenerationConfig = GenerationConfig(
         temperature = temperature,
@@ -66,6 +80,9 @@ class GenerationConfigBuilder {
         stopSequences = stopSequences,
         responseMimeType = responseMimeType,
         responseSchema = responseSchema,
+        responseModalities = responseModalities,
+        presencePenalty = presencePenalty,
+        frequencyPenalty = frequencyPenalty,
     )
 }
 

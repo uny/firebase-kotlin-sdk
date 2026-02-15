@@ -2,6 +2,7 @@ package dev.ynagai.firebase.ai
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 class GenerateContentResponseTest {
@@ -124,5 +125,69 @@ class GenerateContentResponseTest {
         assertNull(response.text)
         val part = response.candidates[0].content.parts[0]
         assertEquals("getWeather", (part as FunctionCallPart).name)
+    }
+
+    @Test
+    fun functionCallsReturnsFunctionCallParts() {
+        val response = GenerateContentResponse(
+            candidates = listOf(
+                Candidate(
+                    content = Content(
+                        role = "model",
+                        parts = listOf(
+                            FunctionCallPart("getWeather", mapOf("city" to "Tokyo")),
+                            FunctionCallPart("getTime", mapOf("zone" to "JST")),
+                        ),
+                    ),
+                ),
+            ),
+        )
+        val calls = response.functionCalls
+        assertNotNull(calls)
+        assertEquals(2, calls.size)
+        assertEquals("getWeather", calls[0].name)
+        assertEquals("getTime", calls[1].name)
+    }
+
+    @Test
+    fun functionCallsReturnsNullForNoCandidates() {
+        val response = GenerateContentResponse(candidates = emptyList())
+        assertNull(response.functionCalls)
+    }
+
+    @Test
+    fun functionCallsReturnsNullForNoFunctionCallParts() {
+        val response = GenerateContentResponse(
+            candidates = listOf(
+                Candidate(
+                    content = Content(
+                        role = "model",
+                        parts = listOf(TextPart("Hello")),
+                    ),
+                ),
+            ),
+        )
+        assertNull(response.functionCalls)
+    }
+
+    @Test
+    fun functionCallsIgnoresNonFunctionCallParts() {
+        val response = GenerateContentResponse(
+            candidates = listOf(
+                Candidate(
+                    content = Content(
+                        role = "model",
+                        parts = listOf(
+                            TextPart("Let me call a function"),
+                            FunctionCallPart("search", mapOf("q" to "kotlin")),
+                        ),
+                    ),
+                ),
+            ),
+        )
+        val calls = response.functionCalls
+        assertNotNull(calls)
+        assertEquals(1, calls.size)
+        assertEquals("search", calls[0].name)
     }
 }

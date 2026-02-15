@@ -101,6 +101,38 @@ class GenerationConfigTest {
     }
 
     @Test
+    fun responseModalitiesAreSet() {
+        val config = generationConfig {
+            responseModalities = listOf(ResponseModality.TEXT, ResponseModality.IMAGE)
+        }
+        assertEquals(listOf(ResponseModality.TEXT, ResponseModality.IMAGE), config.responseModalities)
+    }
+
+    @Test
+    fun presencePenaltyIsSet() {
+        val config = generationConfig {
+            presencePenalty = 0.5f
+        }
+        assertEquals(0.5f, config.presencePenalty)
+    }
+
+    @Test
+    fun frequencyPenaltyIsSet() {
+        val config = generationConfig {
+            frequencyPenalty = -0.5f
+        }
+        assertEquals(-0.5f, config.frequencyPenalty)
+    }
+
+    @Test
+    fun newParametersDefaultToNull() {
+        val config = generationConfig { }
+        assertNull(config.responseModalities)
+        assertNull(config.presencePenalty)
+        assertNull(config.frequencyPenalty)
+    }
+
+    @Test
     fun dataClassCopyWorks() {
         val original = generationConfig {
             temperature = 0.7f

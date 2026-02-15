@@ -2,6 +2,7 @@ package dev.ynagai.firebase.ai
 
 import com.google.firebase.ai.type.content as androidContent
 import com.google.firebase.ai.type.Content as AndroidContent
+import com.google.firebase.ai.type.FileDataPart as AndroidFileDataPart
 import com.google.firebase.ai.type.FunctionCallPart as AndroidFunctionCallPart
 import com.google.firebase.ai.type.FunctionResponsePart as AndroidFunctionResponsePart
 import com.google.firebase.ai.type.Part as AndroidPart
@@ -23,6 +24,7 @@ internal fun Content.toAndroid(): AndroidContent {
             when (part) {
                 is TextPart -> text(part.text)
                 is InlineDataPart -> inlineData(part.data, part.mimeType)
+                is FileDataPart -> part(AndroidFileDataPart(part.mimeType, part.uri))
                 is FunctionCallPart -> part(
                     AndroidFunctionCallPart(
                         part.name,
@@ -48,6 +50,7 @@ internal fun AndroidContent.toCommon(): Content = Content(
 internal fun AndroidPart.toCommon(): Part = when (this) {
     is AndroidTextPart -> TextPart(text)
     is AndroidInlineDataPart -> InlineDataPart(mimeType, inlineData)
+    is AndroidFileDataPart -> FileDataPart(mimeType, uri)
     is AndroidFunctionCallPart -> FunctionCallPart(
         name = name,
         args = args.mapValues { (_, v) -> v.toAny() },

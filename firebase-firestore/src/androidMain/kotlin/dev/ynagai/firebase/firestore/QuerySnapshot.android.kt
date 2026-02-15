@@ -1,5 +1,6 @@
 package dev.ynagai.firebase.firestore
 
+import com.google.firebase.firestore.DocumentChange as AndroidDocumentChange
 import com.google.firebase.firestore.QuerySnapshot as AndroidQuerySnapshot
 
 actual class QuerySnapshot internal constructor(
@@ -13,4 +14,24 @@ actual class QuerySnapshot internal constructor(
 
     actual val size: Int
         get() = android.size()
+
+    actual val metadata: SnapshotMetadata
+        get() = SnapshotMetadata(
+            hasPendingWrites = android.metadata.hasPendingWrites(),
+            isFromCache = android.metadata.isFromCache,
+        )
+
+    actual val documentChanges: List<DocumentChange>
+        get() = android.documentChanges.map { it.toCommon() }
 }
+
+private fun AndroidDocumentChange.toCommon(): DocumentChange = DocumentChange(
+    type = when (type) {
+        AndroidDocumentChange.Type.ADDED -> DocumentChange.Type.ADDED
+        AndroidDocumentChange.Type.MODIFIED -> DocumentChange.Type.MODIFIED
+        AndroidDocumentChange.Type.REMOVED -> DocumentChange.Type.REMOVED
+    },
+    document = DocumentSnapshot(document),
+    oldIndex = oldIndex,
+    newIndex = newIndex,
+)

@@ -33,6 +33,14 @@ actual class DocumentReference internal constructor(
         }
     }
 
+    actual suspend fun set(data: Map<String, Any?>, options: dev.ynagai.firebase.firestore.SetOptions) {
+        when (options) {
+            is dev.ynagai.firebase.firestore.SetOptions.Overwrite -> android.set(data.toAndroidData()).await()
+            is dev.ynagai.firebase.firestore.SetOptions.Merge -> android.set(data.toAndroidData(), SetOptions.merge()).await()
+            is dev.ynagai.firebase.firestore.SetOptions.MergeFields -> android.set(data.toAndroidData(), SetOptions.mergeFields(options.fields)).await()
+        }
+    }
+
     actual suspend fun update(data: Map<String, Any?>) {
         android.update(data.toAndroidData()).await()
     }
@@ -64,4 +72,14 @@ actual class DocumentReference internal constructor(
             }
             awaitClose { listener.remove() }
         }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is DocumentReference) return false
+        return android == other.android
+    }
+
+    override fun hashCode(): Int = android.hashCode()
+
+    override fun toString(): String = "DocumentReference(path=$path)"
 }

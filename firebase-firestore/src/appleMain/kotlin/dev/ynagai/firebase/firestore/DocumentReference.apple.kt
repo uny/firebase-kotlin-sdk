@@ -38,6 +38,14 @@ actual class DocumentReference internal constructor(
         }
     }
 
+    actual suspend fun set(data: Map<String, Any?>, options: SetOptions) {
+        when (options) {
+            is SetOptions.Overwrite -> await { callback -> apple.setData(data.toAppleData(), completion = callback) }
+            is SetOptions.Merge -> await { callback -> apple.setData(data.toAppleData(), merge = true, completion = callback) }
+            is SetOptions.MergeFields -> await { callback -> apple.setData(data.toAppleData(), mergeFields = options.fields, completion = callback) }
+        }
+    }
+
     actual suspend fun update(data: Map<String, Any?>) {
         await { callback -> apple.updateData(data.toAppleData(), completion = callback) }
     }
@@ -71,4 +79,14 @@ actual class DocumentReference internal constructor(
             }
             awaitClose { listener.remove() }
         }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is DocumentReference) return false
+        return path == other.path
+    }
+
+    override fun hashCode(): Int = path.hashCode()
+
+    override fun toString(): String = "DocumentReference(path=$path)"
 }

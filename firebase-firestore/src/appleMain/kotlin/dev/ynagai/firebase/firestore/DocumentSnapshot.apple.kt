@@ -16,6 +16,14 @@ actual class DocumentSnapshot internal constructor(
     actual val exists: Boolean
         get() = apple.exists
 
+    actual val metadata: SnapshotMetadata
+        get() = apple.metadata.let {
+            SnapshotMetadata(
+                hasPendingWrites = it.hasPendingWrites(),
+                isFromCache = it.isFromCache(),
+            )
+        }
+
     @Suppress("UNCHECKED_CAST")
     actual fun getData(): Map<String, Any?>? =
         apple.data() as? Map<String, Any?>
