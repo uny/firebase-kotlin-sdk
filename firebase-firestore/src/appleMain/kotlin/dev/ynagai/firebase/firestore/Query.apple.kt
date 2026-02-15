@@ -123,6 +123,12 @@ actual open class Query internal constructor(internal open val apple: FIRQuery) 
             awaitClose { listener.remove() }
         }
 
+    actual fun count(): AggregateQuery =
+        AggregateQuery(apple.count(), this)
+
+    actual fun aggregate(vararg fields: AggregateField): AggregateQuery =
+        AggregateQuery(apple.aggregate(fields.map { it.apple }), this)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Query) return false

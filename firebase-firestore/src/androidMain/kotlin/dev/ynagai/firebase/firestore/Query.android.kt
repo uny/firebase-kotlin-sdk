@@ -115,6 +115,17 @@ actual open class Query internal constructor(internal open val android: AndroidQ
             awaitClose { listener.remove() }
         }
 
+    actual fun count(): AggregateQuery =
+        AggregateQuery(android.count(), this)
+
+    actual fun aggregate(vararg fields: AggregateField): AggregateQuery {
+        val androidFields = fields.map { it.android }
+        return AggregateQuery(
+            android.aggregate(androidFields.first(), *androidFields.drop(1).toTypedArray()),
+            this,
+        )
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Query) return false
