@@ -119,6 +119,7 @@ actual open class Query internal constructor(internal open val android: AndroidQ
         AggregateQuery(android.count(), this)
 
     actual fun aggregate(vararg fields: AggregateField): AggregateQuery {
+        require(fields.isNotEmpty()) { "aggregate() requires at least one AggregateField" }
         val androidFields = fields.map { it.android }
         return AggregateQuery(
             android.aggregate(androidFields.first(), *androidFields.drop(1).toTypedArray()),
