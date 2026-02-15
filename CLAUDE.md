@@ -32,6 +32,7 @@ Data classes are defined in `commonMain` (not `expect/actual`), with internal ma
 ## Conventions
 
 - Class/method names mirror the **Android Firebase SDK** reference docs
+  - Exception: `firebase-app` uses Kotlin-idiomatic names (`initialize`, `app`, `apps`) instead of Java-style names (`initializeApp`, `getInstance`, `getApps`)
 - Namespace: `dev.ynagai.firebase.<module>`
 - Convention plugin: `dev.ynagai.firebase.library` (defined in `build-logic/`)
 - Dependencies managed via Version Catalog (`gradle/libs.versions.toml`)

@@ -19,5 +19,8 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.firebase.android.common)
         }
+        commonMain.dependencies {
+            implementation(libs.kotlinx.coroutines.core)
+        }
     }
 }

@@ -83,8 +83,8 @@ Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
 
 | # | Task | Detail | Status |
 |---|------|--------|--------|
-| APP-1 | `FirebaseApp.name` / `FirebaseApp.options` / `FirebaseOptions` | アプリ設定を inspect できない | TODO |
-| APP-2 | カスタム `FirebaseApp` 作成 | `FirebaseOptions` からの `FirebaseApp.initializeApp()` がない | TODO |
+| APP-1 | `FirebaseApp.name` / `FirebaseApp.options` / `FirebaseOptions` | アプリ設定を inspect できない | DONE |
+| APP-2 | カスタム `FirebaseApp` 作成 | `FirebaseOptions` からの `FirebaseApp.initializeApp()` がない | DONE |
 
 ---
 
