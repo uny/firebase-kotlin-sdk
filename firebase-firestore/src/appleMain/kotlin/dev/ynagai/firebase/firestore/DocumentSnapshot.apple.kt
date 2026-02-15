@@ -47,4 +47,14 @@ actual class DocumentSnapshot internal constructor(
         val value = apple.valueForField(field) ?: return null
         return nativeTimestampToKmp(value)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is DocumentSnapshot) return false
+        return apple == other.apple
+    }
+
+    override fun hashCode(): Int = apple.hash.toInt()
+
+    override fun toString(): String = "DocumentSnapshot(id=$id, exists=$exists)"
 }

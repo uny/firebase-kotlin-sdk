@@ -81,4 +81,14 @@ actual open class Query internal constructor(internal open val android: AndroidQ
             }
             awaitClose { listener.remove() }
         }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Query) return false
+        return android == other.android
+    }
+
+    override fun hashCode(): Int = android.hashCode()
+
+    override fun toString(): String = "Query(android=$android)"
 }

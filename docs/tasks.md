@@ -18,10 +18,10 @@ Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
 
 | # | Task | Detail | Status |
 |---|------|--------|--------|
-| AI-2 | `GenerateContentResponse.functionCalls` プロパティ追加 | `text` と同様に function call 一覧を取得する convenience property がない。現状 `candidates[0].content.parts.filterIsInstance<FunctionCallPart>()` が必要 | TODO |
-| AI-3 | `FileDataPart` の追加 | Android SDK の `FileDataPart`（URI/Cloud Storage ファイル参照）が未実装。`Content.kt`, `ContentBuilder.kt`, 各 platform mapper に追加が必要 | TODO |
-| AI-4 | `GenerationConfig` に不足パラメータ追加 | `responseModalities`（画像生成時に必要）、`presencePenalty`, `frequencyPenalty` がない | TODO |
-| AI-5 | CLAUDE.md の iOS ステータス更新 | CLAUDE.md に "TODO stubs — not functional" とあるが、`GenerativeModel.apple.kt` 等は実装済み。実態と乖離 | TODO |
+| AI-2 | `GenerateContentResponse.functionCalls` プロパティ追加 | `text` と同様に function call 一覧を取得する convenience property がない。現状 `candidates[0].content.parts.filterIsInstance<FunctionCallPart>()` が必要 | DONE |
+| AI-3 | `FileDataPart` の追加 | Android SDK の `FileDataPart`（URI/Cloud Storage ファイル参照）が未実装。`Content.kt`, `ContentBuilder.kt`, 各 platform mapper に追加が必要 | DONE |
+| AI-4 | `GenerationConfig` に不足パラメータ追加 | `responseModalities`（画像生成時に必要）、`presencePenalty`, `frequencyPenalty` がない | DONE |
+| AI-5 | CLAUDE.md の iOS ステータス更新 | CLAUDE.md に "TODO stubs — not functional" とあるが、`GenerativeModel.apple.kt` 等は実装済み。実態と乖離 | DONE |
 
 ### P2 (Medium)
 
@@ -54,10 +54,10 @@ Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
 
 | # | Task | Detail | Status |
 |---|------|--------|--------|
-| FS-3 | 書き込み用シリアライゼーション `encodeToMap()` | `toObject<T>()` の逆。`@Serializable` オブジェクトを `Map<String, Any?>` に変換するヘルパーがなく、`set()` / `update()` / `add()` で毎回手動 Map 構築が必要 | TODO |
-| FS-4 | `SnapshotMetadata` の公開 | `DocumentSnapshot.metadata` / `QuerySnapshot.metadata` がない。`hasPendingWrites`, `isFromCache` を確認できない | TODO |
-| FS-5 | `DocumentChange` の追加 | `QuerySnapshot.documentChanges` がなく、リアルタイムリスナーで ADDED/MODIFIED/REMOVED の変更種別を判別できない | TODO |
-| FS-6 | `SetOptions` の拡張 | `set(data, merge = true)` のみ。`mergeFields(List<String>)` / `mergeFieldPaths()` で部分フィールドマージができない | TODO |
+| FS-3 | 書き込み用シリアライゼーション `encodeToMap()` | `toObject<T>()` の逆。`@Serializable` オブジェクトを `Map<String, Any?>` に変換するヘルパーがなく、`set()` / `update()` / `add()` で毎回手動 Map 構築が必要 | DONE |
+| FS-4 | `SnapshotMetadata` の公開 | `DocumentSnapshot.metadata` / `QuerySnapshot.metadata` がない。`hasPendingWrites`, `isFromCache` を確認できない | DONE |
+| FS-5 | `DocumentChange` の追加 | `QuerySnapshot.documentChanges` がなく、リアルタイムリスナーで ADDED/MODIFIED/REMOVED の変更種別を判別できない | DONE |
+| FS-6 | `SetOptions` の拡張 | `set(data, merge = true)` のみ。`mergeFields(List<String>)` / `mergeFieldPaths()` で部分フィールドマージができない | DONE |
 
 ### P2 (Medium)
 
@@ -94,8 +94,8 @@ Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
 
 | # | Task | Detail | Status |
 |---|------|--------|--------|
-| X-1 | expect class の `equals` / `hashCode` | `DocumentReference`, `CollectionReference` 等に未定義。common コードでの等値比較が正しく動かない | TODO |
-| X-2 | テスト追加 | platform 実装のテストなし。エミュレータ integration test もない | TODO |
+| X-1 | expect class の `equals` / `hashCode` | `DocumentReference`, `CollectionReference` 等に未定義。common コードでの等値比較が正しく動かない | DONE |
+| X-2 | テスト追加 | platform 実装のテストなし。エミュレータ integration test もない | DONE |
 
 ### P2 (Medium)
 
