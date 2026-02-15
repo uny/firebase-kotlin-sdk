@@ -22,7 +22,13 @@ sealed class ImagenImageFormat {
      * @property compressionQuality Compression quality (0-100). Higher values produce better quality
      *                              but larger file sizes. If null, the server default is used.
      */
-    data class Jpeg(val compressionQuality: Int? = null) : ImagenImageFormat()
+    data class Jpeg(val compressionQuality: Int? = null) : ImagenImageFormat() {
+        init {
+            compressionQuality?.let {
+                require(it in 0..100) { "compressionQuality must be between 0 and 100, was $it" }
+            }
+        }
+    }
 
     companion object {
         /** Creates a PNG image format. */
@@ -33,10 +39,6 @@ sealed class ImagenImageFormat {
          *
          * @param compressionQuality Compression quality (0-100). If null, the server default is used.
          */
-        fun jpeg(compressionQuality: Int? = null): ImagenImageFormat = Jpeg(
-            compressionQuality?.also {
-                require(it in 0..100) { "compressionQuality must be between 0 and 100, was $it" }
-            },
-        )
+        fun jpeg(compressionQuality: Int? = null): ImagenImageFormat = Jpeg(compressionQuality)
     }
 }
