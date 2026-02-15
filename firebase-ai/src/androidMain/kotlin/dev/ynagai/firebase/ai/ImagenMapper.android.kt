@@ -45,11 +45,8 @@ internal fun ImagenPersonFilterLevel.toAndroid(): AndroidImagenPersonFilterLevel
     ImagenPersonFilterLevel.ALLOW_ALL -> AndroidImagenPersonFilterLevel.ALLOW_ALL
 }
 
-internal fun ImagenSafetySettings.toAndroid(): AndroidImagenSafetySettings? {
-    val androidSafetyFilter = safetyFilterLevel?.toAndroid() ?: return null
-    val androidPersonFilter = personFilterLevel?.toAndroid() ?: return null
-    return AndroidImagenSafetySettings(androidSafetyFilter, androidPersonFilter)
-}
+internal fun ImagenSafetySettings.toAndroid(): AndroidImagenSafetySettings =
+    AndroidImagenSafetySettings(safetyFilterLevel.toAndroid(), personFilterLevel.toAndroid())
 
 internal fun AndroidImagenGenerationResponse<AndroidImagenInlineImage>.toCommon(): ImagenGenerationResponse =
     ImagenGenerationResponse(

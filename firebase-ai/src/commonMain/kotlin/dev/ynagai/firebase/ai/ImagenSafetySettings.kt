@@ -17,6 +17,6 @@ package dev.ynagai.firebase.ai
  * ```
  */
 data class ImagenSafetySettings(
-    val safetyFilterLevel: ImagenSafetyFilterLevel? = null,
-    val personFilterLevel: ImagenPersonFilterLevel? = null,
+    val safetyFilterLevel: ImagenSafetyFilterLevel,
+    val personFilterLevel: ImagenPersonFilterLevel,
 )

@@ -55,8 +55,8 @@ internal fun ImagenPersonFilterLevel.toApple(): KFBImagenPersonFilterLevel = whe
 
 @OptIn(ExperimentalForeignApi::class)
 internal fun ImagenSafetySettings.toApple(): KFBImagenSafetySettings = KFBImagenSafetySettings(
-    safetyFilterLevel = safetyFilterLevel?.toApple(),
-    personFilterLevel = personFilterLevel?.toApple(),
+    safetyFilterLevel = safetyFilterLevel.toApple(),
+    personFilterLevel = personFilterLevel.toApple(),
 )
 
 @OptIn(ExperimentalForeignApi::class)
