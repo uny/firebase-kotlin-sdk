@@ -5,10 +5,39 @@ import com.google.firebase.FirebaseApp as AndroidFirebaseApp
 actual val Firebase.app: FirebaseApp
     get() = FirebaseApp(AndroidFirebaseApp.getInstance())
 
+actual fun Firebase.initialize(options: FirebaseOptions, name: String): FirebaseApp {
+    val context = AndroidFirebaseApp.getInstance().applicationContext
+    return FirebaseApp(AndroidFirebaseApp.initializeApp(context, options.toAndroid(), name))
+}
+
+actual fun Firebase.app(name: String): FirebaseApp =
+    FirebaseApp(AndroidFirebaseApp.getInstance(name))
+
+actual val Firebase.apps: List<FirebaseApp>
+    get() = try {
+        val context = AndroidFirebaseApp.getInstance().applicationContext
+        AndroidFirebaseApp.getApps(context).map { FirebaseApp(it) }
+    } catch (_: IllegalStateException) {
+        emptyList()
+    }
+
 actual class FirebaseApp(val android: AndroidFirebaseApp) {
     actual val name: String get() = android.name
     actual val options: FirebaseOptions get() = android.options.toCommon()
+    actual fun delete() = android.delete()
 }
+
+internal fun FirebaseOptions.toAndroid(): com.google.firebase.FirebaseOptions =
+    com.google.firebase.FirebaseOptions.Builder()
+        .setApiKey(apiKey)
+        .setApplicationId(applicationId)
+        .apply {
+            databaseUrl?.let { setDatabaseUrl(it) }
+            gcmSenderId?.let { setGcmSenderId(it) }
+            storageBucket?.let { setStorageBucket(it) }
+            projectId?.let { setProjectId(it) }
+        }
+        .build()
 
 internal fun com.google.firebase.FirebaseOptions.toCommon(): FirebaseOptions =
     FirebaseOptions(
