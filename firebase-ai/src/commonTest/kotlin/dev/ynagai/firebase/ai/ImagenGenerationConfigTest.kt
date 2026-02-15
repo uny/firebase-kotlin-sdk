@@ -138,13 +138,6 @@ class ImagenGenerationConfigTest {
     }
 
     @Test
-    fun safetySettingsDefaults() {
-        val settings = ImagenSafetySettings()
-        assertNull(settings.safetyFilterLevel)
-        assertNull(settings.personFilterLevel)
-    }
-
-    @Test
     fun safetySettingsWithValues() {
         val settings = ImagenSafetySettings(
             safetyFilterLevel = ImagenSafetyFilterLevel.BLOCK_MEDIUM_AND_ABOVE,

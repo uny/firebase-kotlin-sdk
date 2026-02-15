@@ -33,6 +33,10 @@ sealed class ImagenImageFormat {
          *
          * @param compressionQuality Compression quality (0-100). If null, the server default is used.
          */
-        fun jpeg(compressionQuality: Int? = null): ImagenImageFormat = Jpeg(compressionQuality)
+        fun jpeg(compressionQuality: Int? = null): ImagenImageFormat = Jpeg(
+            compressionQuality?.also {
+                require(it in 0..100) { "compressionQuality must be between 0 and 100, was $it" }
+            },
+        )
     }
 }
