@@ -1,25 +1,19 @@
 package dev.ynagai.firebase
 
+import android.content.Context
 import com.google.firebase.FirebaseApp as AndroidFirebaseApp
 
 actual val Firebase.app: FirebaseApp
     get() = FirebaseApp(AndroidFirebaseApp.getInstance())
 
-actual fun Firebase.initialize(options: FirebaseOptions, name: String): FirebaseApp {
-    val context = AndroidFirebaseApp.getInstance().applicationContext
-    return FirebaseApp(AndroidFirebaseApp.initializeApp(context, options.toAndroid(), name))
-}
+actual fun Firebase.initialize(context: Any?, options: FirebaseOptions, name: String): FirebaseApp =
+    FirebaseApp(AndroidFirebaseApp.initializeApp(context as Context, options.toAndroid(), name))
 
 actual fun Firebase.app(name: String): FirebaseApp =
     FirebaseApp(AndroidFirebaseApp.getInstance(name))
 
-actual val Firebase.apps: List<FirebaseApp>
-    get() = try {
-        val context = AndroidFirebaseApp.getInstance().applicationContext
-        AndroidFirebaseApp.getApps(context).map { FirebaseApp(it) }
-    } catch (_: IllegalStateException) {
-        emptyList()
-    }
+actual fun Firebase.apps(context: Any?): List<FirebaseApp> =
+    AndroidFirebaseApp.getApps(context as Context).map { FirebaseApp(it) }
 
 actual class FirebaseApp(val android: AndroidFirebaseApp) {
     actual val name: String get() = android.name

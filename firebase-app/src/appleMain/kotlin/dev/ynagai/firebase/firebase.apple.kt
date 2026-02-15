@@ -13,7 +13,7 @@ actual val Firebase.app: FirebaseApp
     )
 
 @OptIn(ExperimentalForeignApi::class)
-actual fun Firebase.initialize(options: FirebaseOptions, name: String): FirebaseApp {
+actual fun Firebase.initialize(context: Any?, options: FirebaseOptions, name: String): FirebaseApp {
     val firOptions = options.toApple()
     FIRApp.configureWithName(name, options = firOptions)
     return FirebaseApp(requireNotNull(FIRApp.appNamed(name)))
@@ -26,8 +26,8 @@ actual fun Firebase.app(name: String): FirebaseApp =
     })
 
 @OptIn(ExperimentalForeignApi::class)
-actual val Firebase.apps: List<FirebaseApp>
-    get() = FIRApp.allApps?.values?.map { FirebaseApp(it as FIRApp) } ?: emptyList()
+actual fun Firebase.apps(context: Any?): List<FirebaseApp> =
+    FIRApp.allApps?.values?.map { FirebaseApp(it as FIRApp) } ?: emptyList()
 
 @OptIn(ExperimentalForeignApi::class)
 actual class FirebaseApp(val apple: FIRApp) {
