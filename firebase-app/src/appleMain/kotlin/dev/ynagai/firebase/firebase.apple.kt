@@ -1,8 +1,11 @@
 package dev.ynagai.firebase
 
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.coroutines.suspendCancellableCoroutine
 import swiftPMImport.dev.ynagai.firebase.firebase.app.FIRApp
 import swiftPMImport.dev.ynagai.firebase.firebase.app.FIROptions
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 @OptIn(ExperimentalForeignApi::class)
 actual val Firebase.app: FirebaseApp
@@ -33,7 +36,17 @@ actual fun Firebase.apps(context: Any?): List<FirebaseApp> =
 actual class FirebaseApp(val apple: FIRApp) {
     actual val name: String get() = apple.name
     actual val options: FirebaseOptions get() = apple.options.toCommon()
-    actual fun delete() = apple.deleteApp { }
+    actual suspend fun delete(): Unit = suspendCancellableCoroutine { continuation ->
+        apple.deleteApp { success ->
+            if (success) {
+                continuation.resume(Unit)
+            } else {
+                continuation.resumeWithException(
+                    IllegalStateException("Failed to delete FirebaseApp '${apple.name}'.")
+                )
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalForeignApi::class)

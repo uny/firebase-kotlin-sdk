@@ -26,9 +26,12 @@ actual fun Firebase.apps(context: Any?): List<FirebaseApp> =
 actual class FirebaseApp(val android: AndroidFirebaseApp) {
     actual val name: String get() = android.name
     actual val options: FirebaseOptions get() = android.options.toCommon()
-    actual fun delete() = android.delete()
+    actual suspend fun delete() = android.delete()
 }
 
+// Note: gaTrackingId is not set here because Android's FirebaseOptions.Builder
+// does not expose a setGaTrackingId method. On Android, the GA tracking ID is
+// configured exclusively via google-services.json.
 internal fun FirebaseOptions.toAndroid(): com.google.firebase.FirebaseOptions =
     com.google.firebase.FirebaseOptions.Builder()
         .setApiKey(apiKey)
