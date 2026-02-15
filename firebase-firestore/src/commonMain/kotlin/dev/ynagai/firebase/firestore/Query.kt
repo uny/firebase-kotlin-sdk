@@ -14,6 +14,19 @@ expect open class Query {
     fun whereIn(field: String, values: List<Any>): Query
     fun whereNotIn(field: String, values: List<Any>): Query
     fun orderBy(field: String, direction: Direction = Direction.ASCENDING): Query
+
+    fun whereEqualTo(fieldPath: FieldPath, value: Any?): Query
+    fun whereNotEqualTo(fieldPath: FieldPath, value: Any?): Query
+    fun whereLessThan(fieldPath: FieldPath, value: Any): Query
+    fun whereLessThanOrEqualTo(fieldPath: FieldPath, value: Any): Query
+    fun whereGreaterThan(fieldPath: FieldPath, value: Any): Query
+    fun whereGreaterThanOrEqualTo(fieldPath: FieldPath, value: Any): Query
+    fun whereArrayContains(fieldPath: FieldPath, value: Any): Query
+    fun whereArrayContainsAny(fieldPath: FieldPath, values: List<Any>): Query
+    fun whereIn(fieldPath: FieldPath, values: List<Any>): Query
+    fun whereNotIn(fieldPath: FieldPath, values: List<Any>): Query
+    fun orderBy(fieldPath: FieldPath, direction: Direction = Direction.ASCENDING): Query
+
     fun limit(limit: Long): Query
     fun startAt(vararg fieldValues: Any): Query
     fun startAfter(vararg fieldValues: Any): Query

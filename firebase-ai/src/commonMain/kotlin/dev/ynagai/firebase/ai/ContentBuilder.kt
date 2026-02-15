@@ -39,6 +39,18 @@ class ContentBuilder {
     }
 
     /**
+     * Adds an image part to the content.
+     *
+     * Convenience wrapper around [inlineData] for image data.
+     *
+     * @param data The raw image bytes.
+     * @param mimeType The MIME type of the image. Defaults to "image/png".
+     */
+    fun image(data: ByteArray, mimeType: String = "image/png") {
+        inlineData(mimeType, data)
+    }
+
+    /**
      * Adds a file data part referencing a file by URI.
      *
      * @param mimeType The MIME type of the file (e.g., "image/png").
