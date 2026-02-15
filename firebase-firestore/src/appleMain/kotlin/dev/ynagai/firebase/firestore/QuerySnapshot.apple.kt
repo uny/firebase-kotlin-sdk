@@ -29,6 +29,16 @@ actual class QuerySnapshot internal constructor(
 
     actual val documentChanges: List<DocumentChange>
         get() = apple.documentChanges.filterIsInstance<FIRDocumentChange>().map { it.toCommon() }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is QuerySnapshot) return false
+        return apple == other.apple
+    }
+
+    override fun hashCode(): Int = apple.hash.toInt()
+
+    override fun toString(): String = "QuerySnapshot(size=$size)"
 }
 
 @OptIn(ExperimentalForeignApi::class)

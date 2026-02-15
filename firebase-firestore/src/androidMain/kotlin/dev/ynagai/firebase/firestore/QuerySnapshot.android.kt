@@ -23,6 +23,16 @@ actual class QuerySnapshot internal constructor(
 
     actual val documentChanges: List<DocumentChange>
         get() = android.documentChanges.map { it.toCommon() }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is QuerySnapshot) return false
+        return android == other.android
+    }
+
+    override fun hashCode(): Int = android.hashCode()
+
+    override fun toString(): String = "QuerySnapshot(size=$size)"
 }
 
 private fun AndroidDocumentChange.toCommon(): DocumentChange = DocumentChange(

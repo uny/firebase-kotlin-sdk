@@ -36,4 +36,14 @@ actual class DocumentSnapshot internal constructor(
         android.getTimestamp(field)?.let {
             Timestamp(seconds = it.seconds, nanoseconds = it.nanoseconds)
         }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is DocumentSnapshot) return false
+        return android == other.android
+    }
+
+    override fun hashCode(): Int = android.hashCode()
+
+    override fun toString(): String = "DocumentSnapshot(id=$id, exists=$exists)"
 }
