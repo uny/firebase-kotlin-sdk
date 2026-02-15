@@ -5,6 +5,8 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -83,6 +85,33 @@ class SerializationTest {
         assertNotNull(ts)
         assertEquals("1707994800", ts["seconds"]?.jsonPrimitive?.content)
         assertEquals("123456789", ts["nanoseconds"]?.jsonPrimitive?.content)
+    }
+
+    @Test
+    fun mapToJsonElementWithGeoPoint() {
+        val map = mapOf<String, Any?>(
+            "location" to GeoPoint(latitude = 35.6762, longitude = 139.6503)
+        )
+        val json = mapToJsonElement(map)
+        val gp = json["location"]?.jsonObject
+        assertNotNull(gp)
+        assertEquals("35.6762", gp["latitude"]?.jsonPrimitive?.content)
+        assertEquals("139.6503", gp["longitude"]?.jsonPrimitive?.content)
+    }
+
+    @OptIn(ExperimentalEncodingApi::class)
+    @Test
+    fun mapToJsonElementWithBlob() {
+        val bytes = byteArrayOf(1, 2, 3, 4, 5)
+        val map = mapOf<String, Any?>(
+            "data" to Blob(bytes)
+        )
+        val json = mapToJsonElement(map)
+        val blob = json["data"]?.jsonObject
+        assertNotNull(blob)
+        val encodedBytes = blob["_bytes"]?.jsonPrimitive?.content
+        assertNotNull(encodedBytes)
+        assertTrue(bytes.contentEquals(Base64.decode(encodedBytes)))
     }
 
     @Test

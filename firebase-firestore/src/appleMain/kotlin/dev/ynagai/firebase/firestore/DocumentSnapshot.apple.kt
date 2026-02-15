@@ -48,6 +48,16 @@ actual class DocumentSnapshot internal constructor(
         return nativeTimestampToKmp(value)
     }
 
+    actual fun getGeoPoint(field: String): GeoPoint? {
+        val value = apple.valueForField(field) ?: return null
+        return nativeGeoPointToKmp(value)
+    }
+
+    actual fun getBlob(field: String): Blob? {
+        val value = apple.valueForField(field) ?: return null
+        return nativeBlobToKmp(value)
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is DocumentSnapshot) return false

@@ -37,6 +37,16 @@ actual class DocumentSnapshot internal constructor(
             Timestamp(seconds = it.seconds, nanoseconds = it.nanoseconds)
         }
 
+    actual fun getGeoPoint(field: String): GeoPoint? =
+        android.getGeoPoint(field)?.let {
+            GeoPoint(latitude = it.latitude, longitude = it.longitude)
+        }
+
+    actual fun getBlob(field: String): Blob? =
+        android.getBlob(field)?.let {
+            Blob(it.toBytes())
+        }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is DocumentSnapshot) return false
