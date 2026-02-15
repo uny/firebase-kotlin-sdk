@@ -29,7 +29,7 @@ Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
 |---|------|--------|--------|
 | AI-6 | `Schema.type` を enum 化 | `String` 型で `"STRING"`, `"INTEGER"` 等の生文字列を使用。typo リスクあり。`enum class SchemaType` にすべき | DONE |
 | AI-7 | `ContentBuilder` に `image()` ヘルパー追加 | `text()`, `inlineData()` はあるが、画像用の便利メソッドがない | DONE |
-| AI-8 | `ImageGenerationModel` / `imageModel()` | Android SDK の `FirebaseAI.imageModel()` による画像生成機能が欠落 | TODO |
+| AI-8 | `ImagenModel` / `imagenModel()` | Android SDK の `FirebaseAI.imagenModel()` による画像生成機能が欠落 | DONE |
 | AI-9 | `LiveGenerativeModel` / `LiveSession` | Firebase AI SDK のリアルタイムストリーミング API が未実装 | TODO |
 
 ### P3 (Low)
@@ -67,7 +67,7 @@ Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
 | FS-8 | `AggregateQuery` (`count`, `sum`, `average`) | 集計クエリが未実装 | DONE |
 | FS-9 | `FirebaseFirestoreSettings` | キャッシュサイズ、永続化設定、カスタムホスト指定等が不可 | DONE |
 | FS-10 | `GeoPoint` / `Blob` 型 | Firestore ネイティブ型が欠落 | DONE |
-| FS-11 | `CollectionReference.document()` のデフォルト引数確認 | `document(documentPath: String = "")` — 空文字列で自動 ID 生成が正しく動くか要検証 | TODO |
+| FS-11 | `CollectionReference.document()` のデフォルト引数確認 | `document(documentPath: String = "")` — 空文字列で自動 ID 生成が正しく動くか要検証 | DONE |
 
 ### P3 (Low)
 

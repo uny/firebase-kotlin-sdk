@@ -38,4 +38,16 @@ actual class FirebaseAI internal constructor(
             toolConfig = toolConfig?.toAndroid(),
         )
     )
+
+    actual fun imagenModel(
+        modelName: String,
+        generationConfig: ImagenGenerationConfig?,
+        safetySettings: ImagenSafetySettings?,
+    ): ImagenModel = ImagenModel(
+        android.imagenModel(
+            modelName = modelName,
+            generationConfig = generationConfig?.toAndroid(),
+            safetySettings = safetySettings?.toAndroid(),
+        )
+    )
 }

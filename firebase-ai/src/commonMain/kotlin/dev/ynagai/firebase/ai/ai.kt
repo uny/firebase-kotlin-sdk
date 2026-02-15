@@ -62,4 +62,29 @@ expect class FirebaseAI {
         tools: List<Tool>? = null,
         toolConfig: ToolConfig? = null,
     ): GenerativeModel
+
+    /**
+     * Creates an [ImagenModel] with the specified configuration.
+     *
+     * @param modelName The name of the Imagen model to use (e.g., "imagen-3.0-generate-002").
+     * @param generationConfig Optional configuration for image generation.
+     * @param safetySettings Optional safety settings for image generation.
+     * @return A configured [ImagenModel] instance.
+     *
+     * @sample
+     * ```kotlin
+     * val model = Firebase.ai().imagenModel(
+     *     modelName = "imagen-3.0-generate-002",
+     *     generationConfig = imagenGenerationConfig {
+     *         numberOfImages = 4
+     *         aspectRatio = ImagenAspectRatio.LANDSCAPE_16x9
+     *     }
+     * )
+     * ```
+     */
+    fun imagenModel(
+        modelName: String,
+        generationConfig: ImagenGenerationConfig? = null,
+        safetySettings: ImagenSafetySettings? = null,
+    ): ImagenModel
 }
