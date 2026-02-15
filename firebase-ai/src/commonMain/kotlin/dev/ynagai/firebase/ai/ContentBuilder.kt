@@ -39,6 +39,16 @@ class ContentBuilder {
     }
 
     /**
+     * Adds a file data part referencing a file by URI.
+     *
+     * @param mimeType The MIME type of the file (e.g., "image/png").
+     * @param uri The URI of the file.
+     */
+    fun fileData(mimeType: String, uri: String) {
+        parts.add(FileDataPart(mimeType, uri))
+    }
+
+    /**
      * Adds a function call part to the content.
      *
      * @param name The name of the function to call.

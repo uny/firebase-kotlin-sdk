@@ -37,6 +37,15 @@ actual class Transaction internal constructor(
         return this
     }
 
+    actual fun set(documentRef: DocumentReference, data: Map<String, Any?>, options: SetOptions): Transaction {
+        when (options) {
+            is SetOptions.Overwrite -> apple.setData(data.toAppleData(), forDocument = documentRef.apple)
+            is SetOptions.Merge -> apple.setData(data.toAppleData(), forDocument = documentRef.apple, merge = true)
+            is SetOptions.MergeFields -> apple.setData(data.toAppleData(), forDocument = documentRef.apple, mergeFields = options.fields)
+        }
+        return this
+    }
+
     actual fun update(documentRef: DocumentReference, data: Map<String, Any?>): Transaction {
         apple.updateData(data.toAppleData(), forDocument = documentRef.apple)
         return this

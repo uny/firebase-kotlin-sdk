@@ -9,6 +9,7 @@ expect class DocumentReference {
     fun collection(collectionPath: String): CollectionReference
     suspend fun get(source: Source = Source.DEFAULT): DocumentSnapshot
     suspend fun set(data: Map<String, Any?>, merge: Boolean = false): Unit
+    suspend fun set(data: Map<String, Any?>, options: SetOptions): Unit
     suspend fun update(data: Map<String, Any?>): Unit
     suspend fun delete(): Unit
     val snapshots: Flow<DocumentSnapshot>

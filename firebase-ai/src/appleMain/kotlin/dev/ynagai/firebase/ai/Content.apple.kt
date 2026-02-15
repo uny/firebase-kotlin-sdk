@@ -3,6 +3,7 @@ package dev.ynagai.firebase.ai
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.Foundation.NSData
 import platform.Foundation.NSJSONSerialization
+import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBFileDataPart
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBFunctionCallPart
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBFunctionResponsePart
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBInlineDataPart
@@ -16,6 +17,10 @@ internal fun Content.toApple(): KFBModelContent {
             is TextPart -> KFBTextPart(text = part.text)
             is InlineDataPart -> KFBInlineDataPart(
                 data = part.data.toNSData(),
+                mimeType = part.mimeType,
+            )
+            is FileDataPart -> KFBFileDataPart(
+                uri = part.uri,
                 mimeType = part.mimeType,
             )
             is FunctionCallPart -> KFBFunctionCallPart(
@@ -41,6 +46,10 @@ internal fun KFBModelContent.toCommon(): Content = Content(
             is KFBInlineDataPart -> InlineDataPart(
                 mimeType = part.mimeType(),
                 data = (part.data() as? NSData)?.toByteArray() ?: byteArrayOf(),
+            )
+            is KFBFileDataPart -> FileDataPart(
+                mimeType = part.mimeType(),
+                uri = part.uri(),
             )
             is KFBFunctionCallPart -> {
                 val args = part.argsData()?.let { data ->

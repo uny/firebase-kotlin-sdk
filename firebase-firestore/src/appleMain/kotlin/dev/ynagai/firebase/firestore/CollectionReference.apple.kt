@@ -50,4 +50,14 @@ actual class CollectionReference internal constructor(
                 }
             }
         }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is CollectionReference) return false
+        return path == other.path
+    }
+
+    override fun hashCode(): Int = path.hashCode()
+
+    override fun toString(): String = "CollectionReference(path=$path)"
 }

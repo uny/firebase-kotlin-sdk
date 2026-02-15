@@ -24,4 +24,14 @@ actual class CollectionReference internal constructor(
 
     actual suspend fun add(data: Map<String, Any?>): DocumentReference =
         DocumentReference(androidCollection.add(data.toAndroidData()).await())
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is CollectionReference) return false
+        return androidCollection == other.androidCollection
+    }
+
+    override fun hashCode(): Int = androidCollection.hashCode()
+
+    override fun toString(): String = "CollectionReference(path=$path)"
 }

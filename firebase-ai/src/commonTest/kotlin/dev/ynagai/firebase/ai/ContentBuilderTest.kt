@@ -93,6 +93,18 @@ class ContentBuilderTest {
     }
 
     @Test
+    fun fileDataPartIsAdded() {
+        val result = content {
+            fileData("application/pdf", "gs://bucket/file.pdf")
+        }
+        assertEquals(1, result.parts.size)
+        assertIs<FileDataPart>(result.parts[0])
+        val part = result.parts[0] as FileDataPart
+        assertEquals("application/pdf", part.mimeType)
+        assertEquals("gs://bucket/file.pdf", part.uri)
+    }
+
+    @Test
     fun emptyContentHasNoParts() {
         val result = content { }
         assertTrue(result.parts.isEmpty())

@@ -1,5 +1,6 @@
 package dev.ynagai.firebase.ai
 
+import com.google.firebase.ai.type.ResponseModality as AndroidResponseModality
 import com.google.firebase.ai.type.generationConfig as androidGenerationConfig
 
 internal fun GenerationConfig.toAndroid() = androidGenerationConfig {
@@ -11,4 +12,15 @@ internal fun GenerationConfig.toAndroid() = androidGenerationConfig {
     this@toAndroid.stopSequences?.let { stopSequences = it }
     this@toAndroid.responseMimeType?.let { responseMimeType = it }
     this@toAndroid.responseSchema?.let { responseSchema = it.toAndroid() }
+    this@toAndroid.presencePenalty?.let { presencePenalty = it }
+    this@toAndroid.frequencyPenalty?.let { frequencyPenalty = it }
+    this@toAndroid.responseModalities?.let {
+        responseModalities = it.map { modality -> modality.toAndroid() }
+    }
+}
+
+internal fun ResponseModality.toAndroid(): AndroidResponseModality = when (this) {
+    ResponseModality.TEXT -> AndroidResponseModality.TEXT
+    ResponseModality.IMAGE -> AndroidResponseModality.IMAGE
+    ResponseModality.AUDIO -> AndroidResponseModality.AUDIO
 }

@@ -1,6 +1,8 @@
 package dev.ynagai.firebase.firestore
 
 import kotlinx.cinterop.ExperimentalForeignApi
+import swiftPMImport.dev.ynagai.firebase.firebase.firestore.FIRDocumentChange
+import swiftPMImport.dev.ynagai.firebase.firebase.firestore.FIRDocumentChangeType
 import swiftPMImport.dev.ynagai.firebase.firebase.firestore.FIRDocumentSnapshot
 import swiftPMImport.dev.ynagai.firebase.firebase.firestore.FIRQuerySnapshot
 
@@ -16,4 +18,32 @@ actual class QuerySnapshot internal constructor(
 
     actual val size: Int
         get() = apple.documents.size
+
+    actual val metadata: SnapshotMetadata
+        get() = apple.metadata.let {
+            SnapshotMetadata(
+                hasPendingWrites = it.hasPendingWrites(),
+                isFromCache = it.isFromCache(),
+            )
+        }
+
+    actual val documentChanges: List<DocumentChange>
+        get() = apple.documentChanges.filterIsInstance<FIRDocumentChange>().map { it.toCommon() }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+@Suppress("DEPRECATION")
+private fun FIRDocumentChange.toCommon(): DocumentChange {
+    val changeType = when (type) {
+        FIRDocumentChangeType.FIRDocumentChangeTypeAdded -> DocumentChange.Type.ADDED
+        FIRDocumentChangeType.FIRDocumentChangeTypeModified -> DocumentChange.Type.MODIFIED
+        FIRDocumentChangeType.FIRDocumentChangeTypeRemoved -> DocumentChange.Type.REMOVED
+        else -> DocumentChange.Type.MODIFIED
+    }
+    return DocumentChange(
+        type = changeType,
+        document = DocumentSnapshot(document),
+        oldIndex = oldIndex.toInt(),
+        newIndex = newIndex.toInt(),
+    )
 }

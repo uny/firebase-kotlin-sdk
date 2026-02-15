@@ -7,6 +7,10 @@ import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.decodeFromJsonElement
+import kotlinx.serialization.json.encodeToJsonElement
+import kotlinx.serialization.json.booleanOrNull
+import kotlinx.serialization.json.doubleOrNull
+import kotlinx.serialization.json.longOrNull
 
 /**
  * Converts a Firestore data map to a [JsonObject] for serialization.
@@ -62,6 +66,38 @@ inline fun <reified T : Any> DocumentSnapshot.toObject(json: Json = Json { ignor
  */
 inline fun <reified T : Any> QuerySnapshot.toObjects(json: Json = Json { ignoreUnknownKeys = true }): List<T> =
     documents.mapNotNull { it.toObject<T>(json) }
+
+/**
+ * Encodes a serializable object into a [Map] suitable for Firestore operations.
+ *
+ * Uses [kotlinx.serialization] to convert the object to a JSON intermediate representation,
+ * then transforms it into a Map<String, Any?>.
+ *
+ * @param value The object to encode.
+ * @param json The [Json] instance to use for serialization.
+ * @return A map representation of the object.
+ */
+inline fun <reified T : Any> encodeToMap(
+    value: T,
+    json: Json = Json { encodeDefaults = true },
+): Map<String, Any?> {
+    val jsonElement = json.encodeToJsonElement(value)
+    require(jsonElement is JsonObject) { "Expected JsonObject but got ${jsonElement::class.simpleName}" }
+    return jsonObjectToMap(jsonElement)
+}
+
+@PublishedApi
+internal fun jsonObjectToMap(jsonObject: JsonObject): Map<String, Any?> =
+    jsonObject.mapValues { (_, v) -> jsonElementToAny(v) }
+
+private fun jsonElementToAny(element: JsonElement): Any? = when (element) {
+    is JsonNull -> null
+    is JsonPrimitive ->
+        if (element.isString) element.content
+        else element.booleanOrNull ?: element.longOrNull ?: element.doubleOrNull ?: element.content
+    is JsonObject -> jsonObjectToMap(element)
+    is JsonArray -> element.map { jsonElementToAny(it) }
+}
 
 /**
  * Gets a field value from the document and casts it to type [T].

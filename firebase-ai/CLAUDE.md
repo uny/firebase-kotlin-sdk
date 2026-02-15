@@ -20,7 +20,7 @@
 | Platform | Status |
 |----------|--------|
 | Android | Functional — wraps `com.google.firebase:firebase-ai` |
-| iOS | **TODO stubs** — not functional, returns placeholder values |
+| iOS | Functional — wraps Firebase iOS SDK via cinterop fork |
 
 ## iOS Fork
 
@@ -31,7 +31,6 @@ ObjC prefix: `FIR` (standard Firebase iOS prefix).
 ## Not Yet Implemented
 
 - Image generation
-- Function calling / tool use
 - Grounding / retrieval
 - Audio / video parts
 - Code execution
