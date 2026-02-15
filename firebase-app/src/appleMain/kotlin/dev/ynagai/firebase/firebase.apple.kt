@@ -21,7 +21,9 @@ actual class FirebaseApp(val apple: FIRApp) {
 @OptIn(ExperimentalForeignApi::class)
 internal fun FIROptions.toCommon(): FirebaseOptions =
     FirebaseOptions(
-        apiKey = APIKey ?: "",
+        apiKey = requireNotNull(APIKey) {
+            "FIROptions.APIKey is missing. Ensure FirebaseApp.configure() was called with valid options."
+        },
         applicationId = googleAppID,
         databaseUrl = databaseURL,
         gcmSenderId = GCMSenderID,
