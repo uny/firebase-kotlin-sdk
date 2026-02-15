@@ -21,6 +21,12 @@ actual fun Firebase.firestore(app: FirebaseApp): FirebaseFirestore =
 actual class FirebaseFirestore internal constructor(
     internal val apple: FIRFirestore,
 ) {
+    actual var settings: FirebaseFirestoreSettings
+        get() = apple.settings.toCommon()
+        set(value) {
+            apple.settings = value.toApple()
+        }
+
     actual fun collection(collectionPath: String): CollectionReference =
         CollectionReference(apple.collectionWithPath(collectionPath))
 

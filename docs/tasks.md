@@ -65,7 +65,7 @@ Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
 |---|------|--------|--------|
 | FS-7 | `FieldPath` サポート | ネストフィールド参照、`FieldPath.documentId()` が使えない。Query の where 条件でドキュメント ID 指定時に必要 | DONE |
 | FS-8 | `AggregateQuery` (`count`, `sum`, `average`) | 集計クエリが未実装 | DONE |
-| FS-9 | `FirebaseFirestoreSettings` | キャッシュサイズ、永続化設定、カスタムホスト指定等が不可 | TODO |
+| FS-9 | `FirebaseFirestoreSettings` | キャッシュサイズ、永続化設定、カスタムホスト指定等が不可 | DONE |
 | FS-10 | `GeoPoint` / `Blob` 型 | Firestore ネイティブ型が欠落 | TODO |
 | FS-11 | `CollectionReference.document()` のデフォルト引数確認 | `document(documentPath: String = "")` — 空文字列で自動 ID 生成が正しく動くか要検証 | TODO |
 

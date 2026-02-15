@@ -14,6 +14,13 @@ actual fun Firebase.firestore(app: FirebaseApp): FirebaseFirestore =
 actual class FirebaseFirestore internal constructor(
     internal val android: AndroidFirebaseFirestore,
 ) {
+    @Suppress("DEPRECATION")
+    actual var settings: FirebaseFirestoreSettings
+        get() = android.firestoreSettings.toCommon()
+        set(value) {
+            android.firestoreSettings = value.toAndroid()
+        }
+
     actual fun collection(collectionPath: String): CollectionReference =
         CollectionReference(android.collection(collectionPath))
 
