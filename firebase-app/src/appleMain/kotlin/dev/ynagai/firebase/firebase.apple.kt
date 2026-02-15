@@ -2,6 +2,7 @@ package dev.ynagai.firebase
 
 import kotlinx.cinterop.ExperimentalForeignApi
 import swiftPMImport.dev.ynagai.firebase.firebase.app.FIRApp
+import swiftPMImport.dev.ynagai.firebase.firebase.app.FIROptions
 
 @OptIn(ExperimentalForeignApi::class)
 actual val Firebase.app: FirebaseApp
@@ -12,4 +13,20 @@ actual val Firebase.app: FirebaseApp
     )
 
 @OptIn(ExperimentalForeignApi::class)
-actual class FirebaseApp(val apple: FIRApp)
+actual class FirebaseApp(val apple: FIRApp) {
+    actual val name: String get() = apple.name
+    actual val options: FirebaseOptions get() = apple.options.toCommon()
+}
+
+@OptIn(ExperimentalForeignApi::class)
+internal fun FIROptions.toCommon(): FirebaseOptions =
+    FirebaseOptions(
+        apiKey = requireNotNull(APIKey) {
+            "FIROptions.APIKey is missing. Ensure FirebaseApp.configure() was called with valid options."
+        },
+        applicationId = googleAppID,
+        databaseUrl = databaseURL,
+        gcmSenderId = GCMSenderID,
+        storageBucket = storageBucket,
+        projectId = projectID,
+    )
