@@ -20,13 +20,27 @@ private fun anyToJsonElement(value: Any?): JsonElement = when (value) {
     is Boolean -> JsonPrimitive(value)
     is Number -> JsonPrimitive(value)
     is String -> JsonPrimitive(value)
+    is Timestamp -> timestampToJsonElement(value)
     is Map<*, *> -> {
         @Suppress("UNCHECKED_CAST")
         mapToJsonElement(value as Map<String, Any?>)
     }
     is List<*> -> JsonArray(value.map { anyToJsonElement(it) })
-    else -> JsonPrimitive(value.toString())
+    else -> platformValueToJsonElement(value) ?: JsonPrimitive(value.toString())
 }
+
+private fun timestampToJsonElement(ts: Timestamp): JsonElement = JsonObject(
+    mapOf(
+        "seconds" to JsonPrimitive(ts.seconds),
+        "nanoseconds" to JsonPrimitive(ts.nanoseconds),
+    )
+)
+
+/**
+ * Platform-specific hook for converting native types (e.g. platform Timestamp)
+ * to [JsonElement]. Returns null if the value is not a recognized platform type.
+ */
+internal expect fun platformValueToJsonElement(value: Any): JsonElement?
 
 /**
  * Deserializes the document data into an object of type [T].
