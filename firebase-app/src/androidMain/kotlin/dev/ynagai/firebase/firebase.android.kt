@@ -7,13 +7,21 @@ actual val Firebase.app: FirebaseApp
     get() = FirebaseApp(AndroidFirebaseApp.getInstance())
 
 actual fun Firebase.initialize(context: Any?, options: FirebaseOptions, name: String): FirebaseApp =
-    FirebaseApp(AndroidFirebaseApp.initializeApp(context as Context, options.toAndroid(), name))
+    FirebaseApp(
+        AndroidFirebaseApp.initializeApp(
+            requireNotNull(context as? Context) { "Android Context is required. Pass an Activity or Application context." },
+            options.toAndroid(),
+            name
+        )
+    )
 
 actual fun Firebase.app(name: String): FirebaseApp =
     FirebaseApp(AndroidFirebaseApp.getInstance(name))
 
 actual fun Firebase.apps(context: Any?): List<FirebaseApp> =
-    AndroidFirebaseApp.getApps(context as Context).map { FirebaseApp(it) }
+    AndroidFirebaseApp.getApps(
+        requireNotNull(context as? Context) { "Android Context is required. Pass an Activity or Application context." }
+    ).map { FirebaseApp(it) }
 
 actual class FirebaseApp(val android: AndroidFirebaseApp) {
     actual val name: String get() = android.name
