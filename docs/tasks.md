@@ -27,8 +27,8 @@ Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
 
 | # | Task | Detail | Status |
 |---|------|--------|--------|
-| AI-6 | `Schema.type` を enum 化 | `String` 型で `"STRING"`, `"INTEGER"` 等の生文字列を使用。typo リスクあり。`enum class SchemaType` にすべき | TODO |
-| AI-7 | `ContentBuilder` に `image()` ヘルパー追加 | `text()`, `inlineData()` はあるが、画像用の便利メソッドがない | TODO |
+| AI-6 | `Schema.type` を enum 化 | `String` 型で `"STRING"`, `"INTEGER"` 等の生文字列を使用。typo リスクあり。`enum class SchemaType` にすべき | DONE |
+| AI-7 | `ContentBuilder` に `image()` ヘルパー追加 | `text()`, `inlineData()` はあるが、画像用の便利メソッドがない | DONE |
 | AI-8 | `ImageGenerationModel` / `imageModel()` | Android SDK の `FirebaseAI.imageModel()` による画像生成機能が欠落 | TODO |
 | AI-9 | `LiveGenerativeModel` / `LiveSession` | Firebase AI SDK のリアルタイムストリーミング API が未実装 | TODO |
 
@@ -63,7 +63,7 @@ Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
 
 | # | Task | Detail | Status |
 |---|------|--------|--------|
-| FS-7 | `FieldPath` サポート | ネストフィールド参照、`FieldPath.documentId()` が使えない。Query の where 条件でドキュメント ID 指定時に必要 | TODO |
+| FS-7 | `FieldPath` サポート | ネストフィールド参照、`FieldPath.documentId()` が使えない。Query の where 条件でドキュメント ID 指定時に必要 | DONE |
 | FS-8 | `AggregateQuery` (`count`, `sum`, `average`) | 集計クエリが未実装 | TODO |
 | FS-9 | `FirebaseFirestoreSettings` | キャッシュサイズ、永続化設定、カスタムホスト指定等が不可 | TODO |
 | FS-10 | `GeoPoint` / `Blob` 型 | Firestore ネイティブ型が欠落 | TODO |

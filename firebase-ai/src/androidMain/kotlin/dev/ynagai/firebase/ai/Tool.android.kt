@@ -22,34 +22,33 @@ internal fun FunctionDeclaration.toAndroid(): AndroidFunctionDeclaration {
 }
 
 internal fun Schema.toAndroid(): AndroidSchema = when (type) {
-    "STRING" -> if (enumValues != null) {
+    SchemaType.STRING -> if (enumValues != null) {
         AndroidSchema.enumeration(values = enumValues, description = description, nullable = nullable)
     } else {
         AndroidSchema.string(description = description, nullable = nullable)
     }
-    "INTEGER" -> if (format == "int64") {
+    SchemaType.INTEGER -> if (format == "int64") {
         AndroidSchema.long(description = description, nullable = nullable)
     } else {
         AndroidSchema.integer(description = description, nullable = nullable)
     }
-    "NUMBER" -> if (format == "float") {
+    SchemaType.NUMBER -> if (format == "float") {
         AndroidSchema.float(description = description, nullable = nullable)
     } else {
         AndroidSchema.double(description = description, nullable = nullable)
     }
-    "BOOLEAN" -> AndroidSchema.boolean(description = description, nullable = nullable)
-    "ARRAY" -> AndroidSchema.array(
+    SchemaType.BOOLEAN -> AndroidSchema.boolean(description = description, nullable = nullable)
+    SchemaType.ARRAY -> AndroidSchema.array(
         items = items?.toAndroid() ?: AndroidSchema.string(),
         description = description,
         nullable = nullable,
     )
-    "OBJECT" -> AndroidSchema.obj(
+    SchemaType.OBJECT -> AndroidSchema.obj(
         properties = properties?.mapValues { (_, v) -> v.toAndroid() } ?: emptyMap(),
         optionalProperties = properties?.keys?.filter { it !in (requiredProperties ?: emptyList()) } ?: emptyList(),
         description = description,
         nullable = nullable,
     )
-    else -> AndroidSchema.string(description = description, nullable = nullable)
 }
 
 internal fun ToolConfig.toAndroid(): AndroidToolConfig = AndroidToolConfig(

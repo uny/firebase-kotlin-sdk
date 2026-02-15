@@ -42,6 +42,39 @@ actual open class Query internal constructor(internal open val apple: FIRQuery) 
     actual fun orderBy(field: String, direction: Direction): Query =
         Query(apple.queryOrderedByField(field, descending = direction == Direction.DESCENDING))
 
+    actual fun whereEqualTo(fieldPath: FieldPath, value: Any?): Query =
+        Query(apple.queryWhereFieldPath(fieldPath.apple, isEqualTo = value ?: platform.Foundation.NSNull()))
+
+    actual fun whereNotEqualTo(fieldPath: FieldPath, value: Any?): Query =
+        Query(apple.queryWhereFieldPath(fieldPath.apple, isNotEqualTo = value ?: platform.Foundation.NSNull()))
+
+    actual fun whereLessThan(fieldPath: FieldPath, value: Any): Query =
+        Query(apple.queryWhereFieldPath(fieldPath.apple, isLessThan = value))
+
+    actual fun whereLessThanOrEqualTo(fieldPath: FieldPath, value: Any): Query =
+        Query(apple.queryWhereFieldPath(fieldPath.apple, isLessThanOrEqualTo = value))
+
+    actual fun whereGreaterThan(fieldPath: FieldPath, value: Any): Query =
+        Query(apple.queryWhereFieldPath(fieldPath.apple, isGreaterThan = value))
+
+    actual fun whereGreaterThanOrEqualTo(fieldPath: FieldPath, value: Any): Query =
+        Query(apple.queryWhereFieldPath(fieldPath.apple, isGreaterThanOrEqualTo = value))
+
+    actual fun whereArrayContains(fieldPath: FieldPath, value: Any): Query =
+        Query(apple.queryWhereFieldPath(fieldPath.apple, arrayContains = value))
+
+    actual fun whereArrayContainsAny(fieldPath: FieldPath, values: List<Any>): Query =
+        Query(apple.queryWhereFieldPath(fieldPath.apple, arrayContainsAny = values))
+
+    actual fun whereIn(fieldPath: FieldPath, values: List<Any>): Query =
+        Query(apple.queryWhereFieldPath(fieldPath.apple, `in` = values))
+
+    actual fun whereNotIn(fieldPath: FieldPath, values: List<Any>): Query =
+        Query(apple.queryWhereFieldPath(fieldPath.apple, notIn = values))
+
+    actual fun orderBy(fieldPath: FieldPath, direction: Direction): Query =
+        Query(apple.queryOrderedByFieldPath(fieldPath.apple, descending = direction == Direction.DESCENDING))
+
     actual fun limit(limit: Long): Query =
         Query(apple.queryLimitedTo(limit))
 

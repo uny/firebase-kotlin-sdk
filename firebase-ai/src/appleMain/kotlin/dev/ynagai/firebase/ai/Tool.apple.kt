@@ -28,7 +28,7 @@ internal fun FunctionDeclaration.toApple(): KFBFunctionDeclaration {
 @OptIn(ExperimentalForeignApi::class)
 @Suppress("UNCHECKED_CAST")
 internal fun Schema.toApple(): KFBSchema = when (type) {
-    "STRING" -> if (enumValues != null) {
+    SchemaType.STRING -> if (enumValues != null) {
         KFBSchema.enumerationWithValues(
             values = enumValues,
             description = description,
@@ -43,7 +43,7 @@ internal fun Schema.toApple(): KFBSchema = when (type) {
             format = format,
         )
     }
-    "INTEGER" -> KFBSchema.integerWithDescription(
+    SchemaType.INTEGER -> KFBSchema.integerWithDescription(
         description = description,
         title = null,
         nullable = nullable,
@@ -51,7 +51,7 @@ internal fun Schema.toApple(): KFBSchema = when (type) {
         minimum = null,
         maximum = null,
     )
-    "NUMBER" -> if (format == "float") {
+    SchemaType.NUMBER -> if (format == "float") {
         KFBSchema.floatWithDescription(
             description = description,
             title = null,
@@ -68,12 +68,12 @@ internal fun Schema.toApple(): KFBSchema = when (type) {
             maximum = null,
         )
     }
-    "BOOLEAN" -> KFBSchema.booleanWithDescription(
+    SchemaType.BOOLEAN -> KFBSchema.booleanWithDescription(
         description = description,
         title = null,
         nullable = nullable,
     )
-    "ARRAY" -> KFBSchema.arrayWithItems(
+    SchemaType.ARRAY -> KFBSchema.arrayWithItems(
         items = items?.toApple() ?: KFBSchema.stringWithDescription(
             description = null,
             title = null,
@@ -86,7 +86,7 @@ internal fun Schema.toApple(): KFBSchema = when (type) {
         minItems = null,
         maxItems = null,
     )
-    "OBJECT" -> {
+    SchemaType.OBJECT -> {
         val appleProps: Map<Any?, *> =
             properties?.mapValues { (_, v) -> v.toApple() } ?: emptyMap<Any?, Any?>()
         val optionalProps: List<Any?> = properties?.keys?.filter {
@@ -101,12 +101,6 @@ internal fun Schema.toApple(): KFBSchema = when (type) {
             nullable = nullable,
         )
     }
-    else -> KFBSchema.stringWithDescription(
-        description = description,
-        title = null,
-        nullable = nullable,
-        format = null,
-    )
 }
 
 @OptIn(ExperimentalForeignApi::class)

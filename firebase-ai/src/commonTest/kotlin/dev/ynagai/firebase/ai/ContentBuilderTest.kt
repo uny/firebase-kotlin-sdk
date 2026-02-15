@@ -105,6 +105,32 @@ class ContentBuilderTest {
     }
 
     @Test
+    fun imagePartWithDefaultMimeType() {
+        val data = byteArrayOf(10, 20, 30)
+        val result = content {
+            image(data)
+        }
+        assertEquals(1, result.parts.size)
+        assertIs<InlineDataPart>(result.parts[0])
+        val part = result.parts[0] as InlineDataPart
+        assertEquals("image/png", part.mimeType)
+        assertTrue(data.contentEquals(part.data))
+    }
+
+    @Test
+    fun imagePartWithCustomMimeType() {
+        val data = byteArrayOf(1, 2, 3)
+        val result = content {
+            image(data, mimeType = "image/jpeg")
+        }
+        assertEquals(1, result.parts.size)
+        assertIs<InlineDataPart>(result.parts[0])
+        val part = result.parts[0] as InlineDataPart
+        assertEquals("image/jpeg", part.mimeType)
+        assertTrue(data.contentEquals(part.data))
+    }
+
+    @Test
     fun emptyContentHasNoParts() {
         val result = content { }
         assertTrue(result.parts.isEmpty())
