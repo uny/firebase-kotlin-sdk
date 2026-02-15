@@ -11,6 +11,8 @@ import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.booleanOrNull
 import kotlinx.serialization.json.doubleOrNull
 import kotlinx.serialization.json.longOrNull
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 /**
  * Converts a Firestore data map to a [JsonObject] for serialization.
@@ -25,6 +27,8 @@ private fun anyToJsonElement(value: Any?): JsonElement = when (value) {
     is Number -> JsonPrimitive(value)
     is String -> JsonPrimitive(value)
     is Timestamp -> timestampToJsonElement(value)
+    is GeoPoint -> geoPointToJsonElement(value)
+    is Blob -> blobToJsonElement(value)
     is Map<*, *> -> {
         @Suppress("UNCHECKED_CAST")
         mapToJsonElement(value as Map<String, Any?>)
@@ -37,6 +41,20 @@ private fun timestampToJsonElement(ts: Timestamp): JsonElement = JsonObject(
     mapOf(
         "seconds" to JsonPrimitive(ts.seconds),
         "nanoseconds" to JsonPrimitive(ts.nanoseconds),
+    )
+)
+
+private fun geoPointToJsonElement(gp: GeoPoint): JsonElement = JsonObject(
+    mapOf(
+        "latitude" to JsonPrimitive(gp.latitude),
+        "longitude" to JsonPrimitive(gp.longitude),
+    )
+)
+
+@OptIn(ExperimentalEncodingApi::class)
+private fun blobToJsonElement(blob: Blob): JsonElement = JsonObject(
+    mapOf(
+        "_bytes" to JsonPrimitive(Base64.encode(blob.toBytes())),
     )
 )
 

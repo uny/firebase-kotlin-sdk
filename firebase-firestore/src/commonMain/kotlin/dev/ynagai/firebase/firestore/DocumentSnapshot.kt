@@ -12,4 +12,6 @@ expect class DocumentSnapshot {
     fun getDouble(field: String): Double?
     fun getBoolean(field: String): Boolean?
     fun getTimestamp(field: String): Timestamp?
+    fun getGeoPoint(field: String): GeoPoint?
+    fun getBlob(field: String): Blob?
 }

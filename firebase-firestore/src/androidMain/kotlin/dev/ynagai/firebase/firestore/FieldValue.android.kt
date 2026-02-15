@@ -18,6 +18,8 @@ internal fun Map<String, Any?>.toAndroidData(): Map<String, Any?> =
 
 private fun toAndroidValue(value: Any?): Any? = when (value) {
     is FieldValue -> value.android
+    is GeoPoint -> com.google.firebase.firestore.GeoPoint(value.latitude, value.longitude)
+    is Blob -> com.google.firebase.firestore.Blob.fromBytes(value.toBytes())
     is Map<*, *> -> {
         @Suppress("UNCHECKED_CAST")
         (value as Map<String, Any?>).toAndroidData()
