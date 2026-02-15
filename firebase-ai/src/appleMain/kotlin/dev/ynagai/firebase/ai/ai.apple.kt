@@ -40,4 +40,17 @@ actual class FirebaseAI internal constructor(
             requestOptions = null,
         ),
     )
+
+    actual fun imagenModel(
+        modelName: String,
+        generationConfig: ImagenGenerationConfig?,
+        safetySettings: ImagenSafetySettings?,
+    ): ImagenModel = ImagenModel(
+        apple.imagenModelWithModelName(
+            modelName = modelName,
+            generationConfig = generationConfig?.toApple(),
+            safetySettings = safetySettings?.toApple(),
+            requestOptions = null,
+        ),
+    )
 }

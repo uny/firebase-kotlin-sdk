@@ -18,6 +18,10 @@
 - `CountTokensResponse` — token counting result
 - `GenerativeBackend` — backend selection (Google AI / Vertex AI)
 - `Tool`, `FunctionDeclaration`, `ToolConfig`, `Schema` — function calling / structured output
+- `ImagenModel` — image generation using Imagen
+- `ImagenGenerationConfig`, `ImagenImageFormat` — image generation configuration
+- `ImagenSafetySettings`, `ImagenSafetyFilterLevel`, `ImagenPersonFilterLevel` — image safety filtering
+- `ImagenGenerationResponse`, `ImagenInlineImage` — image generation response
 - `FirebaseAIException` — base exception class and subclasses
 
 ## Platform Status
@@ -35,7 +39,6 @@ ObjC prefix: `KFB` (fork-specific prefix for the AI module).
 
 ## Not Yet Implemented
 
-- `ImageGenerationModel` / `imageModel()`
 - `LiveGenerativeModel` / `LiveSession`
 - Grounding / retrieval
 - Audio / video parts
