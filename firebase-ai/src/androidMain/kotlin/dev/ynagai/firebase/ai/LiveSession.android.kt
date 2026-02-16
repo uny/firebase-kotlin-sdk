@@ -35,10 +35,13 @@ actual class LiveSession internal constructor(
     actual suspend fun sendMediaRealtime(data: InlineDataPart): Unit =
         wrapAndroidException {
             val inlineData = data.toAndroidInlineData()
-            if (data.mimeType.startsWith("audio/")) {
-                android.sendAudioRealtime(inlineData)
-            } else {
-                android.sendVideoRealtime(inlineData)
+            when {
+                data.mimeType.startsWith("audio/") -> android.sendAudioRealtime(inlineData)
+                data.mimeType.startsWith("video/") -> android.sendVideoRealtime(inlineData)
+                else -> throw IllegalArgumentException(
+                    "Unsupported mimeType for sendMediaRealtime: ${data.mimeType}. " +
+                        "Only audio/* and video/* are supported.",
+                )
             }
         }
 
@@ -49,7 +52,7 @@ actual class LiveSession internal constructor(
 
     actual fun close() {
         CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
-            android.close()
+            runCatching { android.close() }
         }
     }
 }

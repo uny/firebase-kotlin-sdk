@@ -42,16 +42,25 @@ actual class LiveSession internal constructor(
     }
 
     actual suspend fun sendMediaRealtime(data: InlineDataPart) {
-        suspendCancellableCoroutine { continuation ->
-            if (data.mimeType.startsWith("audio/")) {
-                apple.sendAudioRealtime(data.data.toNSData()) {
-                    continuation.resume(Unit)
-                }
-            } else {
-                apple.sendVideoRealtime(data.data.toNSData(), mimeType = data.mimeType) {
-                    continuation.resume(Unit)
+        when {
+            data.mimeType.startsWith("audio/") -> {
+                suspendCancellableCoroutine<Unit> { continuation ->
+                    apple.sendAudioRealtime(data.data.toNSData()) {
+                        continuation.resume(Unit)
+                    }
                 }
             }
+            data.mimeType.startsWith("video/") -> {
+                suspendCancellableCoroutine<Unit> { continuation ->
+                    apple.sendVideoRealtime(data.data.toNSData(), mimeType = data.mimeType) {
+                        continuation.resume(Unit)
+                    }
+                }
+            }
+            else -> throw IllegalArgumentException(
+                "Unsupported mimeType for sendMediaRealtime: ${data.mimeType}. " +
+                    "Only audio/* and video/* are supported.",
+            )
         }
     }
 
