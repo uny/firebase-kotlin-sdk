@@ -21,7 +21,7 @@ actual class LiveSession internal constructor(
     }
 
     actual suspend fun send(content: Content, turnComplete: Boolean) {
-        await { callback ->
+        awaitVoid { callback ->
             apple.sendContent(
                 listOf(content.toApple()),
                 turnComplete = turnComplete,
@@ -31,7 +31,7 @@ actual class LiveSession internal constructor(
     }
 
     actual suspend fun sendTextRealtime(text: String) {
-        await { callback ->
+        awaitVoid { callback ->
             apple.sendTextRealtime(text, completionHandler = callback)
         }
     }
@@ -39,12 +39,12 @@ actual class LiveSession internal constructor(
     actual suspend fun sendMediaRealtime(data: InlineDataPart) {
         when {
             data.mimeType.startsWith("audio/") -> {
-                await { callback ->
+                awaitVoid { callback ->
                     apple.sendAudioRealtime(data.data.toNSData(), completionHandler = callback)
                 }
             }
             data.mimeType.startsWith("video/") -> {
-                await { callback ->
+                awaitVoid { callback ->
                     apple.sendVideoRealtime(
                         data.data.toNSData(),
                         mimeType = data.mimeType,
@@ -60,7 +60,7 @@ actual class LiveSession internal constructor(
     }
 
     actual suspend fun sendFunctionResponses(functionList: List<FunctionResponsePart>) {
-        await { callback ->
+        awaitVoid { callback ->
             apple.sendFunctionResponses(
                 functionList.map { it.toAppleFunctionResponse() },
                 completionHandler = callback,
