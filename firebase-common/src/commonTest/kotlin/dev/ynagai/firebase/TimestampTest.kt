@@ -1,4 +1,4 @@
-package dev.ynagai.firebase.firestore
+package dev.ynagai.firebase
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -62,5 +62,51 @@ class TimestampTest {
         val t1 = Timestamp(seconds = 1000L, nanoseconds = 500)
         val t2 = Timestamp(seconds = 1000L, nanoseconds = 500)
         assertEquals(t1.hashCode(), t2.hashCode())
+    }
+
+    @Test
+    fun toMillisPositive() {
+        val ts = Timestamp(seconds = 1707994800L, nanoseconds = 500_000_000)
+        assertEquals(1707994800_500L, ts.toMillis())
+    }
+
+    @Test
+    fun toMillisZero() {
+        val ts = Timestamp(seconds = 0L, nanoseconds = 0)
+        assertEquals(0L, ts.toMillis())
+    }
+
+    @Test
+    fun toMillisTruncatesSubMillisecondNanos() {
+        val ts = Timestamp(seconds = 1L, nanoseconds = 1_500_999)
+        assertEquals(1001L, ts.toMillis())
+    }
+
+    @Test
+    fun fromMillisPositive() {
+        val ts = Timestamp.fromMillis(1707994800_500L)
+        assertEquals(1707994800L, ts.seconds)
+        assertEquals(500_000_000, ts.nanoseconds)
+    }
+
+    @Test
+    fun fromMillisZero() {
+        val ts = Timestamp.fromMillis(0L)
+        assertEquals(0L, ts.seconds)
+        assertEquals(0, ts.nanoseconds)
+    }
+
+    @Test
+    fun fromMillisNegative() {
+        val ts = Timestamp.fromMillis(-1500L)
+        assertEquals(-2L, ts.seconds)
+        assertEquals(500_000_000, ts.nanoseconds)
+    }
+
+    @Test
+    fun fromMillisRoundTrip() {
+        val millis = 1707994800_123L
+        val ts = Timestamp.fromMillis(millis)
+        assertEquals(millis, ts.toMillis())
     }
 }

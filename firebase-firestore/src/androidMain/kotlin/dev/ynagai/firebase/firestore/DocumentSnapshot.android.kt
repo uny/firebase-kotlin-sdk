@@ -1,5 +1,6 @@
 package dev.ynagai.firebase.firestore
 
+import dev.ynagai.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot as AndroidDocumentSnapshot
 
 actual class DocumentSnapshot internal constructor(

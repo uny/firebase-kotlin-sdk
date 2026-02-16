@@ -1,5 +1,6 @@
 package dev.ynagai.firebase.firestore
 
+import dev.ynagai.firebase.Timestamp
 import kotlinx.cinterop.ExperimentalForeignApi
 import swiftPMImport.dev.ynagai.firebase.firebase.firestore.FIRDocumentSnapshot
 

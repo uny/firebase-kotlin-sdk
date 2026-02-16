@@ -22,6 +22,7 @@ kotlin {
         }
         commonMain.dependencies {
             api(projects.firebaseApp)
+            api(projects.firebaseCommon)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)
         }

@@ -1,5 +1,7 @@
 package dev.ynagai.firebase.firestore
 
+import dev.ynagai.firebase.Timestamp
+
 expect class DocumentSnapshot {
     val id: String
     val reference: DocumentReference

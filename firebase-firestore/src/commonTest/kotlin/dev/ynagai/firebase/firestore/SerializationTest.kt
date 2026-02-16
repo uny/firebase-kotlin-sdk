@@ -1,5 +1,6 @@
 package dev.ynagai.firebase.firestore
 
+import dev.ynagai.firebase.Timestamp
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonArray
