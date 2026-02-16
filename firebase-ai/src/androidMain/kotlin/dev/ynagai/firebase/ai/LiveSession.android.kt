@@ -1,0 +1,66 @@
+@file:OptIn(PublicPreviewAPI::class)
+
+package dev.ynagai.firebase.ai
+
+import com.google.firebase.ai.type.FunctionResponsePart as AndroidFunctionResponsePart
+import com.google.firebase.ai.type.LiveSession as AndroidLiveSession
+import com.google.firebase.ai.type.PublicPreviewAPI
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
+import kotlinx.serialization.json.JsonObject
+
+actual class LiveSession internal constructor(
+    internal val android: AndroidLiveSession,
+) {
+    actual fun receive(): Flow<LiveServerMessage> =
+        android.receive()
+            .map { it.toCommon() }
+            .catch { throw mapAndroidException(it) }
+
+    actual suspend fun send(content: Content, turnComplete: Boolean): Unit =
+        wrapAndroidException {
+            android.send(content.toAndroid())
+        }
+
+    actual suspend fun sendTextRealtime(text: String): Unit =
+        wrapAndroidException {
+            android.sendTextRealtime(text)
+        }
+
+    actual suspend fun sendMediaRealtime(data: InlineDataPart): Unit =
+        wrapAndroidException {
+            val inlineData = data.toAndroidInlineData()
+            if (data.mimeType.startsWith("audio/")) {
+                android.sendAudioRealtime(inlineData)
+            } else {
+                android.sendVideoRealtime(inlineData)
+            }
+        }
+
+    actual suspend fun sendFunctionResponses(functionList: List<FunctionResponsePart>): Unit =
+        wrapAndroidException {
+            android.sendFunctionResponse(functionList.map { it.toAndroidFunctionResponsePart() })
+        }
+
+    actual fun close() {
+        // Android close() is suspend; fire-and-forget from the non-suspend close()
+        // The session will be cleaned up by the underlying implementation
+    }
+}
+
+private fun Any?.toJsonElement(): kotlinx.serialization.json.JsonElement = when (this) {
+    null -> kotlinx.serialization.json.JsonNull
+    is String -> kotlinx.serialization.json.JsonPrimitive(this)
+    is Number -> kotlinx.serialization.json.JsonPrimitive(this)
+    is Boolean -> kotlinx.serialization.json.JsonPrimitive(this)
+    is Map<*, *> -> JsonObject(entries.associate { (k, v) -> k.toString() to v.toJsonElement() })
+    is List<*> -> kotlinx.serialization.json.JsonArray(map { it.toJsonElement() })
+    else -> kotlinx.serialization.json.JsonPrimitive(toString())
+}
+
+private fun FunctionResponsePart.toAndroidFunctionResponsePart(): AndroidFunctionResponsePart =
+    AndroidFunctionResponsePart(
+        name = name,
+        response = JsonObject(response.mapValues { (_, v) -> v.toJsonElement() }),
+    )

@@ -3,6 +3,7 @@ package dev.ynagai.firebase.ai
 import com.google.firebase.Firebase as AndroidFirebase
 import com.google.firebase.ai.ai
 import com.google.firebase.ai.FirebaseAI as AndroidFirebaseAI
+import com.google.firebase.ai.type.PublicPreviewAPI
 import dev.ynagai.firebase.Firebase
 import dev.ynagai.firebase.FirebaseApp
 
@@ -48,6 +49,23 @@ actual class FirebaseAI internal constructor(
             modelName = modelName,
             generationConfig = generationConfig?.toAndroid(),
             safetySettings = safetySettings?.toAndroid(),
+        )
+    )
+
+    @OptIn(PublicPreviewAPI::class)
+    actual fun liveModel(
+        modelName: String,
+        liveGenerationConfig: LiveGenerationConfig?,
+        safetySettings: List<SafetySetting>?,
+        systemInstruction: Content?,
+        tools: List<Tool>?,
+        toolConfig: ToolConfig?,
+    ): LiveGenerativeModel = LiveGenerativeModel(
+        android.liveModel(
+            modelName = modelName,
+            generationConfig = liveGenerationConfig?.toAndroid(),
+            tools = tools?.map { it.toAndroid() },
+            systemInstruction = systemInstruction?.toAndroid(),
         )
     )
 }

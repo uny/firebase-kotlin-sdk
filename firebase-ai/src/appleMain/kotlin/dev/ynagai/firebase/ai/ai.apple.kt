@@ -53,4 +53,22 @@ actual class FirebaseAI internal constructor(
             requestOptions = null,
         ),
     )
+
+    actual fun liveModel(
+        modelName: String,
+        liveGenerationConfig: LiveGenerationConfig?,
+        safetySettings: List<SafetySetting>?,
+        systemInstruction: Content?,
+        tools: List<Tool>?,
+        toolConfig: ToolConfig?,
+    ): LiveGenerativeModel = LiveGenerativeModel(
+        apple.liveModelWithModelName(
+            modelName = modelName,
+            generationConfig = liveGenerationConfig?.toApple(),
+            tools = tools?.map { it.toApple() },
+            toolConfig = toolConfig?.toApple(),
+            systemInstruction = systemInstruction?.toApple(),
+            requestOptions = null,
+        ),
+    )
 }
