@@ -24,7 +24,7 @@ actual class LiveSession internal constructor(
 
     actual suspend fun send(content: Content, turnComplete: Boolean): Unit =
         wrapAndroidException {
-            android.send(content.toAndroid())
+            android.send(content.toAndroid(), turnComplete)
         }
 
     actual suspend fun sendTextRealtime(text: String): Unit =

@@ -32,7 +32,7 @@ internal fun LiveGenerationConfig.toApple(): KFBLiveGenerationConfig = KFBLiveGe
 internal fun ResponseModality.toAppleResponseModality(): KFBResponseModality = when (this) {
     ResponseModality.TEXT -> KFBResponseModality.text()
     ResponseModality.IMAGE -> KFBResponseModality.image()
-    ResponseModality.AUDIO -> KFBResponseModality.audio()
+    ResponseModality.AUDIO -> throw UnsupportedOperationException("Audio modality is not supported yet")
 }
 
 @OptIn(ExperimentalForeignApi::class)

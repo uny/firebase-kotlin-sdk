@@ -3,10 +3,8 @@ package dev.ynagai.firebase.ai
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.suspendCancellableCoroutine
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBLiveServerMessage
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBLiveSession
-import kotlin.coroutines.resume
 
 @OptIn(ExperimentalForeignApi::class)
 actual class LiveSession internal constructor(
@@ -23,38 +21,35 @@ actual class LiveSession internal constructor(
     }
 
     actual suspend fun send(content: Content, turnComplete: Boolean) {
-        suspendCancellableCoroutine { continuation ->
+        await { callback ->
             apple.sendContent(
                 listOf(content.toApple()),
                 turnComplete = turnComplete,
-            ) {
-                continuation.resume(Unit)
-            }
+                completionHandler = callback,
+            )
         }
     }
 
     actual suspend fun sendTextRealtime(text: String) {
-        suspendCancellableCoroutine { continuation ->
-            apple.sendTextRealtime(text) {
-                continuation.resume(Unit)
-            }
+        await { callback ->
+            apple.sendTextRealtime(text, completionHandler = callback)
         }
     }
 
     actual suspend fun sendMediaRealtime(data: InlineDataPart) {
         when {
             data.mimeType.startsWith("audio/") -> {
-                suspendCancellableCoroutine<Unit> { continuation ->
-                    apple.sendAudioRealtime(data.data.toNSData()) {
-                        continuation.resume(Unit)
-                    }
+                await { callback ->
+                    apple.sendAudioRealtime(data.data.toNSData(), completionHandler = callback)
                 }
             }
             data.mimeType.startsWith("video/") -> {
-                suspendCancellableCoroutine<Unit> { continuation ->
-                    apple.sendVideoRealtime(data.data.toNSData(), mimeType = data.mimeType) {
-                        continuation.resume(Unit)
-                    }
+                await { callback ->
+                    apple.sendVideoRealtime(
+                        data.data.toNSData(),
+                        mimeType = data.mimeType,
+                        completionHandler = callback,
+                    )
                 }
             }
             else -> throw IllegalArgumentException(
@@ -65,10 +60,11 @@ actual class LiveSession internal constructor(
     }
 
     actual suspend fun sendFunctionResponses(functionList: List<FunctionResponsePart>) {
-        suspendCancellableCoroutine { continuation ->
-            apple.sendFunctionResponses(functionList.map { it.toAppleFunctionResponse() }) {
-                continuation.resume(Unit)
-            }
+        await { callback ->
+            apple.sendFunctionResponses(
+                functionList.map { it.toAppleFunctionResponse() },
+                completionHandler = callback,
+            )
         }
     }
 
