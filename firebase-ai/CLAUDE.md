@@ -22,6 +22,10 @@
 - `ImagenGenerationConfig`, `ImagenImageFormat` — image generation configuration
 - `ImagenSafetySettings`, `ImagenSafetyFilterLevel`, `ImagenPersonFilterLevel` — image safety filtering
 - `ImagenGenerationResponse`, `ImagenInlineImage` — image generation response
+- `LiveGenerativeModel` — real-time streaming model
+- `LiveSession` — bidirectional live session
+- `LiveGenerationConfig`, `SpeechConfig`, `Voice` — live generation configuration
+- `LiveServerMessage` — sealed interface for live server messages (Content, ToolCall, ToolCallCancellation, GoingAway)
 - `FirebaseAIException` — base exception class and subclasses
 
 ## Platform Status
@@ -39,7 +43,6 @@ ObjC prefix: `KFB` (fork-specific prefix for the AI module).
 
 ## Not Yet Implemented
 
-- `LiveGenerativeModel` / `LiveSession`
 - Grounding / retrieval
 - Audio / video parts
 - Code execution

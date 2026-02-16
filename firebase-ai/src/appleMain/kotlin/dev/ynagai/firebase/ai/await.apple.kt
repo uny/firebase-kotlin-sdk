@@ -35,6 +35,14 @@ internal suspend fun await(block: (callback: (NSError?) -> Unit) -> Unit): Unit 
     }
 
 @OptIn(ExperimentalForeignApi::class)
+internal suspend fun awaitVoid(block: (callback: () -> Unit) -> Unit): Unit =
+    suspendCancellableCoroutine { continuation ->
+        block {
+            continuation.resume(Unit)
+        }
+    }
+
+@OptIn(ExperimentalForeignApi::class)
 internal suspend fun <T : Any> awaitNullableResult(block: (callback: (T?, NSError?) -> Unit) -> Unit): T? =
     suspendCancellableCoroutine { continuation ->
         block { result, error ->

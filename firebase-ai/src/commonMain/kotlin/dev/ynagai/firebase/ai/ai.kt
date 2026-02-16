@@ -87,4 +87,31 @@ expect class FirebaseAI {
         generationConfig: ImagenGenerationConfig? = null,
         safetySettings: ImagenSafetySettings? = null,
     ): ImagenModel
+
+    /**
+     * Creates a [LiveGenerativeModel] for real-time streaming sessions.
+     *
+     * @param modelName The name of the model to use (e.g., "gemini-2.0-flash-live-001").
+     * @param liveGenerationConfig Optional configuration for live generation (response modality, speech config, etc.).
+     * @param systemInstruction Optional system instruction to guide the model's behavior.
+     * @param tools Optional list of tools available to the model.
+     * @return A configured [LiveGenerativeModel] instance.
+     *
+     * Example usage:
+     * ```kotlin
+     * val model = Firebase.ai().liveModel(
+     *     modelName = "gemini-2.0-flash-live-001",
+     *     liveGenerationConfig = liveGenerationConfig {
+     *         responseModality = ResponseModality.TEXT
+     *     }
+     * )
+     * val session = model.connect()
+     * ```
+     */
+    fun liveModel(
+        modelName: String,
+        liveGenerationConfig: LiveGenerationConfig? = null,
+        systemInstruction: Content? = null,
+        tools: List<Tool>? = null,
+    ): LiveGenerativeModel
 }

@@ -30,7 +30,7 @@ Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
 | AI-6 | `Schema.type` を enum 化 | `String` 型で `"STRING"`, `"INTEGER"` 等の生文字列を使用。typo リスクあり。`enum class SchemaType` にすべき | DONE |
 | AI-7 | `ContentBuilder` に `image()` ヘルパー追加 | `text()`, `inlineData()` はあるが、画像用の便利メソッドがない | DONE |
 | AI-8 | `ImagenModel` / `imagenModel()` | Android SDK の `FirebaseAI.imagenModel()` による画像生成機能が欠落 | DONE |
-| AI-9 | `LiveGenerativeModel` / `LiveSession` | Firebase AI SDK のリアルタイムストリーミング API が未実装 | TODO |
+| AI-9 | `LiveGenerativeModel` / `LiveSession` | Firebase AI SDK のリアルタイムストリーミング API が未実装 | DONE |
 
 ### P3 (Low)
 
