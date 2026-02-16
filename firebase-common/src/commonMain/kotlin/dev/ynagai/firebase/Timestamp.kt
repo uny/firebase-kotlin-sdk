@@ -5,6 +5,12 @@ data class Timestamp(
     val nanoseconds: Int,
 ) : Comparable<Timestamp> {
 
+    init {
+        require(nanoseconds in 0..999_999_999) {
+            "nanoseconds must be between 0 and 999,999,999"
+        }
+    }
+
     override fun compareTo(other: Timestamp): Int {
         val secondsCompare = seconds.compareTo(other.seconds)
         return if (secondsCompare != 0) secondsCompare else nanoseconds.compareTo(other.nanoseconds)

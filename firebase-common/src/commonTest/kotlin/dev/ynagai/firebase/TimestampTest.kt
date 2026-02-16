@@ -2,6 +2,7 @@ package dev.ynagai.firebase
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 class TimestampTest {
@@ -108,5 +109,28 @@ class TimestampTest {
         val millis = 1707994800_123L
         val ts = Timestamp.fromMillis(millis)
         assertEquals(millis, ts.toMillis())
+    }
+
+    @Test
+    fun nanosecondsValidationRejectsNegative() {
+        assertFailsWith<IllegalArgumentException> {
+            Timestamp(seconds = 0L, nanoseconds = -1)
+        }
+    }
+
+    @Test
+    fun nanosecondsValidationRejectsOverflow() {
+        assertFailsWith<IllegalArgumentException> {
+            Timestamp(seconds = 0L, nanoseconds = 1_000_000_000)
+        }
+    }
+
+    @Test
+    fun nanosecondsValidationAcceptsBoundary() {
+        val zero = Timestamp(seconds = 0L, nanoseconds = 0)
+        assertEquals(0, zero.nanoseconds)
+
+        val max = Timestamp(seconds = 0L, nanoseconds = 999_999_999)
+        assertEquals(999_999_999, max.nanoseconds)
     }
 }

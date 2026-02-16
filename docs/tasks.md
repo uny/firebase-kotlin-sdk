@@ -1,6 +1,6 @@
 # Firebase Kotlin SDK — Task List
 
-Updated: 2026-02-15
+Updated: 2026-02-17
 
 Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
 
@@ -101,7 +101,9 @@ Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
 
 | # | Task | Detail | Status |
 |---|------|--------|--------|
-| X-3 | `firebase-common` モジュール活用 | 空のまま。`Timestamp` 変換や `FieldPath` 等の共通ユーティリティ置き場として活用可能 | TODO |
+| X-3 | `firebase-common` モジュール活用 | `Timestamp` を `firebase-firestore` から `firebase-common` に移動。`toMillis()` / `fromMillis()` 追加。非推奨 typealias で後方互換維持 | DONE (#21) |
+| X-4 | `Timestamp` に `toInstant()` / `now()` 追加 | Android Firebase SDK の API に合わせて `toInstant()`, `now()` を追加。`kotlinx-datetime` を依存に導入し commonMain で実装 | TODO |
+| X-5 | `Timestamp` の `nanoseconds` バリデーション | `nanoseconds` が `[0, 999_999_999]` の範囲内であることを `init` ブロックで検証。PR #21 CodeRabbit 指摘対応 | IN PROGRESS (#21) |
 
 ---
 
