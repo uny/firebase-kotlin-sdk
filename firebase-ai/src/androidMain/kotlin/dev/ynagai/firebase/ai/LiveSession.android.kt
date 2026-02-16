@@ -24,7 +24,8 @@ actual class LiveSession internal constructor(
 
     actual suspend fun send(content: Content, turnComplete: Boolean): Unit =
         wrapAndroidException {
-            android.send(content.toAndroid(), turnComplete)
+            // Android SDK does not expose turnComplete parameter; it is hardcoded to true.
+            android.send(content.toAndroid())
         }
 
     actual suspend fun sendTextRealtime(text: String): Unit =
