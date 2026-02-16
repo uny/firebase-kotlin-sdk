@@ -5,9 +5,13 @@ package dev.ynagai.firebase.ai
 import com.google.firebase.ai.type.FunctionResponsePart as AndroidFunctionResponsePart
 import com.google.firebase.ai.type.LiveSession as AndroidLiveSession
 import com.google.firebase.ai.type.PublicPreviewAPI
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonObject
 
 actual class LiveSession internal constructor(
@@ -44,8 +48,9 @@ actual class LiveSession internal constructor(
         }
 
     actual fun close() {
-        // Android close() is suspend; fire-and-forget from the non-suspend close()
-        // The session will be cleaned up by the underlying implementation
+        CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+            android.close()
+        }
     }
 }
 

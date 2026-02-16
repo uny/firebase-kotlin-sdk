@@ -5,7 +5,7 @@ package dev.ynagai.firebase.ai
  *
  * Obtain an instance using [FirebaseAI.liveModel].
  *
- * @sample
+ * Example usage:
  * ```kotlin
  * val model = Firebase.ai().liveModel(
  *     modelName = "gemini-2.0-flash-live-001",

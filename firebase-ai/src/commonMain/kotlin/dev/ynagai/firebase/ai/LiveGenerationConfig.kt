@@ -72,7 +72,7 @@ class LiveGenerationConfigBuilder {
  * @param block The builder block for configuring live generation parameters.
  * @return A new [LiveGenerationConfig] instance.
  *
- * @sample
+ * Example usage:
  * ```kotlin
  * val config = liveGenerationConfig {
  *     responseModality = ResponseModality.AUDIO

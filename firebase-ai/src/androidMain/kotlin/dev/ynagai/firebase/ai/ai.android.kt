@@ -56,10 +56,8 @@ actual class FirebaseAI internal constructor(
     actual fun liveModel(
         modelName: String,
         liveGenerationConfig: LiveGenerationConfig?,
-        safetySettings: List<SafetySetting>?,
         systemInstruction: Content?,
         tools: List<Tool>?,
-        toolConfig: ToolConfig?,
     ): LiveGenerativeModel = LiveGenerativeModel(
         android.liveModel(
             modelName = modelName,

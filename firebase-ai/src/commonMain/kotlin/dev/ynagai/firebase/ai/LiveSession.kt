@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
  * Use [receive] to get a [Flow] of server messages, and the various `send*` methods
  * to send content to the model.
  *
- * @sample
+ * Example usage:
  * ```kotlin
  * val session = model.connect()
  *

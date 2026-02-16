@@ -93,13 +93,11 @@ expect class FirebaseAI {
      *
      * @param modelName The name of the model to use (e.g., "gemini-2.0-flash-live-001").
      * @param liveGenerationConfig Optional configuration for live generation (response modality, speech config, etc.).
-     * @param safetySettings Optional list of safety settings to control content filtering.
      * @param systemInstruction Optional system instruction to guide the model's behavior.
      * @param tools Optional list of tools available to the model.
-     * @param toolConfig Optional tool configuration.
      * @return A configured [LiveGenerativeModel] instance.
      *
-     * @sample
+     * Example usage:
      * ```kotlin
      * val model = Firebase.ai().liveModel(
      *     modelName = "gemini-2.0-flash-live-001",
@@ -113,9 +111,7 @@ expect class FirebaseAI {
     fun liveModel(
         modelName: String,
         liveGenerationConfig: LiveGenerationConfig? = null,
-        safetySettings: List<SafetySetting>? = null,
         systemInstruction: Content? = null,
         tools: List<Tool>? = null,
-        toolConfig: ToolConfig? = null,
     ): LiveGenerativeModel
 }
