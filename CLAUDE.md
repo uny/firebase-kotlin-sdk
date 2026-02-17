@@ -26,6 +26,7 @@ Data classes are defined in `commonMain` (not `expect/actual`), with internal ma
 |--------|---------|
 | `firebase-app` | `dev.ynagai.firebase` |
 | `firebase-ai` | `dev.ynagai.firebase.ai` |
+| `firebase-auth` | `dev.ynagai.firebase.auth` |
 | `firebase-firestore` | `dev.ynagai.firebase.firestore` |
 | `firebase-common` | `dev.ynagai.firebase` |
 

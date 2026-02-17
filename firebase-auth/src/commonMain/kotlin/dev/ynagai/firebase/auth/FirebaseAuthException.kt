@@ -1,0 +1,29 @@
+package dev.ynagai.firebase.auth
+
+enum class AuthExceptionCode {
+    INVALID_EMAIL,
+    USER_DISABLED,
+    USER_NOT_FOUND,
+    WRONG_PASSWORD,
+    EMAIL_ALREADY_IN_USE,
+    WEAK_PASSWORD,
+    OPERATION_NOT_ALLOWED,
+    TOO_MANY_REQUESTS,
+    REQUIRES_RECENT_LOGIN,
+    CREDENTIAL_ALREADY_IN_USE,
+    INVALID_CREDENTIAL,
+    ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL,
+    USER_MISMATCH,
+    PROVIDER_ALREADY_LINKED,
+    EXPIRED_ACTION_CODE,
+    INVALID_ACTION_CODE,
+    NETWORK_ERROR,
+    USER_TOKEN_EXPIRED,
+    INVALID_USER_TOKEN,
+    UNKNOWN,
+}
+
+class FirebaseAuthException(
+    message: String?,
+    val code: AuthExceptionCode,
+) : Exception(message)

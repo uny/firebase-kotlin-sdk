@@ -25,6 +25,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(
     ":firebase-ai",
     ":firebase-app",
+    ":firebase-auth",
     ":firebase-common",
     ":firebase-firestore",
 )
