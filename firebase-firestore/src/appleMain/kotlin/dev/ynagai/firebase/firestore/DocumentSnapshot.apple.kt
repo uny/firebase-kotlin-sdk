@@ -2,6 +2,7 @@ package dev.ynagai.firebase.firestore
 
 import dev.ynagai.firebase.Timestamp
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.datetime.Instant
 import swiftPMImport.dev.ynagai.firebase.firebase.firestore.FIRDocumentSnapshot
 
 @OptIn(ExperimentalForeignApi::class)
@@ -58,6 +59,8 @@ actual class DocumentSnapshot internal constructor(
         val value = apple.valueForField(field) ?: return null
         return nativeBlobToKmp(value)
     }
+
+    actual fun getDate(field: String): Instant? = getTimestamp(field)?.toInstant()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

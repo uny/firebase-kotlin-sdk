@@ -1,6 +1,7 @@
 package dev.ynagai.firebase.firestore
 
 import dev.ynagai.firebase.Timestamp
+import kotlinx.datetime.Instant
 import com.google.firebase.firestore.DocumentSnapshot as AndroidDocumentSnapshot
 
 actual class DocumentSnapshot internal constructor(
@@ -47,6 +48,8 @@ actual class DocumentSnapshot internal constructor(
         android.getBlob(field)?.let {
             Blob(it.toBytes())
         }
+
+    actual fun getDate(field: String): Instant? = getTimestamp(field)?.toInstant()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -73,7 +73,7 @@ Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
 
 | # | Task | Detail | Status |
 |---|------|--------|--------|
-| FS-12 | `DocumentSnapshot.getDate()` | Date フィールドアクセサが未実装 | TODO |
+| FS-12 | `DocumentSnapshot.getDate()` | Date フィールドアクセサが未実装 | DONE |
 
 ---
 
@@ -102,8 +102,8 @@ Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
 | # | Task | Detail | Status |
 |---|------|--------|--------|
 | X-3 | `firebase-common` モジュール活用 | `Timestamp` を `firebase-firestore` から `firebase-common` に移動。`toMillis()` / `fromMillis()` 追加。非推奨 typealias で後方互換維持 | DONE (#21) |
-| X-4 | `Timestamp` に `toInstant()` / `now()` 追加 | Android Firebase SDK の API に合わせて `toInstant()`, `now()` を追加。`kotlinx-datetime` を依存に導入し commonMain で実装 | TODO |
-| X-5 | `Timestamp` の `nanoseconds` バリデーション | `nanoseconds` が `[0, 999_999_999]` の範囲内であることを `init` ブロックで検証。PR #21 CodeRabbit 指摘対応 | IN PROGRESS (#21) |
+| X-4 | `Timestamp` に `toInstant()` / `now()` 追加 | Android Firebase SDK の API に合わせて `toInstant()`, `now()`, `fromInstant()` を追加。`kotlinx-datetime` を依存に導入し commonMain で実装 | DONE |
+| X-5 | `Timestamp` の `nanoseconds` バリデーション | `nanoseconds` が `[0, 999_999_999]` の範囲内であることを `init` ブロックで検証。PR #21 CodeRabbit 指摘対応 | DONE (#21) |
 
 ---
 
