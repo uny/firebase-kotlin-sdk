@@ -36,8 +36,8 @@ Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
 
 | # | Task | Detail | Status |
 |---|------|--------|--------|
-| AI-10 | Embeddings API | 未実装 | TODO |
-| AI-11 | Audio/video input parts | 未実装 | TODO |
+| AI-10 | Embeddings API | 未実装 | BLOCKED |
+| AI-11 | Audio/video input parts | 未実装 | DONE |
 
 ---
 
