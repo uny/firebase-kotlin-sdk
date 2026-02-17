@@ -51,6 +51,30 @@ class ContentBuilder {
     }
 
     /**
+     * Adds an audio part to the content.
+     *
+     * Convenience wrapper around [inlineData] for audio data.
+     *
+     * @param data The raw audio bytes.
+     * @param mimeType The MIME type of the audio. Defaults to "audio/mpeg".
+     */
+    fun audio(data: ByteArray, mimeType: String = "audio/mpeg") {
+        inlineData(mimeType, data)
+    }
+
+    /**
+     * Adds a video part to the content.
+     *
+     * Convenience wrapper around [inlineData] for video data.
+     *
+     * @param data The raw video bytes.
+     * @param mimeType The MIME type of the video. Defaults to "video/mp4".
+     */
+    fun video(data: ByteArray, mimeType: String = "video/mp4") {
+        inlineData(mimeType, data)
+    }
+
+    /**
      * Adds a file data part referencing a file by URI.
      *
      * @param mimeType The MIME type of the file (e.g., "image/png").

@@ -22,7 +22,7 @@ data class Content(
  *
  * Implementations include:
  * - [TextPart]: Plain text content
- * - [InlineDataPart]: Binary data like images
+ * - [InlineDataPart]: Binary data like images, audio, and video
  *
  * @see TextPart
  * @see InlineDataPart
@@ -37,9 +37,9 @@ sealed interface Part
 data class TextPart(val text: String) : Part
 
 /**
- * An inline binary data part of content, typically used for images.
+ * An inline binary data part of content, used for images, audio, and video.
  *
- * @property mimeType The MIME type of the data (e.g., "image/png", "image/jpeg").
+ * @property mimeType The MIME type of the data (e.g., "image/png", "audio/mpeg", "video/mp4").
  * @property data The raw binary data.
  *
  * @sample

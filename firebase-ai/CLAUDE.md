@@ -44,6 +44,5 @@ ObjC prefix: `KFB` (fork-specific prefix for the AI module).
 ## Not Yet Implemented
 
 - Grounding / retrieval
-- Audio / video parts
 - Code execution
 - Cached content

@@ -131,6 +131,58 @@ class ContentBuilderTest {
     }
 
     @Test
+    fun audioPartWithDefaultMimeType() {
+        val data = byteArrayOf(10, 20, 30)
+        val result = content {
+            audio(data)
+        }
+        assertEquals(1, result.parts.size)
+        assertIs<InlineDataPart>(result.parts[0])
+        val part = result.parts[0] as InlineDataPart
+        assertEquals("audio/mpeg", part.mimeType)
+        assertTrue(data.contentEquals(part.data))
+    }
+
+    @Test
+    fun audioPartWithCustomMimeType() {
+        val data = byteArrayOf(1, 2, 3)
+        val result = content {
+            audio(data, mimeType = "audio/wav")
+        }
+        assertEquals(1, result.parts.size)
+        assertIs<InlineDataPart>(result.parts[0])
+        val part = result.parts[0] as InlineDataPart
+        assertEquals("audio/wav", part.mimeType)
+        assertTrue(data.contentEquals(part.data))
+    }
+
+    @Test
+    fun videoPartWithDefaultMimeType() {
+        val data = byteArrayOf(10, 20, 30)
+        val result = content {
+            video(data)
+        }
+        assertEquals(1, result.parts.size)
+        assertIs<InlineDataPart>(result.parts[0])
+        val part = result.parts[0] as InlineDataPart
+        assertEquals("video/mp4", part.mimeType)
+        assertTrue(data.contentEquals(part.data))
+    }
+
+    @Test
+    fun videoPartWithCustomMimeType() {
+        val data = byteArrayOf(1, 2, 3)
+        val result = content {
+            video(data, mimeType = "video/webm")
+        }
+        assertEquals(1, result.parts.size)
+        assertIs<InlineDataPart>(result.parts[0])
+        val part = result.parts[0] as InlineDataPart
+        assertEquals("video/webm", part.mimeType)
+        assertTrue(data.contentEquals(part.data))
+    }
+
+    @Test
     fun emptyContentHasNoParts() {
         val result = content { }
         assertTrue(result.parts.isEmpty())
