@@ -1,7 +1,6 @@
 package dev.ynagai.firebase.firestore
 
 import dev.ynagai.firebase.Timestamp
-import kotlinx.datetime.Instant
 
 expect class DocumentSnapshot {
     val id: String
@@ -17,5 +16,4 @@ expect class DocumentSnapshot {
     fun getTimestamp(field: String): Timestamp?
     fun getGeoPoint(field: String): GeoPoint?
     fun getBlob(field: String): Blob?
-    fun getDate(field: String): Instant?
 }

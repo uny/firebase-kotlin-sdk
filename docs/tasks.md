@@ -73,7 +73,7 @@ Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
 
 | # | Task | Detail | Status |
 |---|------|--------|--------|
-| FS-12 | `DocumentSnapshot.getDate()` | Date フィールドアクセサが未実装 | DONE |
+| FS-12 | `DocumentSnapshot.getDate()` | `getTimestamp(field)?.toInstant()` で代替可能。専用メソッド不要 | WONTFIX |
 
 ---
 
