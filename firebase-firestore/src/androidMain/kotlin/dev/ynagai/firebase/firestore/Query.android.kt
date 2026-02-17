@@ -76,17 +76,32 @@ actual open class Query internal constructor(internal open val android: AndroidQ
     actual fun limit(limit: Long): Query =
         Query(android.limit(limit))
 
+    actual fun limitToLast(limit: Long): Query =
+        Query(android.limitToLast(limit))
+
     actual fun startAt(vararg fieldValues: Any): Query =
         Query(android.startAt(*fieldValues))
+
+    actual fun startAt(snapshot: DocumentSnapshot): Query =
+        Query(android.startAt(snapshot.android))
 
     actual fun startAfter(vararg fieldValues: Any): Query =
         Query(android.startAfter(*fieldValues))
 
+    actual fun startAfter(snapshot: DocumentSnapshot): Query =
+        Query(android.startAfter(snapshot.android))
+
     actual fun endAt(vararg fieldValues: Any): Query =
         Query(android.endAt(*fieldValues))
 
+    actual fun endAt(snapshot: DocumentSnapshot): Query =
+        Query(android.endAt(snapshot.android))
+
     actual fun endBefore(vararg fieldValues: Any): Query =
         Query(android.endBefore(*fieldValues))
+
+    actual fun endBefore(snapshot: DocumentSnapshot): Query =
+        Query(android.endBefore(snapshot.android))
 
     actual suspend fun get(source: Source): QuerySnapshot =
         QuerySnapshot(android.get(source.toAndroid()).await())
