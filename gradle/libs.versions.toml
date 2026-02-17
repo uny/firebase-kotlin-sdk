@@ -7,7 +7,7 @@ firebase-bom = "34.9.0"
 firebase-objc = "0.2.0"
 kotlin = "2.2.21-titan-211"
 kotlinx-coroutines = "1.10.2"
-kotlinx-datetime = "0.6.2"
+kotlinx-datetime = "0.7.1-0.6.x-compat"
 kotlinx-serialization = "1.8.1"
 publish = "0.36.0"
 
