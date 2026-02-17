@@ -14,7 +14,7 @@ actual class EmailAuthProvider {
 
 actual class GoogleAuthProvider {
     actual companion object {
-        actual fun getCredential(idToken: String, accessToken: String): AuthCredential =
+        actual fun getCredential(idToken: String?, accessToken: String?): AuthCredential =
             AuthCredential(AndroidGoogleAuthProvider.getCredential(idToken, accessToken))
     }
 }

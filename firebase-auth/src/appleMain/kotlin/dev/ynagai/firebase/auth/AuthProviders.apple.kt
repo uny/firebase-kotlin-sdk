@@ -17,11 +17,11 @@ actual class EmailAuthProvider {
 @OptIn(ExperimentalForeignApi::class)
 actual class GoogleAuthProvider {
     actual companion object {
-        actual fun getCredential(idToken: String, accessToken: String): AuthCredential =
+        actual fun getCredential(idToken: String?, accessToken: String?): AuthCredential =
             AuthCredential(
                 FIRGoogleAuthProvider.credentialWithIDToken(
-                    idToken,
-                    accessToken = accessToken,
+                    idToken ?: throw IllegalArgumentException("idToken is required on iOS"),
+                    accessToken = accessToken ?: throw IllegalArgumentException("accessToken is required on iOS"),
                 )
             )
     }

@@ -8,7 +8,7 @@ expect class EmailAuthProvider {
 
 expect class GoogleAuthProvider {
     companion object {
-        fun getCredential(idToken: String, accessToken: String): AuthCredential
+        fun getCredential(idToken: String?, accessToken: String?): AuthCredential
     }
 }
 
