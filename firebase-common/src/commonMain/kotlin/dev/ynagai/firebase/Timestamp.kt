@@ -1,5 +1,8 @@
 package dev.ynagai.firebase
 
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+
 data class Timestamp(
     val seconds: Long,
     val nanoseconds: Int,
@@ -18,7 +21,14 @@ data class Timestamp(
 
     fun toMillis(): Long = seconds * 1000 + nanoseconds / 1_000_000
 
+    fun toInstant(): Instant = Instant.fromEpochSeconds(seconds, nanoseconds.toLong())
+
     companion object {
+        fun now(): Timestamp = fromInstant(Clock.System.now())
+
+        fun fromInstant(instant: Instant): Timestamp =
+            Timestamp(instant.epochSeconds, instant.nanosecondsOfSecond)
+
         fun fromMillis(milliseconds: Long): Timestamp {
             val seconds = milliseconds / 1000
             val nanos = ((milliseconds % 1000) * 1_000_000).toInt()
