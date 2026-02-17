@@ -9,32 +9,32 @@ class FirebaseAuthExceptionTest {
 
     @Test
     fun exceptionHasCorrectMessageAndCode() {
-        val exception = FirebaseAuthException("Invalid email", AuthExceptionCode.INVALID_EMAIL)
+        val exception = FirebaseAuthException("Invalid email", FirebaseAuthExceptionCode.INVALID_EMAIL)
         assertEquals("Invalid email", exception.message)
-        assertEquals(AuthExceptionCode.INVALID_EMAIL, exception.code)
+        assertEquals(FirebaseAuthExceptionCode.INVALID_EMAIL, exception.errorCode)
     }
 
     @Test
     fun exceptionIsThrowable() {
-        val exception = FirebaseAuthException("error", AuthExceptionCode.UNKNOWN)
+        val exception = FirebaseAuthException("error", FirebaseAuthExceptionCode.UNKNOWN)
         assertIs<Exception>(exception)
     }
 
     @Test
     fun allEnumValuesExist() {
-        val values = AuthExceptionCode.entries
+        val values = FirebaseAuthExceptionCode.entries
         assertTrue(values.size >= 20)
-        assertTrue(values.contains(AuthExceptionCode.INVALID_EMAIL))
-        assertTrue(values.contains(AuthExceptionCode.USER_NOT_FOUND))
-        assertTrue(values.contains(AuthExceptionCode.WRONG_PASSWORD))
-        assertTrue(values.contains(AuthExceptionCode.EMAIL_ALREADY_IN_USE))
-        assertTrue(values.contains(AuthExceptionCode.UNKNOWN))
+        assertTrue(values.contains(FirebaseAuthExceptionCode.INVALID_EMAIL))
+        assertTrue(values.contains(FirebaseAuthExceptionCode.USER_NOT_FOUND))
+        assertTrue(values.contains(FirebaseAuthExceptionCode.WRONG_PASSWORD))
+        assertTrue(values.contains(FirebaseAuthExceptionCode.EMAIL_ALREADY_IN_USE))
+        assertTrue(values.contains(FirebaseAuthExceptionCode.UNKNOWN))
     }
 
     @Test
     fun nullMessage() {
-        val exception = FirebaseAuthException(null, AuthExceptionCode.UNKNOWN)
+        val exception = FirebaseAuthException(null, FirebaseAuthExceptionCode.UNKNOWN)
         assertEquals(null, exception.message)
-        assertEquals(AuthExceptionCode.UNKNOWN, exception.code)
+        assertEquals(FirebaseAuthExceptionCode.UNKNOWN, exception.errorCode)
     }
 }

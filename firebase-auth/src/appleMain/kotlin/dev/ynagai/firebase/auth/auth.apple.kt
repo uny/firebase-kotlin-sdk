@@ -34,8 +34,9 @@ actual class FirebaseAuth internal constructor(
     actual var languageCode: String?
         get() = apple.languageCode()
         set(value) {
-            apple.setLanguageCode(value)
-            if (value == null) {
+            if (value != null) {
+                apple.setLanguageCode(value)
+            } else {
                 apple.useAppLanguage()
             }
         }

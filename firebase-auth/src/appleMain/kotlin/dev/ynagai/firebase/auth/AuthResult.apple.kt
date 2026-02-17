@@ -9,7 +9,7 @@ actual class AuthResult internal constructor(
     internal val apple: FIRAuthDataResult,
 ) {
     actual val user: FirebaseUser?
-        get() = FirebaseUser(apple.user())
+        get() = apple.user()?.let { FirebaseUser(it) }
 
     actual val additionalUserInfo: AdditionalUserInfo?
         get() = apple.additionalUserInfo()?.let {

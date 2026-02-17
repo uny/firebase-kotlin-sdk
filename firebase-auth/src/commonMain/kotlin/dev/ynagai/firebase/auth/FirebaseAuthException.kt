@@ -1,6 +1,6 @@
 package dev.ynagai.firebase.auth
 
-enum class AuthExceptionCode {
+enum class FirebaseAuthExceptionCode {
     INVALID_EMAIL,
     USER_DISABLED,
     USER_NOT_FOUND,
@@ -25,5 +25,5 @@ enum class AuthExceptionCode {
 
 class FirebaseAuthException(
     message: String?,
-    val code: AuthExceptionCode,
+    val errorCode: FirebaseAuthExceptionCode,
 ) : Exception(message)

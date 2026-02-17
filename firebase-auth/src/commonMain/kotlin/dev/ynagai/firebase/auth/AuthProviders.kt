@@ -1,21 +1,29 @@
 package dev.ynagai.firebase.auth
 
-expect object EmailAuthProvider {
-    fun credential(email: String, password: String): AuthCredential
+expect class EmailAuthProvider {
+    companion object {
+        fun getCredential(email: String, password: String): AuthCredential
+    }
 }
 
-expect object GoogleAuthProvider {
-    fun credential(idToken: String?, accessToken: String?): AuthCredential
+expect class GoogleAuthProvider {
+    companion object {
+        fun getCredential(idToken: String, accessToken: String): AuthCredential
+    }
 }
 
-expect object PhoneAuthProvider {
-    fun credential(verificationId: String, smsCode: String): AuthCredential
+expect class PhoneAuthProvider {
+    companion object {
+        fun getCredential(verificationId: String, smsCode: String): AuthCredential
+    }
 }
 
-expect object OAuthProvider {
-    fun credential(
-        providerId: String,
-        idToken: String? = null,
-        accessToken: String? = null,
-    ): AuthCredential
+expect class OAuthProvider {
+    companion object {
+        fun getCredential(
+            providerId: String,
+            idToken: String,
+            accessToken: String? = null,
+        ): AuthCredential
+    }
 }
