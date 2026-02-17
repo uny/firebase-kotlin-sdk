@@ -78,17 +78,32 @@ actual open class Query internal constructor(internal open val apple: FIRQuery) 
     actual fun limit(limit: Long): Query =
         Query(apple.queryLimitedTo(limit))
 
+    actual fun limitToLast(limit: Long): Query =
+        Query(apple.queryLimitedToLast(limit))
+
     actual fun startAt(vararg fieldValues: Any): Query =
         Query(apple.queryStartingAtValues(fieldValues.toList()))
+
+    actual fun startAt(snapshot: DocumentSnapshot): Query =
+        Query(apple.queryStartingAtDocument(snapshot.apple))
 
     actual fun startAfter(vararg fieldValues: Any): Query =
         Query(apple.queryStartingAfterValues(fieldValues.toList()))
 
+    actual fun startAfter(snapshot: DocumentSnapshot): Query =
+        Query(apple.queryStartingAfterDocument(snapshot.apple))
+
     actual fun endAt(vararg fieldValues: Any): Query =
         Query(apple.queryEndingAtValues(fieldValues.toList()))
 
+    actual fun endAt(snapshot: DocumentSnapshot): Query =
+        Query(apple.queryEndingAtDocument(snapshot.apple))
+
     actual fun endBefore(vararg fieldValues: Any): Query =
         Query(apple.queryEndingBeforeValues(fieldValues.toList()))
+
+    actual fun endBefore(snapshot: DocumentSnapshot): Query =
+        Query(apple.queryEndingBeforeDocument(snapshot.apple))
 
     actual suspend fun get(source: Source): QuerySnapshot {
         val result = awaitResult<FIRQuerySnapshot> { callback ->

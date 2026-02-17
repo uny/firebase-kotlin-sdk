@@ -1,6 +1,6 @@
 # Firebase Kotlin SDK — Task List
 
-Updated: 2026-02-17
+Updated: 2026-02-18
 
 Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
 
@@ -74,6 +74,8 @@ Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
 | # | Task | Detail | Status |
 |---|------|--------|--------|
 | FS-12 | `DocumentSnapshot.getDate()` | `getTimestamp(field)?.toInstant()` で代替可能。専用メソッド不要 | WONTFIX |
+| FS-13 | `startAt(DocumentSnapshot)` 等カーソルページネーション | `startAt/startAfter/endAt/endBefore` が `vararg Any` のみ。`DocumentSnapshot` ベースのカーソルページネーションが未実装。実アプリのページネーションで最頻出 | DONE |
+| FS-14 | `limitToLast()` | `Query.limit()` はあるが `limitToLast()` がない。降順クエリの末尾 N 件取得に必要 | DONE |
 
 ---
 

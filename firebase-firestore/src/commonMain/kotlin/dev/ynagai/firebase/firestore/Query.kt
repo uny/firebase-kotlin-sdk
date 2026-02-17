@@ -28,10 +28,15 @@ expect open class Query {
     fun orderBy(fieldPath: FieldPath, direction: Direction = Direction.ASCENDING): Query
 
     fun limit(limit: Long): Query
+    fun limitToLast(limit: Long): Query
     fun startAt(vararg fieldValues: Any): Query
+    fun startAt(snapshot: DocumentSnapshot): Query
     fun startAfter(vararg fieldValues: Any): Query
+    fun startAfter(snapshot: DocumentSnapshot): Query
     fun endAt(vararg fieldValues: Any): Query
+    fun endAt(snapshot: DocumentSnapshot): Query
     fun endBefore(vararg fieldValues: Any): Query
+    fun endBefore(snapshot: DocumentSnapshot): Query
     suspend fun get(source: Source = Source.DEFAULT): QuerySnapshot
     val snapshots: Flow<QuerySnapshot>
     fun snapshots(metadataChanges: MetadataChanges): Flow<QuerySnapshot>
