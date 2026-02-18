@@ -13,6 +13,8 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import platform.Foundation.NSError
+import platform.Foundation.NSURL
+import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIRActionCodeSettings
 import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIRAuth
 import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIRUser
 
@@ -93,6 +95,22 @@ actual class FirebaseAuth internal constructor(
         await { callback -> apple.sendPasswordResetWithEmail(email, completion = callback) }
     }
 
+    actual suspend fun sendSignInLinkToEmail(email: String, actionCodeSettings: ActionCodeSettings) {
+        await { callback ->
+            apple.sendSignInLinkToEmail(email, actionCodeSettings = actionCodeSettings.toApple(), completion = callback)
+        }
+    }
+
+    actual fun isSignInWithEmailLink(link: String): Boolean =
+        apple.isSignInWithEmailLink(link)
+
+    actual suspend fun signInWithEmailLink(email: String, link: String): AuthResult =
+        AuthResult(
+            awaitResult { callback ->
+                apple.signInWithEmail(email, link = link, completion = callback)
+            }
+        )
+
     actual val authStateChanges: Flow<FirebaseUser?>
         get() = callbackFlow {
             val handle = apple.addAuthStateDidChangeListener { _, user ->
@@ -109,3 +127,15 @@ actual class FirebaseAuth internal constructor(
             awaitClose { apple.removeIDTokenDidChangeListener(handle) }
         }
 }
+
+@OptIn(ExperimentalForeignApi::class)
+private fun ActionCodeSettings.toApple(): FIRActionCodeSettings =
+    FIRActionCodeSettings().apply {
+        setURL(NSURL(string = url))
+        setHandleCodeInApp(handleCodeInApp)
+        androidPackageName?.let {
+            setAndroidPackageName(it, installIfNotAvailable = androidInstallIfNotAvailable, minimumVersion = androidMinimumVersion)
+        }
+        iOSBundleId?.let { setIOSBundleID(it) }
+        dynamicLinkDomain?.let { setLinkDomain(it) }
+    }
