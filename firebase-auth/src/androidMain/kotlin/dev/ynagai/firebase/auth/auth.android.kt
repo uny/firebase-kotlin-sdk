@@ -1,5 +1,7 @@
 package dev.ynagai.firebase.auth
 
+import com.google.firebase.auth.ActionCodeEmailInfo
+import com.google.firebase.auth.ActionCodeResult as AndroidActionCodeResult
 import com.google.firebase.auth.ActionCodeSettings as AndroidActionCodeSettings
 import com.google.firebase.auth.FirebaseAuth as AndroidFirebaseAuth
 import dev.ynagai.firebase.Firebase
@@ -58,6 +60,24 @@ actual class FirebaseAuth internal constructor(
         android.sendPasswordResetEmail(email).await()
     }
 
+    actual suspend fun checkActionCode(code: String): ActionCodeResult {
+        val result = android.checkActionCode(code).await()
+        val emailInfo = result.info as? ActionCodeEmailInfo
+        return ActionCodeResult(
+            operation = result.operation.toActionCodeOperation(),
+            email = emailInfo?.email,
+            previousEmail = emailInfo?.previousEmail,
+        )
+    }
+
+    actual suspend fun applyActionCode(code: String) {
+        android.applyActionCode(code).await()
+    }
+
+    actual suspend fun confirmPasswordReset(code: String, newPassword: String) {
+        android.confirmPasswordReset(code, newPassword).await()
+    }
+
     actual suspend fun sendSignInLinkToEmail(email: String, actionCodeSettings: ActionCodeSettings) {
         android.sendSignInLinkToEmail(email, actionCodeSettings.toAndroid()).await()
     }
@@ -85,6 +105,16 @@ actual class FirebaseAuth internal constructor(
             android.addIdTokenListener(listener)
             awaitClose { android.removeIdTokenListener(listener) }
         }
+}
+
+private fun Int.toActionCodeOperation(): ActionCodeOperation = when (this) {
+    AndroidActionCodeResult.PASSWORD_RESET -> ActionCodeOperation.PASSWORD_RESET
+    AndroidActionCodeResult.VERIFY_EMAIL -> ActionCodeOperation.VERIFY_EMAIL
+    AndroidActionCodeResult.RECOVER_EMAIL -> ActionCodeOperation.RECOVER_EMAIL
+    AndroidActionCodeResult.SIGN_IN_WITH_EMAIL_LINK -> ActionCodeOperation.SIGN_IN_WITH_EMAIL_LINK
+    AndroidActionCodeResult.VERIFY_BEFORE_CHANGE_EMAIL -> ActionCodeOperation.VERIFY_AND_CHANGE_EMAIL
+    AndroidActionCodeResult.REVERT_SECOND_FACTOR_ADDITION -> ActionCodeOperation.REVERT_SECOND_FACTOR_ADDITION
+    else -> ActionCodeOperation.UNKNOWN
 }
 
 private fun ActionCodeSettings.toAndroid(): AndroidActionCodeSettings =
