@@ -95,6 +95,25 @@ actual class FirebaseAuth internal constructor(
         await { callback -> apple.sendPasswordResetWithEmail(email, completion = callback) }
     }
 
+    actual suspend fun checkActionCode(code: String): ActionCodeResult {
+        val info = awaitResult { callback ->
+            apple.checkActionCode(code, completion = callback)
+        }
+        return ActionCodeResult(
+            operation = info.operation().toActionCodeOperation(),
+            email = info.email(),
+            previousEmail = info.previousEmail(),
+        )
+    }
+
+    actual suspend fun applyActionCode(code: String) {
+        await { callback -> apple.applyActionCode(code, completion = callback) }
+    }
+
+    actual suspend fun confirmPasswordReset(code: String, newPassword: String) {
+        await { callback -> apple.confirmPasswordResetWithCode(code, newPassword = newPassword, completion = callback) }
+    }
+
     actual suspend fun sendSignInLinkToEmail(email: String, actionCodeSettings: ActionCodeSettings) {
         await { callback ->
             apple.sendSignInLinkToEmail(email, actionCodeSettings = actionCodeSettings.toApple(), completion = callback)
@@ -126,6 +145,17 @@ actual class FirebaseAuth internal constructor(
             }
             awaitClose { apple.removeIDTokenDidChangeListener(handle) }
         }
+}
+
+// FIRActionCodeOperation raw values from Firebase iOS SDK
+private fun Long.toActionCodeOperation(): ActionCodeOperation = when (this) {
+    1L -> ActionCodeOperation.PASSWORD_RESET
+    2L -> ActionCodeOperation.VERIFY_EMAIL
+    3L -> ActionCodeOperation.RECOVER_EMAIL
+    4L -> ActionCodeOperation.SIGN_IN_WITH_EMAIL_LINK
+    5L -> ActionCodeOperation.VERIFY_AND_CHANGE_EMAIL
+    6L -> ActionCodeOperation.REVERT_SECOND_FACTOR_ADDITION
+    else -> ActionCodeOperation.UNKNOWN
 }
 
 @OptIn(ExperimentalForeignApi::class)
