@@ -18,6 +18,7 @@ expect class FirebaseUser {
     suspend fun updatePassword(password: String)
     suspend fun updateProfile(displayName: String? = null, photoUrl: String? = null)
     suspend fun sendEmailVerification()
+    suspend fun sendEmailVerification(actionCodeSettings: ActionCodeSettings)
     suspend fun linkWithCredential(credential: AuthCredential): AuthResult
     suspend fun unlink(providerId: String): FirebaseUser
     suspend fun reauthenticate(credential: AuthCredential)

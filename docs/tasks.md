@@ -98,15 +98,15 @@ Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
 |---|------|--------|--------|
 | AUTH-2 | Email Link Sign-In | `sendSignInLinkToEmail`, `isSignInWithEmailLink`, `signInWithEmailLink` の実装。ActionCodeSettings は既存 | DONE |
 | AUTH-3 | Phone Auth Verification Flow | `PhoneAuthProvider.verifyPhoneNumber()` の OTP フロー実装。現状 credential 作成のみ | TODO |
-| AUTH-4 | Email Action Codes | `checkActionCode`, `applyActionCode`, `confirmPasswordReset` の実装。パスワードリセット・メール検証フロー完成に必要 | TODO |
+| AUTH-4 | Email Action Codes | `checkActionCode`, `applyActionCode`, `confirmPasswordReset` の実装。パスワードリセット・メール検証フロー完成に必要 | DONE |
 
 ### P2 (Medium)
 
 | # | Task | Detail | Status |
 |---|------|--------|--------|
 | AUTH-5 | Additional Auth Providers | Facebook, GitHub, Apple, Twitter 等の `AuthProvider.getCredential()` 追加。現状 Email/Google/Phone/OAuth のみ | TODO |
-| AUTH-6 | `sendPasswordResetEmail` ActionCodeSettings オーバーロード | `sendPasswordResetEmail(email, actionCodeSettings)` 追加。カスタムリダイレクト URL 指定が必要なケース対応 | TODO |
-| AUTH-7 | `sendEmailVerification` ActionCodeSettings オーバーロード | `FirebaseUser.sendEmailVerification(actionCodeSettings)` 追加 | TODO |
+| AUTH-6 | `sendPasswordResetEmail` ActionCodeSettings オーバーロード | `sendPasswordResetEmail(email, actionCodeSettings)` 追加。カスタムリダイレクト URL 指定が必要なケース対応 | DONE |
+| AUTH-7 | `sendEmailVerification` ActionCodeSettings オーバーロード | `FirebaseUser.sendEmailVerification(actionCodeSettings)` 追加 | DONE |
 | AUTH-8 | `fetchSignInMethodsForEmail` | メールに紐づくサインイン方法一覧取得。アカウントリンク・リカバリフローに必要 | TODO |
 
 ### P3 (Low)

@@ -60,6 +60,10 @@ actual class FirebaseAuth internal constructor(
         android.sendPasswordResetEmail(email).await()
     }
 
+    actual suspend fun sendPasswordResetEmail(email: String, actionCodeSettings: ActionCodeSettings) {
+        android.sendPasswordResetEmail(email, actionCodeSettings.toAndroid()).await()
+    }
+
     actual suspend fun checkActionCode(code: String): ActionCodeResult {
         val result = android.checkActionCode(code).await()
         val emailInfo = result.info as? ActionCodeEmailInfo
@@ -117,7 +121,7 @@ private fun Int.toActionCodeOperation(): ActionCodeOperation = when (this) {
     else -> ActionCodeOperation.UNKNOWN
 }
 
-private fun ActionCodeSettings.toAndroid(): AndroidActionCodeSettings =
+internal fun ActionCodeSettings.toAndroid(): AndroidActionCodeSettings =
     AndroidActionCodeSettings.newBuilder()
         .setUrl(url)
         .setHandleCodeInApp(handleCodeInApp)

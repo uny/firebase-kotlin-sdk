@@ -95,6 +95,12 @@ actual class FirebaseAuth internal constructor(
         await { callback -> apple.sendPasswordResetWithEmail(email, completion = callback) }
     }
 
+    actual suspend fun sendPasswordResetEmail(email: String, actionCodeSettings: ActionCodeSettings) {
+        await { callback ->
+            apple.sendPasswordResetWithEmail(email, actionCodeSettings = actionCodeSettings.toApple(), completion = callback)
+        }
+    }
+
     actual suspend fun checkActionCode(code: String): ActionCodeResult {
         val info = awaitResult { callback ->
             apple.checkActionCode(code, completion = callback)
@@ -159,7 +165,7 @@ private fun Long.toActionCodeOperation(): ActionCodeOperation = when (this) {
 }
 
 @OptIn(ExperimentalForeignApi::class)
-private fun ActionCodeSettings.toApple(): FIRActionCodeSettings =
+internal fun ActionCodeSettings.toApple(): FIRActionCodeSettings =
     FIRActionCodeSettings().apply {
         setURL(NSURL(string = url))
         setHandleCodeInApp(handleCodeInApp)
