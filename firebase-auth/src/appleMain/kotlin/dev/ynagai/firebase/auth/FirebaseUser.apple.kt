@@ -87,6 +87,12 @@ actual class FirebaseUser internal constructor(
         await { callback -> apple.sendEmailVerificationWithCompletion(callback) }
     }
 
+    actual suspend fun sendEmailVerification(actionCodeSettings: ActionCodeSettings) {
+        await { callback ->
+            apple.sendEmailVerificationWithActionCodeSettings(actionCodeSettings.toApple(), completion = callback)
+        }
+    }
+
     actual suspend fun linkWithCredential(credential: AuthCredential): AuthResult =
         AuthResult(
             awaitResult { callback ->

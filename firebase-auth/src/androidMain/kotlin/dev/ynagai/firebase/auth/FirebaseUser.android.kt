@@ -79,6 +79,10 @@ actual class FirebaseUser internal constructor(
         android.sendEmailVerification().await()
     }
 
+    actual suspend fun sendEmailVerification(actionCodeSettings: ActionCodeSettings) {
+        android.sendEmailVerification(actionCodeSettings.toAndroid()).await()
+    }
+
     actual suspend fun linkWithCredential(credential: AuthCredential): AuthResult =
         AuthResult(android.linkWithCredential(credential.android).await())
 

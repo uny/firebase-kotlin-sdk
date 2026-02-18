@@ -22,6 +22,7 @@ expect class FirebaseAuth {
     fun signOut()
 
     suspend fun sendPasswordResetEmail(email: String)
+    suspend fun sendPasswordResetEmail(email: String, actionCodeSettings: ActionCodeSettings)
     suspend fun checkActionCode(code: String): ActionCodeResult
     suspend fun applyActionCode(code: String)
     suspend fun confirmPasswordReset(code: String, newPassword: String)
