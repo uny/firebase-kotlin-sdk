@@ -23,6 +23,10 @@ expect class FirebaseAuth {
 
     suspend fun sendPasswordResetEmail(email: String)
 
+    suspend fun sendSignInLinkToEmail(email: String, actionCodeSettings: ActionCodeSettings)
+    fun isSignInWithEmailLink(link: String): Boolean
+    suspend fun signInWithEmailLink(email: String, link: String): AuthResult
+
     val authStateChanges: Flow<FirebaseUser?>
     val idTokenChanges: Flow<FirebaseUser?>
 }

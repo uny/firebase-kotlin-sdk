@@ -1,5 +1,6 @@
 package dev.ynagai.firebase.auth
 
+import com.google.firebase.auth.ActionCodeSettings as AndroidActionCodeSettings
 import com.google.firebase.auth.FirebaseAuth as AndroidFirebaseAuth
 import dev.ynagai.firebase.Firebase
 import dev.ynagai.firebase.FirebaseApp
@@ -57,6 +58,16 @@ actual class FirebaseAuth internal constructor(
         android.sendPasswordResetEmail(email).await()
     }
 
+    actual suspend fun sendSignInLinkToEmail(email: String, actionCodeSettings: ActionCodeSettings) {
+        android.sendSignInLinkToEmail(email, actionCodeSettings.toAndroid()).await()
+    }
+
+    actual fun isSignInWithEmailLink(link: String): Boolean =
+        android.isSignInWithEmailLink(link)
+
+    actual suspend fun signInWithEmailLink(email: String, link: String): AuthResult =
+        AuthResult(android.signInWithEmailLink(email, link).await())
+
     actual val authStateChanges: Flow<FirebaseUser?>
         get() = callbackFlow {
             val listener = AndroidFirebaseAuth.AuthStateListener { auth ->
@@ -75,3 +86,14 @@ actual class FirebaseAuth internal constructor(
             awaitClose { android.removeIdTokenListener(listener) }
         }
 }
+
+private fun ActionCodeSettings.toAndroid(): AndroidActionCodeSettings =
+    AndroidActionCodeSettings.newBuilder()
+        .setUrl(url)
+        .setHandleCodeInApp(handleCodeInApp)
+        .apply {
+            androidPackageName?.let { setAndroidPackageName(it, androidInstallIfNotAvailable, androidMinimumVersion) }
+            iOSBundleId?.let { setIOSBundleId(it) }
+            dynamicLinkDomain?.let { setDynamicLinkDomain(it) }
+        }
+        .build()
