@@ -28,5 +28,11 @@ internal fun String.toAuthExceptionCode(): FirebaseAuthExceptionCode = when (thi
     "ERROR_NETWORK_REQUEST_FAILED" -> FirebaseAuthExceptionCode.NETWORK_ERROR
     "ERROR_USER_TOKEN_EXPIRED" -> FirebaseAuthExceptionCode.USER_TOKEN_EXPIRED
     "ERROR_INVALID_USER_TOKEN" -> FirebaseAuthExceptionCode.INVALID_USER_TOKEN
+    "ERROR_INVALID_PHONE_NUMBER" -> FirebaseAuthExceptionCode.INVALID_PHONE_NUMBER
+    "ERROR_MISSING_PHONE_NUMBER" -> FirebaseAuthExceptionCode.MISSING_PHONE_NUMBER
+    "ERROR_QUOTA_EXCEEDED" -> FirebaseAuthExceptionCode.QUOTA_EXCEEDED
+    "ERROR_SESSION_EXPIRED" -> FirebaseAuthExceptionCode.SESSION_EXPIRED
+    "ERROR_INVALID_VERIFICATION_CODE" -> FirebaseAuthExceptionCode.INVALID_VERIFICATION_CODE
+    "ERROR_INVALID_VERIFICATION_ID" -> FirebaseAuthExceptionCode.INVALID_VERIFICATION_ID
     else -> FirebaseAuthExceptionCode.UNKNOWN
 }

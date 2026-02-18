@@ -23,11 +23,17 @@ class FirebaseAuthExceptionTest {
     @Test
     fun allEnumValuesExist() {
         val values = FirebaseAuthExceptionCode.entries
-        assertTrue(values.size >= 20)
+        assertTrue(values.size >= 26)
         assertTrue(values.contains(FirebaseAuthExceptionCode.INVALID_EMAIL))
         assertTrue(values.contains(FirebaseAuthExceptionCode.USER_NOT_FOUND))
         assertTrue(values.contains(FirebaseAuthExceptionCode.WRONG_PASSWORD))
         assertTrue(values.contains(FirebaseAuthExceptionCode.EMAIL_ALREADY_IN_USE))
+        assertTrue(values.contains(FirebaseAuthExceptionCode.INVALID_PHONE_NUMBER))
+        assertTrue(values.contains(FirebaseAuthExceptionCode.MISSING_PHONE_NUMBER))
+        assertTrue(values.contains(FirebaseAuthExceptionCode.QUOTA_EXCEEDED))
+        assertTrue(values.contains(FirebaseAuthExceptionCode.SESSION_EXPIRED))
+        assertTrue(values.contains(FirebaseAuthExceptionCode.INVALID_VERIFICATION_CODE))
+        assertTrue(values.contains(FirebaseAuthExceptionCode.INVALID_VERIFICATION_ID))
         assertTrue(values.contains(FirebaseAuthExceptionCode.UNKNOWN))
     }
 
