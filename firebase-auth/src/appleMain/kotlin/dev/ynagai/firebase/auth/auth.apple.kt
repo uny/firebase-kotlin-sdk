@@ -136,6 +136,12 @@ actual class FirebaseAuth internal constructor(
             }
         )
 
+    @Suppress("UNCHECKED_CAST")
+    actual suspend fun fetchSignInMethodsForEmail(email: String): List<String> =
+        awaitResult<List<*>> { callback ->
+            apple.fetchSignInMethodsForEmail(email, completion = callback)
+        } as List<String>
+
     actual val authStateChanges: Flow<FirebaseUser?>
         get() = callbackFlow {
             val handle = apple.addAuthStateDidChangeListener { _, user ->

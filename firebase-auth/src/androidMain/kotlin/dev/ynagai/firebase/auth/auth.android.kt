@@ -92,6 +92,10 @@ actual class FirebaseAuth internal constructor(
     actual suspend fun signInWithEmailLink(email: String, link: String): AuthResult =
         AuthResult(android.signInWithEmailLink(email, link).await())
 
+    @Suppress("DEPRECATION")
+    actual suspend fun fetchSignInMethodsForEmail(email: String): List<String> =
+        android.fetchSignInMethodsForEmail(email).await().signInMethods.orEmpty()
+
     actual val authStateChanges: Flow<FirebaseUser?>
         get() = callbackFlow {
             val listener = AndroidFirebaseAuth.AuthStateListener { auth ->
