@@ -31,6 +31,8 @@ expect class FirebaseAuth {
     fun isSignInWithEmailLink(link: String): Boolean
     suspend fun signInWithEmailLink(email: String, link: String): AuthResult
 
+    suspend fun fetchSignInMethodsForEmail(email: String): List<String>
+
     val authStateChanges: Flow<FirebaseUser?>
     val idTokenChanges: Flow<FirebaseUser?>
 }
