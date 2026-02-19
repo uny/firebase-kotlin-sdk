@@ -28,3 +28,21 @@ expect class OAuthProvider {
         ): AuthCredential
     }
 }
+
+expect class FacebookAuthProvider {
+    companion object {
+        fun getCredential(accessToken: String): AuthCredential
+    }
+}
+
+expect class GithubAuthProvider {
+    companion object {
+        fun getCredential(token: String): AuthCredential
+    }
+}
+
+expect class TwitterAuthProvider {
+    companion object {
+        fun getCredential(token: String, secret: String): AuthCredential
+    }
+}

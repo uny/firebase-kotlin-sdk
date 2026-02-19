@@ -5,7 +5,10 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIREmailAuthProvider
 import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIRGoogleAuthProvider
 import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIRPhoneAuthProvider
+import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIRFacebookAuthProvider
+import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIRGitHubAuthProvider
 import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIROAuthProvider
+import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIRTwitterAuthProvider
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -89,5 +92,29 @@ actual class OAuthProvider {
                     accessToken = accessToken,
                 )
             )
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+actual class FacebookAuthProvider {
+    actual companion object {
+        actual fun getCredential(accessToken: String): AuthCredential =
+            AuthCredential(FIRFacebookAuthProvider.credentialWithAccessToken(accessToken))
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+actual class GithubAuthProvider {
+    actual companion object {
+        actual fun getCredential(token: String): AuthCredential =
+            AuthCredential(FIRGitHubAuthProvider.credentialWithToken(token))
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+actual class TwitterAuthProvider {
+    actual companion object {
+        actual fun getCredential(token: String, secret: String): AuthCredential =
+            AuthCredential(FIRTwitterAuthProvider.credentialWithToken(token, secret = secret))
     }
 }
