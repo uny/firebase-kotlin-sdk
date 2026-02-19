@@ -104,7 +104,7 @@ Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
 
 | # | Task | Detail | Status |
 |---|------|--------|--------|
-| AUTH-5 | Additional Auth Providers | Facebook, GitHub, Apple, Twitter 等の `AuthProvider.getCredential()` 追加。現状 Email/Google/Phone/OAuth のみ | TODO |
+| AUTH-5 | Additional Auth Providers | Facebook, GitHub, Apple, Twitter 等の `AuthProvider.getCredential()` 追加。現状 Email/Google/Phone/OAuth のみ | DONE |
 | AUTH-6 | `sendPasswordResetEmail` ActionCodeSettings オーバーロード | `sendPasswordResetEmail(email, actionCodeSettings)` 追加。カスタムリダイレクト URL 指定が必要なケース対応 | DONE |
 | AUTH-7 | `sendEmailVerification` ActionCodeSettings オーバーロード | `FirebaseUser.sendEmailVerification(actionCodeSettings)` 追加 | DONE |
 | AUTH-8 | `fetchSignInMethodsForEmail` | メールに紐づくサインイン方法一覧取得。アカウントリンク・リカバリフローに必要 | TODO |

@@ -8,7 +8,10 @@ import com.google.firebase.auth.FirebaseAuthException as AndroidFirebaseAuthExce
 import com.google.firebase.auth.GoogleAuthProvider as AndroidGoogleAuthProvider
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider as AndroidPhoneAuthProvider
+import com.google.firebase.auth.FacebookAuthProvider as AndroidFacebookAuthProvider
+import com.google.firebase.auth.GithubAuthProvider as AndroidGithubAuthProvider
 import com.google.firebase.auth.OAuthProvider as AndroidOAuthProvider
+import com.google.firebase.auth.TwitterAuthProvider as AndroidTwitterAuthProvider
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.lang.ref.WeakReference
 import java.util.concurrent.TimeUnit
@@ -105,5 +108,26 @@ actual class OAuthProvider {
             accessToken?.let { builder.setAccessToken(it) }
             return AuthCredential(builder.build())
         }
+    }
+}
+
+actual class FacebookAuthProvider {
+    actual companion object {
+        actual fun getCredential(accessToken: String): AuthCredential =
+            AuthCredential(AndroidFacebookAuthProvider.getCredential(accessToken))
+    }
+}
+
+actual class GithubAuthProvider {
+    actual companion object {
+        actual fun getCredential(token: String): AuthCredential =
+            AuthCredential(AndroidGithubAuthProvider.getCredential(token))
+    }
+}
+
+actual class TwitterAuthProvider {
+    actual companion object {
+        actual fun getCredential(token: String, secret: String): AuthCredential =
+            AuthCredential(AndroidTwitterAuthProvider.getCredential(token, secret))
     }
 }
