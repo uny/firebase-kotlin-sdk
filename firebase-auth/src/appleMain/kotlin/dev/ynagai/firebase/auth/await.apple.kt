@@ -36,6 +36,8 @@ internal suspend fun await(block: (callback: (NSError?) -> Unit) -> Unit): Unit 
     }
 
 // FIRAuthErrorCode raw values from Firebase iOS SDK AuthErrors.swift
+private const val ERROR_INVALID_CUSTOM_TOKEN = 17000L
+private const val ERROR_CUSTOM_TOKEN_MISMATCH = 17002L
 private const val ERROR_INVALID_CREDENTIAL = 17004L
 private const val ERROR_USER_DISABLED = 17005L
 private const val ERROR_OPERATION_NOT_ALLOWED = 17006L
@@ -47,19 +49,17 @@ private const val ERROR_USER_NOT_FOUND = 17011L
 private const val ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL = 17012L
 private const val ERROR_REQUIRES_RECENT_LOGIN = 17014L
 private const val ERROR_PROVIDER_ALREADY_LINKED = 17015L
+private const val ERROR_NO_SUCH_PROVIDER = 17016L
 private const val ERROR_INVALID_USER_TOKEN = 17017L
 private const val ERROR_NETWORK_ERROR = 17020L
 private const val ERROR_USER_TOKEN_EXPIRED = 17021L
+private const val ERROR_INVALID_API_KEY = 17023L
 private const val ERROR_USER_MISMATCH = 17024L
 private const val ERROR_CREDENTIAL_ALREADY_IN_USE = 17025L
 private const val ERROR_WEAK_PASSWORD = 17026L
+private const val ERROR_APP_NOT_AUTHORIZED = 17028L
 private const val ERROR_EXPIRED_ACTION_CODE = 17029L
 private const val ERROR_INVALID_ACTION_CODE = 17030L
-private const val ERROR_INVALID_CUSTOM_TOKEN = 17000L
-private const val ERROR_CUSTOM_TOKEN_MISMATCH = 17002L
-private const val ERROR_NO_SUCH_PROVIDER = 17016L
-private const val ERROR_INVALID_API_KEY = 17023L
-private const val ERROR_APP_NOT_AUTHORIZED = 17028L
 private const val ERROR_INVALID_MESSAGE_PAYLOAD = 17031L
 private const val ERROR_INVALID_SENDER = 17032L
 private const val ERROR_INVALID_RECIPIENT_EMAIL = 17033L
