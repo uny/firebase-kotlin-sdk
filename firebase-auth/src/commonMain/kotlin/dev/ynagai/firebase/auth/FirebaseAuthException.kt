@@ -41,11 +41,25 @@ enum class FirebaseAuthExceptionCode {
     INVALID_CONTINUE_URI,
     MISSING_CONTINUE_URI,
     REJECTED_CREDENTIAL,
+    MULTI_FACTOR_AUTH_REQUIRED,
+    MISSING_MULTI_FACTOR_SESSION,
+    MISSING_MULTI_FACTOR_INFO,
+    INVALID_MULTI_FACTOR_SESSION,
+    MULTI_FACTOR_INFO_NOT_FOUND,
+    UNSUPPORTED_FIRST_FACTOR,
+    MAXIMUM_SECOND_FACTOR_COUNT_EXCEEDED,
+    SECOND_FACTOR_ALREADY_ENROLLED,
     INTERNAL_ERROR,
     UNKNOWN,
 }
 
-class FirebaseAuthException(
+open class FirebaseAuthException(
     message: String?,
     val errorCode: FirebaseAuthExceptionCode,
 ) : Exception(message)
+
+class FirebaseAuthMultiFactorException(
+    message: String?,
+    errorCode: FirebaseAuthExceptionCode,
+    val resolver: MultiFactorResolver,
+) : FirebaseAuthException(message, errorCode)

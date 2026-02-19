@@ -16,6 +16,7 @@ expect class PhoneAuthProvider {
     companion object {
         fun getCredential(verificationId: String, smsCode: String): AuthCredential
         suspend fun verifyPhoneNumber(auth: FirebaseAuth, phoneNumber: String): PhoneVerificationResult
+        suspend fun verifyPhoneNumber(auth: FirebaseAuth, phoneNumber: String, session: MultiFactorSession): PhoneVerificationResult
     }
 }
 

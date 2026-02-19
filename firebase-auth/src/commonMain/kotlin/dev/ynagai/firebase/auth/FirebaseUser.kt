@@ -11,6 +11,7 @@ expect class FirebaseUser {
     val providerId: String
     val providerData: List<UserInfo>
     val metadata: UserMetadata?
+    val multiFactor: MultiFactor
 
     suspend fun delete()
     suspend fun reload()

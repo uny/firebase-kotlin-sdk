@@ -52,6 +52,9 @@ actual class FirebaseUser internal constructor(
             )
         }
 
+    actual val multiFactor: MultiFactor
+        get() = MultiFactor(android.multiFactor)
+
     actual suspend fun delete() {
         android.delete().await()
     }

@@ -93,6 +93,58 @@ actual class PhoneAuthProvider {
 
             AndroidPhoneAuthProvider.verifyPhoneNumber(options)
         }
+
+        actual suspend fun verifyPhoneNumber(
+            auth: FirebaseAuth,
+            phoneNumber: String,
+            session: MultiFactorSession,
+        ): PhoneVerificationResult = suspendCancellableCoroutine { continuation ->
+            val activity = activityRef?.get()
+                ?: throw IllegalStateException(
+                    "PhoneAuthProvider.initialize(activity) must be called before verifyPhoneNumber"
+                )
+
+            val resumed = AtomicBoolean(false)
+            continuation.invokeOnCancellation { resumed.set(true) }
+
+            val callbacks = object : AndroidPhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+                    if (resumed.compareAndSet(false, true)) {
+                        continuation.resume(PhoneVerificationResult.AutoVerified(AuthCredential(credential)))
+                    }
+                }
+
+                override fun onVerificationFailed(exception: FirebaseException) {
+                    if (resumed.compareAndSet(false, true)) {
+                        val authException = if (exception is AndroidFirebaseAuthException) {
+                            exception.toCommon()
+                        } else {
+                            FirebaseAuthException(exception.message, FirebaseAuthExceptionCode.UNKNOWN)
+                        }
+                        continuation.resumeWithException(authException)
+                    }
+                }
+
+                override fun onCodeSent(
+                    verificationId: String,
+                    token: AndroidPhoneAuthProvider.ForceResendingToken,
+                ) {
+                    if (resumed.compareAndSet(false, true)) {
+                        continuation.resume(PhoneVerificationResult.CodeSent(verificationId))
+                    }
+                }
+            }
+
+            val options = PhoneAuthOptions.newBuilder(auth.android)
+                .setPhoneNumber(phoneNumber)
+                .setTimeout(60L, TimeUnit.SECONDS)
+                .setActivity(activity)
+                .setMultiFactorSession(session.android)
+                .setCallbacks(callbacks)
+                .build()
+
+            AndroidPhoneAuthProvider.verifyPhoneNumber(options)
+        }
     }
 }
 

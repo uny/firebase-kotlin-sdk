@@ -23,7 +23,7 @@ class FirebaseAuthExceptionTest {
     @Test
     fun allEnumValuesExist() {
         val values = FirebaseAuthExceptionCode.entries
-        assertTrue(values.size >= 42)
+        assertTrue(values.size >= 50)
         assertTrue(values.contains(FirebaseAuthExceptionCode.INVALID_EMAIL))
         assertTrue(values.contains(FirebaseAuthExceptionCode.USER_NOT_FOUND))
         assertTrue(values.contains(FirebaseAuthExceptionCode.WRONG_PASSWORD))
@@ -41,6 +41,15 @@ class FirebaseAuthExceptionTest {
         assertTrue(values.contains(FirebaseAuthExceptionCode.INTERNAL_ERROR))
         assertTrue(values.contains(FirebaseAuthExceptionCode.REJECTED_CREDENTIAL))
         assertTrue(values.contains(FirebaseAuthExceptionCode.UNKNOWN))
+        // MFA error codes
+        assertTrue(values.contains(FirebaseAuthExceptionCode.MULTI_FACTOR_AUTH_REQUIRED))
+        assertTrue(values.contains(FirebaseAuthExceptionCode.MISSING_MULTI_FACTOR_SESSION))
+        assertTrue(values.contains(FirebaseAuthExceptionCode.MISSING_MULTI_FACTOR_INFO))
+        assertTrue(values.contains(FirebaseAuthExceptionCode.INVALID_MULTI_FACTOR_SESSION))
+        assertTrue(values.contains(FirebaseAuthExceptionCode.MULTI_FACTOR_INFO_NOT_FOUND))
+        assertTrue(values.contains(FirebaseAuthExceptionCode.UNSUPPORTED_FIRST_FACTOR))
+        assertTrue(values.contains(FirebaseAuthExceptionCode.MAXIMUM_SECOND_FACTOR_COUNT_EXCEEDED))
+        assertTrue(values.contains(FirebaseAuthExceptionCode.SECOND_FACTOR_ALREADY_ENROLLED))
     }
 
     @Test
