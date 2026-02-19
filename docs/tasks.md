@@ -114,7 +114,7 @@ Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
 | # | Task | Detail | Status |
 |---|------|--------|--------|
 | AUTH-9 | Multi-Factor Authentication (MFA) | `MultiFactor`, `MultiFactorSession`, `MultiFactorAssertion` 等。エンタープライズ向け | TODO |
-| AUTH-10 | Exception コード拡充 | Android SDK の追加エラーコード対応 (`INVALID_DYNAMIC_LINK`, `MISSING_EMAIL` 等) | TODO |
+| AUTH-10 | Exception コード拡充 | Android SDK の追加エラーコード対応 (`INVALID_DYNAMIC_LINK`, `MISSING_EMAIL` 等) | DONE |
 
 ---
 
