@@ -12,6 +12,7 @@ import com.google.firebase.auth.OAuthProvider as AndroidOAuthProvider
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.lang.ref.WeakReference
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -49,15 +50,18 @@ actual class PhoneAuthProvider {
                     "PhoneAuthProvider.initialize(activity) must be called before verifyPhoneNumber"
                 )
 
+            val resumed = AtomicBoolean(false)
+            continuation.invokeOnCancellation { resumed.set(true) }
+
             val callbacks = object : AndroidPhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                 override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-                    if (continuation.isActive) {
+                    if (resumed.compareAndSet(false, true)) {
                         continuation.resume(PhoneVerificationResult.AutoVerified(AuthCredential(credential)))
                     }
                 }
 
                 override fun onVerificationFailed(exception: FirebaseException) {
-                    if (continuation.isActive) {
+                    if (resumed.compareAndSet(false, true)) {
                         val authException = if (exception is AndroidFirebaseAuthException) {
                             exception.toCommon()
                         } else {
@@ -71,7 +75,7 @@ actual class PhoneAuthProvider {
                     verificationId: String,
                     token: AndroidPhoneAuthProvider.ForceResendingToken,
                 ) {
-                    if (continuation.isActive) {
+                    if (resumed.compareAndSet(false, true)) {
                         continuation.resume(PhoneVerificationResult.CodeSent(verificationId))
                     }
                 }
