@@ -1,10 +1,13 @@
 package dev.ynagai.firebase.auth
 
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.coroutines.suspendCancellableCoroutine
 import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIREmailAuthProvider
 import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIRGoogleAuthProvider
 import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIRPhoneAuthProvider
 import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIROAuthProvider
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 @OptIn(ExperimentalForeignApi::class)
 actual class EmailAuthProvider {
@@ -37,6 +40,37 @@ actual class PhoneAuthProvider {
                     verificationCode = smsCode,
                 )
             )
+
+        actual suspend fun verifyPhoneNumber(
+            auth: FirebaseAuth,
+            phoneNumber: String,
+        ): PhoneVerificationResult = suspendCancellableCoroutine { continuation ->
+            FIRPhoneAuthProvider.providerWithAuth(auth.apple)
+                .verifyPhoneNumber(phoneNumber, UIDelegate = null) { verificationId, error ->
+                    when {
+                        error != null -> {
+                            if (continuation.isActive) {
+                                continuation.resumeWithException(error.toAuthException())
+                            }
+                        }
+                        verificationId != null -> {
+                            if (continuation.isActive) {
+                                continuation.resume(PhoneVerificationResult.CodeSent(verificationId))
+                            }
+                        }
+                        else -> {
+                            if (continuation.isActive) {
+                                continuation.resumeWithException(
+                                    FirebaseAuthException(
+                                        "Phone verification completed without verificationId or error.",
+                                        FirebaseAuthExceptionCode.UNKNOWN,
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
+        }
     }
 }
 

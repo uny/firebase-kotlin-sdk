@@ -15,6 +15,7 @@ expect class GoogleAuthProvider {
 expect class PhoneAuthProvider {
     companion object {
         fun getCredential(verificationId: String, smsCode: String): AuthCredential
+        suspend fun verifyPhoneNumber(auth: FirebaseAuth, phoneNumber: String): PhoneVerificationResult
     }
 }
 

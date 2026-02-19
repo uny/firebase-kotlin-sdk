@@ -55,6 +55,12 @@ private const val ERROR_CREDENTIAL_ALREADY_IN_USE = 17025L
 private const val ERROR_WEAK_PASSWORD = 17026L
 private const val ERROR_EXPIRED_ACTION_CODE = 17029L
 private const val ERROR_INVALID_ACTION_CODE = 17030L
+private const val ERROR_MISSING_PHONE_NUMBER = 17041L
+private const val ERROR_INVALID_PHONE_NUMBER = 17048L
+private const val ERROR_INVALID_VERIFICATION_CODE = 17049L
+private const val ERROR_INVALID_VERIFICATION_ID = 17050L
+private const val ERROR_SESSION_EXPIRED = 17051L
+private const val ERROR_QUOTA_EXCEEDED = 17052L
 
 internal fun NSError.toAuthException(): FirebaseAuthException {
     val code = when (this.code) {
@@ -74,6 +80,12 @@ internal fun NSError.toAuthException(): FirebaseAuthException {
         ERROR_PROVIDER_ALREADY_LINKED -> FirebaseAuthExceptionCode.PROVIDER_ALREADY_LINKED
         ERROR_EXPIRED_ACTION_CODE -> FirebaseAuthExceptionCode.EXPIRED_ACTION_CODE
         ERROR_INVALID_ACTION_CODE -> FirebaseAuthExceptionCode.INVALID_ACTION_CODE
+        ERROR_MISSING_PHONE_NUMBER -> FirebaseAuthExceptionCode.MISSING_PHONE_NUMBER
+        ERROR_INVALID_PHONE_NUMBER -> FirebaseAuthExceptionCode.INVALID_PHONE_NUMBER
+        ERROR_INVALID_VERIFICATION_CODE -> FirebaseAuthExceptionCode.INVALID_VERIFICATION_CODE
+        ERROR_INVALID_VERIFICATION_ID -> FirebaseAuthExceptionCode.INVALID_VERIFICATION_ID
+        ERROR_SESSION_EXPIRED -> FirebaseAuthExceptionCode.SESSION_EXPIRED
+        ERROR_QUOTA_EXCEEDED -> FirebaseAuthExceptionCode.QUOTA_EXCEEDED
         ERROR_NETWORK_ERROR -> FirebaseAuthExceptionCode.NETWORK_ERROR
         ERROR_USER_TOKEN_EXPIRED -> FirebaseAuthExceptionCode.USER_TOKEN_EXPIRED
         ERROR_INVALID_USER_TOKEN -> FirebaseAuthExceptionCode.INVALID_USER_TOKEN

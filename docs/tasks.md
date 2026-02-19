@@ -97,7 +97,7 @@ Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
 | # | Task | Detail | Status |
 |---|------|--------|--------|
 | AUTH-2 | Email Link Sign-In | `sendSignInLinkToEmail`, `isSignInWithEmailLink`, `signInWithEmailLink` の実装。ActionCodeSettings は既存 | DONE |
-| AUTH-3 | Phone Auth Verification Flow | `PhoneAuthProvider.verifyPhoneNumber()` の OTP フロー実装。現状 credential 作成のみ | TODO |
+| AUTH-3 | Phone Auth Verification Flow | `PhoneAuthProvider.verifyPhoneNumber()` の OTP フロー実装。現状 credential 作成のみ | DONE |
 | AUTH-4 | Email Action Codes | `checkActionCode`, `applyActionCode`, `confirmPasswordReset` の実装。パスワードリセット・メール検証フロー完成に必要 | DONE |
 
 ### P2 (Medium)
