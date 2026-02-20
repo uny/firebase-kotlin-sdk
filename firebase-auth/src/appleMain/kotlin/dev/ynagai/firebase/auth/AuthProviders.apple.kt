@@ -47,64 +47,49 @@ actual class PhoneAuthProvider {
         actual suspend fun verifyPhoneNumber(
             auth: FirebaseAuth,
             phoneNumber: String,
-        ): PhoneVerificationResult = suspendCancellableCoroutine { continuation ->
-            FIRPhoneAuthProvider.providerWithAuth(auth.apple)
-                .verifyPhoneNumber(phoneNumber, UIDelegate = null) { verificationId, error ->
-                    when {
-                        error != null -> {
-                            if (continuation.isActive) {
-                                continuation.resumeWithException(error.toAuthException())
-                            }
-                        }
-                        verificationId != null -> {
-                            if (continuation.isActive) {
-                                continuation.resume(PhoneVerificationResult.CodeSent(verificationId))
-                            }
-                        }
-                        else -> {
-                            if (continuation.isActive) {
-                                continuation.resumeWithException(
-                                    FirebaseAuthException(
-                                        "Phone verification completed without verificationId or error.",
-                                        FirebaseAuthExceptionCode.UNKNOWN,
-                                    )
-                                )
-                            }
-                        }
-                    }
-                }
-        }
+        ): PhoneVerificationResult = verifyPhoneNumberInternal(auth, phoneNumber)
 
         actual suspend fun verifyPhoneNumber(
             auth: FirebaseAuth,
             phoneNumber: String,
             session: MultiFactorSession,
+        ): PhoneVerificationResult = verifyPhoneNumberInternal(auth, phoneNumber, session.apple)
+
+        private suspend fun verifyPhoneNumberInternal(
+            auth: FirebaseAuth,
+            phoneNumber: String,
+            session: swiftPMImport.dev.ynagai.firebase.firebase.auth.FIRMultiFactorSession? = null,
         ): PhoneVerificationResult = suspendCancellableCoroutine { continuation ->
-            FIRPhoneAuthProvider.providerWithAuth(auth.apple)
-                .verifyPhoneNumber(phoneNumber, UIDelegate = null, multiFactorSession = session.apple) { verificationId, error ->
-                    when {
-                        error != null -> {
-                            if (continuation.isActive) {
-                                continuation.resumeWithException(error.toAuthException())
-                            }
+            val provider = FIRPhoneAuthProvider.providerWithAuth(auth.apple)
+            val callback = { verificationId: String?, error: platform.Foundation.NSError? ->
+                when {
+                    error != null -> {
+                        if (continuation.isActive) {
+                            continuation.resumeWithException(error.toAuthException())
                         }
-                        verificationId != null -> {
-                            if (continuation.isActive) {
-                                continuation.resume(PhoneVerificationResult.CodeSent(verificationId))
-                            }
+                    }
+                    verificationId != null -> {
+                        if (continuation.isActive) {
+                            continuation.resume(PhoneVerificationResult.CodeSent(verificationId))
                         }
-                        else -> {
-                            if (continuation.isActive) {
-                                continuation.resumeWithException(
-                                    FirebaseAuthException(
-                                        "Phone verification completed without verificationId or error.",
-                                        FirebaseAuthExceptionCode.UNKNOWN,
-                                    )
+                    }
+                    else -> {
+                        if (continuation.isActive) {
+                            continuation.resumeWithException(
+                                FirebaseAuthException(
+                                    "Phone verification completed without verificationId or error.",
+                                    FirebaseAuthExceptionCode.UNKNOWN,
                                 )
-                            }
+                            )
                         }
                     }
                 }
+            }
+            if (session != null) {
+                provider.verifyPhoneNumber(phoneNumber, UIDelegate = null, multiFactorSession = session, completion = callback)
+            } else {
+                provider.verifyPhoneNumber(phoneNumber, UIDelegate = null, completion = callback)
+            }
         }
     }
 }
