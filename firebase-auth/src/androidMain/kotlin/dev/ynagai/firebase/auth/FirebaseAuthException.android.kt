@@ -1,12 +1,21 @@
 package dev.ynagai.firebase.auth
 
 import com.google.firebase.auth.FirebaseAuthException as AndroidFirebaseAuthException
+import com.google.firebase.auth.FirebaseAuthMultiFactorException as AndroidFirebaseAuthMultiFactorException
 
-internal fun AndroidFirebaseAuthException.toCommon(): FirebaseAuthException =
-    FirebaseAuthException(
+internal fun AndroidFirebaseAuthException.toCommon(): FirebaseAuthException {
+    if (this is AndroidFirebaseAuthMultiFactorException) {
+        return FirebaseAuthMultiFactorException(
+            message = message,
+            errorCode = FirebaseAuthExceptionCode.MULTI_FACTOR_AUTH_REQUIRED,
+            resolver = MultiFactorResolver(resolver),
+        )
+    }
+    return FirebaseAuthException(
         message = message,
         errorCode = errorCode.toAuthExceptionCode(),
     )
+}
 
 internal fun String.toAuthExceptionCode(): FirebaseAuthExceptionCode = when (this) {
     "ERROR_INVALID_EMAIL" -> FirebaseAuthExceptionCode.INVALID_EMAIL
@@ -49,6 +58,14 @@ internal fun String.toAuthExceptionCode(): FirebaseAuthExceptionCode = when (thi
     "ERROR_INVALID_CONTINUE_URI" -> FirebaseAuthExceptionCode.INVALID_CONTINUE_URI
     "ERROR_MISSING_CONTINUE_URI" -> FirebaseAuthExceptionCode.MISSING_CONTINUE_URI
     "ERROR_REJECTED_CREDENTIAL" -> FirebaseAuthExceptionCode.REJECTED_CREDENTIAL
+    "ERROR_MULTI_FACTOR_AUTH_REQUIRED" -> FirebaseAuthExceptionCode.MULTI_FACTOR_AUTH_REQUIRED
+    "ERROR_MISSING_MULTI_FACTOR_SESSION" -> FirebaseAuthExceptionCode.MISSING_MULTI_FACTOR_SESSION
+    "ERROR_MISSING_MULTI_FACTOR_INFO" -> FirebaseAuthExceptionCode.MISSING_MULTI_FACTOR_INFO
+    "ERROR_INVALID_MULTI_FACTOR_SESSION" -> FirebaseAuthExceptionCode.INVALID_MULTI_FACTOR_SESSION
+    "ERROR_MULTI_FACTOR_INFO_NOT_FOUND" -> FirebaseAuthExceptionCode.MULTI_FACTOR_INFO_NOT_FOUND
+    "ERROR_UNSUPPORTED_FIRST_FACTOR" -> FirebaseAuthExceptionCode.UNSUPPORTED_FIRST_FACTOR
+    "ERROR_MAXIMUM_SECOND_FACTOR_COUNT_EXCEEDED" -> FirebaseAuthExceptionCode.MAXIMUM_SECOND_FACTOR_COUNT_EXCEEDED
+    "ERROR_SECOND_FACTOR_ALREADY_ENROLLED" -> FirebaseAuthExceptionCode.SECOND_FACTOR_ALREADY_ENROLLED
     "ERROR_INTERNAL_ERROR" -> FirebaseAuthExceptionCode.INTERNAL_ERROR
     else -> FirebaseAuthExceptionCode.UNKNOWN
 }

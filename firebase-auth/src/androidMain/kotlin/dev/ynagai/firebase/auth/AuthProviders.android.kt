@@ -47,6 +47,18 @@ actual class PhoneAuthProvider {
         actual suspend fun verifyPhoneNumber(
             auth: FirebaseAuth,
             phoneNumber: String,
+        ): PhoneVerificationResult = verifyPhoneNumberInternal(auth, phoneNumber)
+
+        actual suspend fun verifyPhoneNumber(
+            auth: FirebaseAuth,
+            phoneNumber: String,
+            session: MultiFactorSession,
+        ): PhoneVerificationResult = verifyPhoneNumberInternal(auth, phoneNumber, session.android)
+
+        private suspend fun verifyPhoneNumberInternal(
+            auth: FirebaseAuth,
+            phoneNumber: String,
+            session: com.google.firebase.auth.MultiFactorSession? = null,
         ): PhoneVerificationResult = suspendCancellableCoroutine { continuation ->
             val activity = activityRef?.get()
                 ?: throw IllegalStateException(
@@ -84,14 +96,14 @@ actual class PhoneAuthProvider {
                 }
             }
 
-            val options = PhoneAuthOptions.newBuilder(auth.android)
+            val optionsBuilder = PhoneAuthOptions.newBuilder(auth.android)
                 .setPhoneNumber(phoneNumber)
                 .setTimeout(60L, TimeUnit.SECONDS)
                 .setActivity(activity)
                 .setCallbacks(callbacks)
-                .build()
+            session?.let { optionsBuilder.setMultiFactorSession(it) }
 
-            AndroidPhoneAuthProvider.verifyPhoneNumber(options)
+            AndroidPhoneAuthProvider.verifyPhoneNumber(optionsBuilder.build())
         }
     }
 }

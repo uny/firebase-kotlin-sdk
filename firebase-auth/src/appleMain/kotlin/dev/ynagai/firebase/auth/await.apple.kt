@@ -3,6 +3,7 @@ package dev.ynagai.firebase.auth
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import platform.Foundation.NSError
+import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIRMultiFactorResolver
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -75,10 +76,30 @@ private const val ERROR_MISSING_VERIFICATION_ID = 17045L
 private const val ERROR_INVALID_VERIFICATION_ID = 17046L
 private const val ERROR_SESSION_EXPIRED = 17051L
 private const val ERROR_QUOTA_EXCEEDED = 17052L
+private const val ERROR_SECOND_FACTOR_REQUIRED = 17078L
+private const val ERROR_MISSING_MULTI_FACTOR_SESSION = 17081L
+private const val ERROR_MISSING_MULTI_FACTOR_INFO = 17082L
+private const val ERROR_INVALID_MULTI_FACTOR_SESSION = 17083L
+private const val ERROR_MULTI_FACTOR_INFO_NOT_FOUND = 17084L
+private const val ERROR_UNSUPPORTED_FIRST_FACTOR = 17098L
+private const val ERROR_MAXIMUM_SECOND_FACTOR_COUNT_EXCEEDED = 17099L
+private const val ERROR_SECOND_FACTOR_ALREADY_ENROLLED = 17100L
 private const val ERROR_REJECTED_CREDENTIAL = 17075L
 private const val ERROR_INTERNAL_ERROR = 17999L
 
+@OptIn(ExperimentalForeignApi::class)
 internal fun NSError.toAuthException(): FirebaseAuthException {
+    if (this.code == ERROR_SECOND_FACTOR_REQUIRED) {
+        val resolver = this.userInfo["FIRAuthErrorUserInfoMultiFactorResolverKey"] as? FIRMultiFactorResolver
+        if (resolver != null) {
+            return FirebaseAuthMultiFactorException(
+                message = localizedDescription,
+                errorCode = FirebaseAuthExceptionCode.MULTI_FACTOR_AUTH_REQUIRED,
+                resolver = MultiFactorResolver(resolver),
+            )
+        }
+    }
+
     val code = when (this.code) {
         ERROR_INVALID_EMAIL -> FirebaseAuthExceptionCode.INVALID_EMAIL
         ERROR_USER_DISABLED -> FirebaseAuthExceptionCode.USER_DISABLED
@@ -120,6 +141,14 @@ internal fun NSError.toAuthException(): FirebaseAuthException {
         ERROR_INVALID_CONTINUE_URI -> FirebaseAuthExceptionCode.INVALID_CONTINUE_URI
         ERROR_MISSING_CONTINUE_URI -> FirebaseAuthExceptionCode.MISSING_CONTINUE_URI
         ERROR_REJECTED_CREDENTIAL -> FirebaseAuthExceptionCode.REJECTED_CREDENTIAL
+        ERROR_SECOND_FACTOR_REQUIRED -> FirebaseAuthExceptionCode.MULTI_FACTOR_AUTH_REQUIRED
+        ERROR_MISSING_MULTI_FACTOR_SESSION -> FirebaseAuthExceptionCode.MISSING_MULTI_FACTOR_SESSION
+        ERROR_MISSING_MULTI_FACTOR_INFO -> FirebaseAuthExceptionCode.MISSING_MULTI_FACTOR_INFO
+        ERROR_INVALID_MULTI_FACTOR_SESSION -> FirebaseAuthExceptionCode.INVALID_MULTI_FACTOR_SESSION
+        ERROR_MULTI_FACTOR_INFO_NOT_FOUND -> FirebaseAuthExceptionCode.MULTI_FACTOR_INFO_NOT_FOUND
+        ERROR_UNSUPPORTED_FIRST_FACTOR -> FirebaseAuthExceptionCode.UNSUPPORTED_FIRST_FACTOR
+        ERROR_MAXIMUM_SECOND_FACTOR_COUNT_EXCEEDED -> FirebaseAuthExceptionCode.MAXIMUM_SECOND_FACTOR_COUNT_EXCEEDED
+        ERROR_SECOND_FACTOR_ALREADY_ENROLLED -> FirebaseAuthExceptionCode.SECOND_FACTOR_ALREADY_ENROLLED
         ERROR_INTERNAL_ERROR -> FirebaseAuthExceptionCode.INTERNAL_ERROR
         else -> FirebaseAuthExceptionCode.UNKNOWN
     }

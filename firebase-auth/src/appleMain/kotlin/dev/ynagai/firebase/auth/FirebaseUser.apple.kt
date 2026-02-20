@@ -4,8 +4,6 @@ import kotlinx.cinterop.ExperimentalForeignApi
 import platform.Foundation.NSURL
 import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIRUser
 import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIRUserInfoProtocol
-import platform.Foundation.NSDate
-import platform.Foundation.timeIntervalSince1970
 
 @OptIn(ExperimentalForeignApi::class)
 actual class FirebaseUser internal constructor(
@@ -56,6 +54,9 @@ actual class FirebaseUser internal constructor(
                 lastSignInTimestamp = m.lastSignInDate()?.toMillis(),
             )
         }
+
+    actual val multiFactor: MultiFactor
+        get() = MultiFactor(apple.multiFactor())
 
     actual suspend fun delete() {
         await { callback -> apple.deleteWithCompletion(callback) }
@@ -121,5 +122,3 @@ actual class FirebaseUser internal constructor(
         }
     }
 }
-
-private fun NSDate.toMillis(): Long = (timeIntervalSince1970 * 1000).toLong()
