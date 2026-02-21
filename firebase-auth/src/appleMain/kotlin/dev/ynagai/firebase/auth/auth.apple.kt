@@ -142,6 +142,12 @@ actual class FirebaseAuth internal constructor(
             apple.fetchSignInMethodsForEmail(email, completion = callback)
         } as List<String>
 
+    actual suspend fun revokeAccessToken(accessToken: String) {
+        await { callback ->
+            apple.revokeTokenWithAuthorizationCode(accessToken, completion = callback)
+        }
+    }
+
     actual val authStateChanges: Flow<FirebaseUser?>
         get() = callbackFlow {
             val handle = apple.addAuthStateDidChangeListener { _, user ->

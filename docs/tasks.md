@@ -1,8 +1,19 @@
 # Firebase Kotlin SDK — Task List
 
-Updated: 2026-02-18
+Updated: 2026-02-21
 
 Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
+
+## API Coverage
+
+Android Firebase SDK の公開 API に対するカバー率（手動見積もり）。
+
+| Module | Coverage | Detail |
+|--------|----------|--------|
+| `firebase-app` | 75% (13/17) | 未実装: `dataCollectionDefaultEnabled`, `automaticResourceManagement` |
+| `firebase-ai` | 80% (56/69) | 未実装: Code Execution, Grounding/Retrieval, Cached Content, Embeddings (BLOCKED) |
+| `firebase-auth` | 90% (82/92) | 未実装: `revokeAccessToken`, `tenantId`, `AppleAuthProvider` 等 |
+| `firebase-firestore` | 80% (124/152) | 未実装: `where(Filter)`, `terminate()`, multi-db 等 |
 
 ---
 
@@ -113,7 +124,7 @@ Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
 
 | # | Task | Detail | Status |
 |---|------|--------|--------|
-| AUTH-9 | Multi-Factor Authentication (MFA) | `MultiFactor`, `MultiFactorSession`, `MultiFactorAssertion` 等。エンタープライズ向け | TODO |
+| AUTH-9 | Multi-Factor Authentication (MFA) | `MultiFactor`, `MultiFactorSession`, `MultiFactorAssertion` 等。エンタープライズ向け | DONE (#33) |
 | AUTH-10 | Exception コード拡充 | Android SDK の追加エラーコード対応 (`INVALID_DYNAMIC_LINK`, `MISSING_EMAIL` 等) | DONE |
 
 ---
@@ -134,6 +145,32 @@ Previous evaluation: [evaluation-tasks.md](./evaluation-tasks.md)
 | X-3 | `firebase-common` モジュール活用 | `Timestamp` を `firebase-firestore` から `firebase-common` に移動。`toMillis()` / `fromMillis()` 追加。非推奨 typealias で後方互換維持 | DONE (#21) |
 | X-4 | `Timestamp` に `toInstant()` / `now()` 追加 | Android Firebase SDK の API に合わせて `toInstant()`, `now()`, `fromInstant()` を追加。`kotlinx-datetime` を依存に導入し commonMain で実装 | DONE |
 | X-5 | `Timestamp` の `nanoseconds` バリデーション | `nanoseconds` が `[0, 999_999_999]` の範囲内であることを `init` ブロックで検証。PR #21 CodeRabbit 指摘対応 | DONE (#21) |
+
+---
+
+## Next Phase
+
+### firebase-auth 100% 化
+
+| # | Task | Detail | Status |
+|---|------|--------|--------|
+| AUTH-11 | `revokeAccessToken` | OAuth トークン失効。Apple Sign-In の App Store 要件で必須 | DONE |
+| AUTH-12 | `updatePhoneNumber` | ユーザーの電話番号更新 | TODO |
+
+### firebase-firestore 100% 化
+
+| # | Task | Detail | Status |
+|---|------|--------|--------|
+| FS-15 | `where(Filter)` 複合フィルタ | `Filter.and()` / `Filter.or()` による OR クエリ等。最近の SDK で追加された重要機能 | TODO |
+| FS-16 | `terminate()` / `waitForPendingWrites()` | Firestore インスタンスのライフサイクル管理 | TODO |
+| FS-17 | `DocumentSnapshot.contains()` | フィールド存在チェック | TODO |
+
+### 品質・基盤
+
+| # | Task | Detail | Status |
+|---|------|--------|--------|
+| Q-1 | KDoc 整備 | public API に KDoc コメント追加。サンプルコード含む | TODO |
+| Q-2 | エミュレータ integration test | Firebase Emulator Suite を使った自動テスト基盤構築 | TODO |
 
 ---
 
