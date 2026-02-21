@@ -33,6 +33,8 @@ expect class FirebaseAuth {
 
     suspend fun fetchSignInMethodsForEmail(email: String): List<String>
 
+    suspend fun revokeAccessToken(accessToken: String)
+
     val authStateChanges: Flow<FirebaseUser?>
     val idTokenChanges: Flow<FirebaseUser?>
 }
