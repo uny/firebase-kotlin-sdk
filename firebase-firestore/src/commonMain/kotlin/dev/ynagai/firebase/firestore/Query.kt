@@ -27,6 +27,7 @@ expect open class Query {
     fun whereNotIn(fieldPath: FieldPath, values: List<Any>): Query
     fun orderBy(fieldPath: FieldPath, direction: Direction = Direction.ASCENDING): Query
 
+    fun where(filter: Filter): Query
     fun limit(limit: Long): Query
     fun limitToLast(limit: Long): Query
     fun startAt(vararg fieldValues: Any): Query

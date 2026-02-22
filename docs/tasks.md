@@ -161,7 +161,7 @@ Android Firebase SDK の公開 API に対するカバー率（手動見積もり
 
 | # | Task | Detail | Status |
 |---|------|--------|--------|
-| FS-15 | `where(Filter)` 複合フィルタ | `Filter.and()` / `Filter.or()` による OR クエリ等。最近の SDK で追加された重要機能 | TODO |
+| FS-15 | `where(Filter)` 複合フィルタ | `Filter.and()` / `Filter.or()` による OR クエリ等。最近の SDK で追加された重要機能 | DONE |
 | FS-16 | `terminate()` / `waitForPendingWrites()` | Firestore インスタンスのライフサイクル管理 | DONE |
 | FS-17 | `DocumentSnapshot.contains()` | フィールド存在チェック | DONE |
 
