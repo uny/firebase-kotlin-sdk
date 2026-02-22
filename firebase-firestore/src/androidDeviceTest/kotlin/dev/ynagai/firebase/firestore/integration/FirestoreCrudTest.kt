@@ -10,9 +10,11 @@ import kotlin.test.assertTrue
 
 class FirestoreCrudTest : FirestoreEmulatorTest() {
 
+    private val collectionPath = "crud-test-${System.nanoTime()}"
+
     @Test
     fun addAndGetDocument() = runTest {
-        val collection = firestore.collection("crud-test")
+        val collection = firestore.collection(collectionPath)
         val data = mapOf("name" to "Alice", "age" to 30L)
 
         val docRef = collection.add(data)
@@ -25,7 +27,7 @@ class FirestoreCrudTest : FirestoreEmulatorTest() {
 
     @Test
     fun setAndGetDocument() = runTest {
-        val docRef = firestore.collection("crud-test").document("set-doc")
+        val docRef = firestore.collection(collectionPath).document("set-doc")
         val data = mapOf("city" to "Tokyo", "population" to 14000000L)
 
         docRef.set(data)
@@ -38,7 +40,7 @@ class FirestoreCrudTest : FirestoreEmulatorTest() {
 
     @Test
     fun updateDocument() = runTest {
-        val docRef = firestore.collection("crud-test").document("update-doc")
+        val docRef = firestore.collection(collectionPath).document("update-doc")
         docRef.set(mapOf("name" to "Bob", "age" to 25L))
 
         docRef.update(mapOf("age" to 26L))
@@ -50,7 +52,7 @@ class FirestoreCrudTest : FirestoreEmulatorTest() {
 
     @Test
     fun deleteDocument() = runTest {
-        val docRef = firestore.collection("crud-test").document("delete-doc")
+        val docRef = firestore.collection(collectionPath).document("delete-doc")
         docRef.set(mapOf("temp" to true))
 
         docRef.delete()
@@ -61,7 +63,7 @@ class FirestoreCrudTest : FirestoreEmulatorTest() {
 
     @Test
     fun getDataReturnsFullMap() = runTest {
-        val docRef = firestore.collection("crud-test").document("data-doc")
+        val docRef = firestore.collection(collectionPath).document("data-doc")
         val data = mapOf("key1" to "value1", "key2" to 42L)
         docRef.set(data)
 
@@ -75,7 +77,7 @@ class FirestoreCrudTest : FirestoreEmulatorTest() {
 
     @Test
     fun getNonExistentDocumentReturnsNotExists() = runTest {
-        val docRef = firestore.collection("crud-test").document("does-not-exist")
+        val docRef = firestore.collection(collectionPath).document("does-not-exist")
 
         val snapshot = docRef.get()
 
@@ -85,7 +87,7 @@ class FirestoreCrudTest : FirestoreEmulatorTest() {
 
     @Test
     fun setWithMerge() = runTest {
-        val docRef = firestore.collection("crud-test").document("merge-doc")
+        val docRef = firestore.collection(collectionPath).document("merge-doc")
         docRef.set(mapOf("name" to "Charlie", "age" to 30L))
 
         docRef.set(mapOf("email" to "charlie@example.com"), merge = true)
@@ -98,7 +100,7 @@ class FirestoreCrudTest : FirestoreEmulatorTest() {
 
     @Test
     fun documentContainsField() = runTest {
-        val docRef = firestore.collection("crud-test").document("contains-doc")
+        val docRef = firestore.collection(collectionPath).document("contains-doc")
         docRef.set(mapOf("present" to "yes"))
 
         val snapshot = docRef.get()

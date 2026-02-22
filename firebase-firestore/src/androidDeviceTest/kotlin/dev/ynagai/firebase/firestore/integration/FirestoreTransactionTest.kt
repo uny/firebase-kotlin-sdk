@@ -3,13 +3,16 @@ package dev.ynagai.firebase.firestore.integration
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class FirestoreTransactionTest : FirestoreEmulatorTest() {
 
+    private val collectionPath = "tx-test-${System.nanoTime()}"
+
     @Test
     fun transactionReadAndWrite() = runTest {
-        val docRef = firestore.collection("tx-test").document("counter")
+        val docRef = firestore.collection(collectionPath).document("counter")
         docRef.set(mapOf("count" to 10L))
 
         firestore.runTransaction {
@@ -24,7 +27,7 @@ class FirestoreTransactionTest : FirestoreEmulatorTest() {
 
     @Test
     fun transactionReturnsValue() = runTest {
-        val docRef = firestore.collection("tx-test").document("return-val")
+        val docRef = firestore.collection(collectionPath).document("return-val")
         docRef.set(mapOf("value" to "hello"))
 
         val value = firestore.runTransaction {
@@ -37,7 +40,7 @@ class FirestoreTransactionTest : FirestoreEmulatorTest() {
 
     @Test
     fun transactionDeleteDocument() = runTest {
-        val docRef = firestore.collection("tx-test").document("to-delete")
+        val docRef = firestore.collection(collectionPath).document("to-delete")
         docRef.set(mapOf("temp" to true))
 
         firestore.runTransaction {
@@ -45,12 +48,12 @@ class FirestoreTransactionTest : FirestoreEmulatorTest() {
         }
 
         val result = docRef.get()
-        assertTrue(!result.exists)
+        assertFalse(result.exists)
     }
 
     @Test
     fun transactionUpdateDocument() = runTest {
-        val docRef = firestore.collection("tx-test").document("to-update")
+        val docRef = firestore.collection(collectionPath).document("to-update")
         docRef.set(mapOf("name" to "Eve", "score" to 100L))
 
         firestore.runTransaction {

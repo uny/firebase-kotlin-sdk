@@ -63,19 +63,19 @@ jobs:
 
       - name: Start Firebase Emulator
         run: firebase emulators:start --project firebase-kotlin-sdk-test &
-        env:
-          FIRESTORE_EMULATOR_HOST: 127.0.0.1:8080
 
       - name: Wait for Emulator
         run: |
           for i in $(seq 1 30); do
             if curl -s http://127.0.0.1:8080/ > /dev/null 2>&1; then
               echo "Emulator is ready"
-              break
+              exit 0
             fi
             echo "Waiting for emulator... ($i)"
             sleep 2
           done
+          echo "Error: Emulator did not start within 60 seconds."
+          exit 1
 
       - name: Enable KVM
         run: |

@@ -8,9 +8,11 @@ import kotlin.test.assertTrue
 
 class FirestoreWriteBatchTest : FirestoreEmulatorTest() {
 
+    private val collectionPath = "batch-test-${System.nanoTime()}"
+
     @Test
     fun batchSetMultipleDocuments() = runTest {
-        val collection = firestore.collection("batch-test")
+        val collection = firestore.collection(collectionPath)
         val doc1 = collection.document("batch-doc1")
         val doc2 = collection.document("batch-doc2")
 
@@ -29,7 +31,7 @@ class FirestoreWriteBatchTest : FirestoreEmulatorTest() {
 
     @Test
     fun batchUpdateDocument() = runTest {
-        val docRef = firestore.collection("batch-test").document("batch-update")
+        val docRef = firestore.collection(collectionPath).document("batch-update")
         docRef.set(mapOf("name" to "Hank", "age" to 40L))
 
         firestore.batch()
@@ -43,7 +45,7 @@ class FirestoreWriteBatchTest : FirestoreEmulatorTest() {
 
     @Test
     fun batchDeleteDocument() = runTest {
-        val docRef = firestore.collection("batch-test").document("batch-delete")
+        val docRef = firestore.collection(collectionPath).document("batch-delete")
         docRef.set(mapOf("temp" to true))
 
         firestore.batch()
@@ -56,7 +58,7 @@ class FirestoreWriteBatchTest : FirestoreEmulatorTest() {
 
     @Test
     fun batchMixedOperations() = runTest {
-        val collection = firestore.collection("batch-test")
+        val collection = firestore.collection(collectionPath)
         val docSet = collection.document("batch-mixed-set")
         val docUpdate = collection.document("batch-mixed-update")
         val docDelete = collection.document("batch-mixed-delete")
@@ -71,8 +73,9 @@ class FirestoreWriteBatchTest : FirestoreEmulatorTest() {
             .delete(docDelete)
             .commit()
 
-        assertTrue(docSet.get().exists)
-        assertEquals("new", docSet.get().getString("status"))
+        val snapSet = docSet.get()
+        assertTrue(snapSet.exists)
+        assertEquals("new", snapSet.getString("status"))
         assertEquals("updated", docUpdate.get().getString("status"))
         assertFalse(docDelete.get().exists)
     }
