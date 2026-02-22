@@ -64,11 +64,15 @@ actual class Filter internal constructor(internal val android: AndroidFilter) {
         actual fun notInArray(fieldPath: FieldPath, values: List<Any>): Filter =
             Filter(AndroidFilter.notInArray(fieldPath.android, values))
 
-        actual fun and(vararg filters: Filter): Filter =
-            Filter(AndroidFilter.and(*filters.map { it.android }.toTypedArray()))
+        actual fun and(vararg filters: Filter): Filter {
+            require(filters.isNotEmpty()) { "Filter.and() requires at least one filter" }
+            return Filter(AndroidFilter.and(*filters.map { it.android }.toTypedArray()))
+        }
 
-        actual fun or(vararg filters: Filter): Filter =
-            Filter(AndroidFilter.or(*filters.map { it.android }.toTypedArray()))
+        actual fun or(vararg filters: Filter): Filter {
+            require(filters.isNotEmpty()) { "Filter.or() requires at least one filter" }
+            return Filter(AndroidFilter.or(*filters.map { it.android }.toTypedArray()))
+        }
     }
 
     override fun equals(other: Any?): Boolean {

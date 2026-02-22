@@ -66,11 +66,15 @@ actual class Filter internal constructor(internal val apple: FIRFilter) {
         actual fun notInArray(fieldPath: FieldPath, values: List<Any>): Filter =
             Filter(FIRFilter.filterWhereFieldPath(fieldPath.apple, notIn = values))
 
-        actual fun and(vararg filters: Filter): Filter =
-            Filter(FIRFilter.andFilterWithFilters(filters.map { it.apple }))
+        actual fun and(vararg filters: Filter): Filter {
+            require(filters.isNotEmpty()) { "Filter.and() requires at least one filter" }
+            return Filter(FIRFilter.andFilterWithFilters(filters.map { it.apple }))
+        }
 
-        actual fun or(vararg filters: Filter): Filter =
-            Filter(FIRFilter.orFilterWithFilters(filters.map { it.apple }))
+        actual fun or(vararg filters: Filter): Filter {
+            require(filters.isNotEmpty()) { "Filter.or() requires at least one filter" }
+            return Filter(FIRFilter.orFilterWithFilters(filters.map { it.apple }))
+        }
     }
 
     override fun equals(other: Any?): Boolean {
