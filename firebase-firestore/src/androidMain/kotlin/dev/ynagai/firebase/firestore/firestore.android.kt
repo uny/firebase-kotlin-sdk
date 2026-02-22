@@ -50,4 +50,12 @@ actual class FirebaseFirestore internal constructor(
     actual suspend fun enableNetwork() {
         android.enableNetwork().await()
     }
+
+    actual suspend fun terminate() {
+        android.terminate().await()
+    }
+
+    actual suspend fun waitForPendingWrites() {
+        android.waitForPendingWrites().await()
+    }
 }

@@ -2,6 +2,7 @@ package dev.ynagai.firebase.auth
 
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.Foundation.NSURL
+import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIRPhoneAuthCredential
 import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIRUser
 import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIRUserInfoProtocol
 
@@ -113,6 +114,14 @@ actual class FirebaseUser internal constructor(
             apple.reauthenticateWithCredential(credential.apple) { _, error ->
                 callback(error)
             }
+        }
+    }
+
+    actual suspend fun updatePhoneNumber(credential: AuthCredential) {
+        val phoneCredential = credential.apple as? FIRPhoneAuthCredential
+            ?: throw IllegalArgumentException("updatePhoneNumber requires a phone auth credential")
+        await { callback ->
+            apple.updatePhoneNumberCredential(phoneCredential, completion = callback)
         }
     }
 

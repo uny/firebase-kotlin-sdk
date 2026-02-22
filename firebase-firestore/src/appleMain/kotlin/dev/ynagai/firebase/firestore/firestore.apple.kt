@@ -71,4 +71,12 @@ actual class FirebaseFirestore internal constructor(
     actual suspend fun enableNetwork() {
         await { callback -> apple.enableNetworkWithCompletion(callback) }
     }
+
+    actual suspend fun terminate() {
+        await { callback -> apple.terminateWithCompletion(callback) }
+    }
+
+    actual suspend fun waitForPendingWrites() {
+        await { callback -> apple.waitForPendingWritesWithCompletion(callback) }
+    }
 }
