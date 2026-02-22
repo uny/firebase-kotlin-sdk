@@ -6,6 +6,10 @@ plugins {
 kotlin {
     androidLibrary {
         namespace = "dev.ynagai.firebase.firestore"
+        withDeviceTestBuilder {
+        }.configure {
+            instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        }
     }
 
     swiftPMDependencies {
@@ -25,6 +29,12 @@ kotlin {
             api(projects.firebaseCommon)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)
+        }
+        getByName("androidDeviceTest").dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.androidx.test.core)
+            implementation(libs.androidx.test.runner)
         }
     }
 }
