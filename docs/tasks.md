@@ -13,7 +13,7 @@ Android Firebase SDK の公開 API に対するカバー率（手動見積もり
 | `firebase-app` | 75% (13/17) | 未実装: `dataCollectionDefaultEnabled`, `automaticResourceManagement` |
 | `firebase-ai` | 80% (56/69) | 未実装: Code Execution, Grounding/Retrieval, Cached Content, Embeddings (BLOCKED) |
 | `firebase-auth` | 90% (83/92) | 未実装: `tenantId`, `AppleAuthProvider` 等 |
-| `firebase-firestore` | 80% (124/152) | 未実装: `where(Filter)`, multi-db 等 |
+| `firebase-firestore` | 84% (128/152) | 未実装: `where(Filter)`, multi-db 等 |
 
 ---
 
