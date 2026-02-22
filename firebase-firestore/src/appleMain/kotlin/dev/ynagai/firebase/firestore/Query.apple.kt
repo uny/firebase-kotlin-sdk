@@ -9,6 +9,9 @@ import swiftPMImport.dev.ynagai.firebase.firebase.firestore.FIRQuerySnapshot
 
 @OptIn(ExperimentalForeignApi::class)
 actual open class Query internal constructor(internal open val apple: FIRQuery) {
+    actual fun where(filter: Filter): Query =
+        Query(apple.queryWhereFilter(filter.apple))
+
     actual fun whereEqualTo(field: String, value: Any?): Query =
         Query(apple.queryWhereField(field, isEqualTo = value ?: platform.Foundation.NSNull()))
 
