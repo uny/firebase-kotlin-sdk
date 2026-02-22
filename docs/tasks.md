@@ -155,15 +155,15 @@ Android Firebase SDK の公開 API に対するカバー率（手動見積もり
 | # | Task | Detail | Status |
 |---|------|--------|--------|
 | AUTH-11 | `revokeAccessToken` | OAuth トークン失効。Apple Sign-In の App Store 要件で必須 | DONE |
-| AUTH-12 | `updatePhoneNumber` | ユーザーの電話番号更新 | TODO |
+| AUTH-12 | `updatePhoneNumber` | ユーザーの電話番号更新 | DONE |
 
 ### firebase-firestore 100% 化
 
 | # | Task | Detail | Status |
 |---|------|--------|--------|
 | FS-15 | `where(Filter)` 複合フィルタ | `Filter.and()` / `Filter.or()` による OR クエリ等。最近の SDK で追加された重要機能 | TODO |
-| FS-16 | `terminate()` / `waitForPendingWrites()` | Firestore インスタンスのライフサイクル管理 | TODO |
-| FS-17 | `DocumentSnapshot.contains()` | フィールド存在チェック | TODO |
+| FS-16 | `terminate()` / `waitForPendingWrites()` | Firestore インスタンスのライフサイクル管理 | DONE |
+| FS-17 | `DocumentSnapshot.contains()` | フィールド存在チェック | DONE |
 
 ### 品質・基盤
 

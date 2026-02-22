@@ -16,4 +16,6 @@ expect class DocumentSnapshot {
     fun getTimestamp(field: String): Timestamp?
     fun getGeoPoint(field: String): GeoPoint?
     fun getBlob(field: String): Blob?
+    fun contains(field: String): Boolean
+    fun contains(fieldPath: FieldPath): Boolean
 }

@@ -59,6 +59,10 @@ actual class DocumentSnapshot internal constructor(
         return nativeBlobToKmp(value)
     }
 
+    actual fun contains(field: String): Boolean = apple.valueForField(field) != null
+
+    actual fun contains(fieldPath: FieldPath): Boolean = apple.valueForField(fieldPath.apple) != null
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is DocumentSnapshot) return false

@@ -48,6 +48,10 @@ actual class DocumentSnapshot internal constructor(
             Blob(it.toBytes())
         }
 
+    actual fun contains(field: String): Boolean = android.contains(field)
+
+    actual fun contains(fieldPath: FieldPath): Boolean = android.contains(fieldPath.android)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is DocumentSnapshot) return false

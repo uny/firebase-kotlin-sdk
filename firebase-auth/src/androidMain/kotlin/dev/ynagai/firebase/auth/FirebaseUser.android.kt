@@ -2,6 +2,7 @@ package dev.ynagai.firebase.auth
 
 import android.net.Uri
 import com.google.firebase.auth.FirebaseUser as AndroidFirebaseUser
+import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.coroutines.tasks.await
 
@@ -94,6 +95,12 @@ actual class FirebaseUser internal constructor(
 
     actual suspend fun reauthenticate(credential: AuthCredential) {
         android.reauthenticate(credential.android).await()
+    }
+
+    actual suspend fun updatePhoneNumber(credential: AuthCredential) {
+        val phoneCredential = credential.android as? PhoneAuthCredential
+            ?: throw IllegalArgumentException("updatePhoneNumber requires a phone auth credential")
+        android.updatePhoneNumber(phoneCredential).await()
     }
 
     actual suspend fun verifyBeforeUpdateEmail(newEmail: String) {

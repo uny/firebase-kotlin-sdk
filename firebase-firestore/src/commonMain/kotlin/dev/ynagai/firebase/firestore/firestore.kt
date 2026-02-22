@@ -17,4 +17,6 @@ expect class FirebaseFirestore {
     suspend fun clearPersistence()
     suspend fun disableNetwork()
     suspend fun enableNetwork()
+    suspend fun terminate()
+    suspend fun waitForPendingWrites()
 }

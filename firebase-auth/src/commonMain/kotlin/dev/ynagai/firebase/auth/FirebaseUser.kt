@@ -23,5 +23,6 @@ expect class FirebaseUser {
     suspend fun linkWithCredential(credential: AuthCredential): AuthResult
     suspend fun unlink(providerId: String): FirebaseUser
     suspend fun reauthenticate(credential: AuthCredential)
+    suspend fun updatePhoneNumber(credential: AuthCredential)
     suspend fun verifyBeforeUpdateEmail(newEmail: String)
 }
