@@ -75,6 +75,9 @@ actual open class Query internal constructor(internal open val apple: FIRQuery) 
     actual fun orderBy(fieldPath: FieldPath, direction: Direction): Query =
         Query(apple.queryOrderedByFieldPath(fieldPath.apple, descending = direction == Direction.DESCENDING))
 
+    actual fun where(filter: Filter): Query =
+        Query(apple.queryWhereFilter(filter.apple))
+
     actual fun limit(limit: Long): Query =
         Query(apple.queryLimitedTo(limit))
 
