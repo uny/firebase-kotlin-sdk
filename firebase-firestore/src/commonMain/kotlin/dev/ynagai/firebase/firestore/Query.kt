@@ -3,6 +3,7 @@ package dev.ynagai.firebase.firestore
 import kotlinx.coroutines.flow.Flow
 
 expect open class Query {
+    fun where(filter: Filter): Query
     fun whereEqualTo(field: String, value: Any?): Query
     fun whereNotEqualTo(field: String, value: Any?): Query
     fun whereLessThan(field: String, value: Any): Query
@@ -27,7 +28,6 @@ expect open class Query {
     fun whereNotIn(fieldPath: FieldPath, values: List<Any>): Query
     fun orderBy(fieldPath: FieldPath, direction: Direction = Direction.ASCENDING): Query
 
-    fun where(filter: Filter): Query
     fun limit(limit: Long): Query
     fun limitToLast(limit: Long): Query
     fun startAt(vararg fieldValues: Any): Query

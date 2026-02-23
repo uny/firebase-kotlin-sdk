@@ -7,6 +7,9 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
 actual open class Query internal constructor(internal open val android: AndroidQuery) {
+    actual fun where(filter: Filter): Query =
+        Query(android.where(filter.android))
+
     actual fun whereEqualTo(field: String, value: Any?): Query =
         Query(android.whereEqualTo(field, value))
 
@@ -72,9 +75,6 @@ actual open class Query internal constructor(internal open val android: AndroidQ
 
     actual fun orderBy(fieldPath: FieldPath, direction: Direction): Query =
         Query(android.orderBy(fieldPath.android, direction.toAndroid()))
-
-    actual fun where(filter: Filter): Query =
-        Query(android.where(filter.android))
 
     actual fun limit(limit: Long): Query =
         Query(android.limit(limit))
