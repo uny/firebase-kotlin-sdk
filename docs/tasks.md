@@ -170,7 +170,7 @@ Android Firebase SDK の公開 API に対するカバー率（手動見積もり
 | # | Task | Detail | Status |
 |---|------|--------|--------|
 | Q-1 | KDoc 整備 | public API に KDoc コメント追加。サンプルコード含む | TODO |
-| Q-2 | エミュレータ integration test | Firebase Emulator Suite を使った自動テスト基盤構築 | TODO |
+| Q-2 | エミュレータ integration test | Firebase Emulator Suite を使った自動テスト基盤構築 | DONE (#37) |
 
 ---
 
