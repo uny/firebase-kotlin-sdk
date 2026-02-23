@@ -2,6 +2,7 @@ package dev.ynagai.firebase.firestore.integration
 
 import androidx.test.platform.app.InstrumentationRegistry
 import dev.ynagai.firebase.Firebase
+import dev.ynagai.firebase.FirebaseApp
 import dev.ynagai.firebase.FirebaseOptions
 import dev.ynagai.firebase.firestore.FirebaseFirestore
 import dev.ynagai.firebase.firestore.firestore
@@ -12,6 +13,7 @@ import kotlin.test.BeforeTest
 
 abstract class FirestoreEmulatorTest {
     protected lateinit var firestore: FirebaseFirestore
+    private lateinit var app: FirebaseApp
 
     @BeforeTest
     fun setUp() {
@@ -21,7 +23,7 @@ abstract class FirestoreEmulatorTest {
             applicationId = "1:123456789:android:abcdef",
             projectId = "firebase-kotlin-sdk-test",
         )
-        val app = Firebase.initialize(
+        app = Firebase.initialize(
             context = context,
             options = options,
             name = "test-${System.nanoTime()}",
@@ -33,5 +35,6 @@ abstract class FirestoreEmulatorTest {
     @AfterTest
     fun tearDown() = runTest {
         firestore.terminate()
+        app.delete()
     }
 }
