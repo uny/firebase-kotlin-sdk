@@ -32,6 +32,9 @@ jobs:
         id: version
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
+      - name: Resolve SwiftPM packages (serial to avoid cache conflicts)
+        run: ./gradlew fetchSyntheticImportProjectPackages --no-parallel
+
       - name: Publish to Maven Central
         run: ./gradlew publishToMavenCentral -Pversion=${{ steps.version.outputs.VERSION }}
         env:
