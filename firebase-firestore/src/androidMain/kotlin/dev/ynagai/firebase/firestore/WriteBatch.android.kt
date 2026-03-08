@@ -2,8 +2,6 @@ package dev.ynagai.firebase.firestore
 
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.WriteBatch as AndroidWriteBatch
-import kotlinx.coroutines.tasks.await
-
 actual class WriteBatch internal constructor(
     internal val android: AndroidWriteBatch,
 ) {
@@ -36,6 +34,6 @@ actual class WriteBatch internal constructor(
     }
 
     actual suspend fun commit() {
-        android.commit().await()
+        android.commit().awaitWithWrappedExceptions()
     }
 }

@@ -3,8 +3,6 @@ package dev.ynagai.firebase.firestore
 import com.google.firebase.firestore.FirebaseFirestore as AndroidFirebaseFirestore
 import dev.ynagai.firebase.Firebase
 import dev.ynagai.firebase.FirebaseApp
-import kotlinx.coroutines.tasks.await
-
 actual val Firebase.firestore: FirebaseFirestore
     get() = FirebaseFirestore(AndroidFirebaseFirestore.getInstance())
 
@@ -33,29 +31,29 @@ actual class FirebaseFirestore internal constructor(
     actual fun batch(): WriteBatch = WriteBatch(android.batch())
 
     actual suspend fun <T> runTransaction(func: Transaction.() -> T): T =
-        android.runTransaction<T> { func(Transaction(it)) }.await()
+        android.runTransaction<T> { func(Transaction(it)) }.awaitWithWrappedExceptions()
 
     actual fun useEmulator(host: String, port: Int) {
         android.useEmulator(host, port)
     }
 
     actual suspend fun clearPersistence() {
-        android.clearPersistence().await()
+        android.clearPersistence().awaitWithWrappedExceptions()
     }
 
     actual suspend fun disableNetwork() {
-        android.disableNetwork().await()
+        android.disableNetwork().awaitWithWrappedExceptions()
     }
 
     actual suspend fun enableNetwork() {
-        android.enableNetwork().await()
+        android.enableNetwork().awaitWithWrappedExceptions()
     }
 
     actual suspend fun terminate() {
-        android.terminate().await()
+        android.terminate().awaitWithWrappedExceptions()
     }
 
     actual suspend fun waitForPendingWrites() {
-        android.waitForPendingWrites().await()
+        android.waitForPendingWrites().awaitWithWrappedExceptions()
     }
 }

@@ -27,6 +27,7 @@ import kotlin.coroutines.resumeWithException
 internal suspend fun <T : Any> awaitResult(block: (callback: (T?, NSError?) -> Unit) -> Unit): T =
     suspendCancellableCoroutine { continuation ->
         block { result, error ->
+            if (!continuation.isActive) return@block
             when {
                 error != null -> continuation.resumeWithException(error.toException())
                 result != null -> continuation.resume(result)
@@ -44,6 +45,7 @@ internal suspend fun <T : Any> awaitResult(block: (callback: (T?, NSError?) -> U
 internal suspend fun await(block: (callback: (NSError?) -> Unit) -> Unit): Unit =
     suspendCancellableCoroutine { continuation ->
         block { error ->
+            if (!continuation.isActive) return@block
             if (error != null) {
                 continuation.resumeWithException(error.toException())
             } else {

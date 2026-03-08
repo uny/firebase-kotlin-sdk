@@ -8,6 +8,16 @@ internal fun AndroidFirebaseFirestoreException.toCommon(): FirebaseFirestoreExce
         code = code.toCommon(),
     )
 
+internal fun Exception.toCommonFirestoreException(): FirebaseFirestoreException =
+    when (this) {
+        is AndroidFirebaseFirestoreException -> toCommon()
+        is FirebaseFirestoreException -> this
+        else -> FirebaseFirestoreException(
+            message = message ?: toString(),
+            code = FirestoreExceptionCode.UNKNOWN,
+        )
+    }
+
 internal fun AndroidFirebaseFirestoreException.Code.toCommon(): FirestoreExceptionCode = when (this) {
     AndroidFirebaseFirestoreException.Code.OK -> FirestoreExceptionCode.OK
     AndroidFirebaseFirestoreException.Code.CANCELLED -> FirestoreExceptionCode.CANCELLED

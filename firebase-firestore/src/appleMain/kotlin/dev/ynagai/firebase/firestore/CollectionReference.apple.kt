@@ -33,6 +33,7 @@ actual class CollectionReference internal constructor(
             docRef = appleCollection.addDocumentWithData(
                 data.toAppleData(),
             ) { error ->
+                if (!continuation.isActive) return@addDocumentWithData
                 if (error != null) {
                     continuation.resumeWithException(error.toException())
                 } else {

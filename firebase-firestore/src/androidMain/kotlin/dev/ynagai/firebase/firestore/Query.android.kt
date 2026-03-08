@@ -4,7 +4,6 @@ import com.google.firebase.firestore.Query as AndroidQuery
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.tasks.await
 
 actual open class Query internal constructor(internal open val android: AndroidQuery) {
     actual fun where(filter: Filter): Query =
@@ -107,13 +106,13 @@ actual open class Query internal constructor(internal open val android: AndroidQ
         Query(android.endBefore(snapshot.android))
 
     actual suspend fun get(source: Source): QuerySnapshot =
-        QuerySnapshot(android.get(source.toAndroid()).await())
+        QuerySnapshot(android.get(source.toAndroid()).awaitWithWrappedExceptions())
 
     actual val snapshots: Flow<QuerySnapshot>
         get() = callbackFlow {
             val listener = android.addSnapshotListener { snapshot, error ->
                 if (error != null) {
-                    close(error.toCommon())
+                    close(error.toCommonFirestoreException())
                 } else if (snapshot != null) {
                     trySend(QuerySnapshot(snapshot))
                 }
@@ -125,7 +124,7 @@ actual open class Query internal constructor(internal open val android: AndroidQ
         callbackFlow {
             val listener = android.addSnapshotListener(metadataChanges.toAndroid()) { snapshot, error ->
                 if (error != null) {
-                    close(error.toCommon())
+                    close(error.toCommonFirestoreException())
                 } else if (snapshot != null) {
                     trySend(QuerySnapshot(snapshot))
                 }

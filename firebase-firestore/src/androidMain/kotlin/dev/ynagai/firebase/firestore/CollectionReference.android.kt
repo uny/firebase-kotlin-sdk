@@ -1,7 +1,6 @@
 package dev.ynagai.firebase.firestore
 
 import com.google.firebase.firestore.CollectionReference as AndroidCollectionReference
-import kotlinx.coroutines.tasks.await
 
 actual class CollectionReference internal constructor(
     internal val androidCollection: AndroidCollectionReference,
@@ -23,7 +22,7 @@ actual class CollectionReference internal constructor(
         }
 
     actual suspend fun add(data: Map<String, Any?>): DocumentReference =
-        DocumentReference(androidCollection.add(data.toAndroidData()).await())
+        DocumentReference(androidCollection.add(data.toAndroidData()).awaitWithWrappedExceptions())
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
