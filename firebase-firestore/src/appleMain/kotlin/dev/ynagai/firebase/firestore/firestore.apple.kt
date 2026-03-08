@@ -45,6 +45,7 @@ actual class FirebaseFirestore internal constructor(
                     func(Transaction(firTransaction ?: throw FirebaseFirestoreException("Transaction is unexpectedly null", FirestoreExceptionCode.INTERNAL)))
                 },
                 completion = { result: Any?, error: NSError? ->
+                    if (!continuation.isActive) return@runTransactionWithBlock
                     when {
                         error != null -> continuation.resumeWithException(error.toException())
                         else -> {
