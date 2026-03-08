@@ -112,7 +112,7 @@ actual open class Query internal constructor(internal open val android: AndroidQ
         get() = callbackFlow {
             val listener = android.addSnapshotListener { snapshot, error ->
                 if (error != null) {
-                    close(error.toCommonFirestoreException())
+                    close(error.toCommon())
                 } else if (snapshot != null) {
                     trySend(QuerySnapshot(snapshot))
                 }
@@ -124,7 +124,7 @@ actual open class Query internal constructor(internal open val android: AndroidQ
         callbackFlow {
             val listener = android.addSnapshotListener(metadataChanges.toAndroid()) { snapshot, error ->
                 if (error != null) {
-                    close(error.toCommonFirestoreException())
+                    close(error.toCommon())
                 } else if (snapshot != null) {
                     trySend(QuerySnapshot(snapshot))
                 }
