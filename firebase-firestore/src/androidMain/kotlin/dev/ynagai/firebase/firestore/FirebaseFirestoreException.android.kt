@@ -15,6 +15,7 @@ internal fun Exception.toCommonFirestoreException(): FirebaseFirestoreException 
         else -> FirebaseFirestoreException(
             message = message ?: toString(),
             code = FirestoreExceptionCode.UNKNOWN,
+            cause = this,
         )
     }
 

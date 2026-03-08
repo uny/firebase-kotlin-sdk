@@ -23,4 +23,5 @@ enum class FirestoreExceptionCode {
 class FirebaseFirestoreException(
     message: String?,
     val code: FirestoreExceptionCode,
-) : Exception(message)
+    cause: Throwable? = null,
+) : Exception(message, cause)
