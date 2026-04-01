@@ -28,6 +28,9 @@ actual class Transaction internal constructor(
             DocumentSnapshot(snapshot)
         }
 
+    actual fun get(query: Query): QuerySnapshot =
+        throw UnsupportedOperationException("Transaction.get(Query) is not supported on Apple platforms with the current Firebase iOS SDK version.")
+
     actual fun set(documentRef: DocumentReference, data: Map<String, Any?>, merge: Boolean): Transaction {
         if (merge) {
             apple.setData(data.toAppleData(), forDocument = documentRef.apple, merge = true)

@@ -8,7 +8,7 @@ kotlin {
     }
 
     swiftPMDependencies {
-        `package`(
+        swiftPackage(
             url = url("https://github.com/firebase/firebase-ios-sdk.git"),
             version = from(libs.versions.firebase.apple.get()),
             products = listOf(product("FirebaseCore")),

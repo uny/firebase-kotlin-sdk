@@ -9,6 +9,9 @@ actual class Transaction internal constructor(
     actual fun get(documentRef: DocumentReference): DocumentSnapshot =
         DocumentSnapshot(android.get(documentRef.android))
 
+    actual fun get(query: Query): QuerySnapshot =
+        throw UnsupportedOperationException("Transaction.get(Query) is not supported on Android. Use Transaction.get(DocumentReference) instead.")
+
     actual fun set(documentRef: DocumentReference, data: Map<String, Any?>, merge: Boolean): Transaction {
         if (merge) {
             android.set(documentRef.android, data.toAndroidData(), SetOptions.merge())

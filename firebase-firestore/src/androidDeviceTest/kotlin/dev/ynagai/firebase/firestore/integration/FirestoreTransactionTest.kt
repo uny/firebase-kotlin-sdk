@@ -52,6 +52,30 @@ class FirestoreTransactionTest : FirestoreEmulatorTest() {
     }
 
     @Test
+    fun transactionQueryRead() = runTest {
+        val col = firestore.collection("tx-query-${System.nanoTime()}")
+        col.document("a").set(mapOf("category" to "fruit", "name" to "apple"))
+        col.document("b").set(mapOf("category" to "fruit", "name" to "banana"))
+        col.document("c").set(mapOf("category" to "veggie", "name" to "carrot"))
+
+        val query = col.where("category", equalTo = "fruit")
+
+        val count = firestore.runTransaction {
+            val snapshot = get(query)
+            val size = snapshot.size
+            set(
+                col.document("summary"),
+                mapOf("fruitCount" to size.toLong()),
+            )
+            size
+        }
+
+        assertEquals(2, count)
+        val summary = col.document("summary").get()
+        assertEquals(2L, summary.getLong("fruitCount"))
+    }
+
+    @Test
     fun transactionUpdateDocument() = runTest {
         val docRef = firestore.collection(collectionPath).document("to-update")
         docRef.set(mapOf("name" to "Eve", "score" to 100L))
