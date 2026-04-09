@@ -7,6 +7,9 @@ import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBFileDataPart
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBFunctionCallPart
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBFunctionResponsePart
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBInlineDataPart
+import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBCodeExecutionOutcome
+import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBCodeExecutionResultPart
+import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBExecutableCodePart
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBModelContent
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBTextPart
 
@@ -31,8 +34,10 @@ internal fun Content.toApple(): KFBModelContent {
                 name = part.name,
                 response = part.response as Map<Any?, *>,
             )
+            is ExecutableCodePart -> null
+            is CodeExecutionResultPart -> null
         }
-    }
+    }.filterNotNull()
     return KFBModelContent(role = role ?: "user", parts = appleParts)
 }
 
@@ -63,6 +68,19 @@ internal fun KFBModelContent.toCommon(): Content = Content(
                 } ?: emptyMap()
                 FunctionResponsePart(name = part.name(), response = response)
             }
+            is KFBExecutableCodePart -> ExecutableCodePart(
+                language = part.language().rawValue(),
+                code = part.code(),
+            )
+            is KFBCodeExecutionResultPart -> CodeExecutionResultPart(
+                outcome = when (part.outcome().rawValue()) {
+                    KFBCodeExecutionOutcome.ok().rawValue() -> CodeExecutionOutcome.OK
+                    KFBCodeExecutionOutcome.failed().rawValue() -> CodeExecutionOutcome.FAILED
+                    KFBCodeExecutionOutcome.deadlineExceeded().rawValue() -> CodeExecutionOutcome.DEADLINE_EXCEEDED
+                    else -> CodeExecutionOutcome.UNSPECIFIED
+                },
+                output = part.output() ?: "",
+            )
             else -> null
         }
     } ?: emptyList(),

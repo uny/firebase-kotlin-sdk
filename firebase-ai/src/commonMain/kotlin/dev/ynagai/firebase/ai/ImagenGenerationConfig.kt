@@ -1,5 +1,10 @@
 package dev.ynagai.firebase.ai
 
+private const val IMAGEN_DEPRECATION_MESSAGE =
+    "Imagen models are deprecated and will be shut down. " +
+        "Migrate to Gemini image generation models. " +
+        "See https://firebase.google.com/docs/ai-logic/generate-images-gemini"
+
 /**
  * Configuration options for Imagen image generation.
  *
@@ -22,6 +27,7 @@ package dev.ynagai.firebase.ai
  * }
  * ```
  */
+@Deprecated(IMAGEN_DEPRECATION_MESSAGE)
 data class ImagenGenerationConfig(
     val negativePrompt: String? = null,
     val numberOfImages: Int? = null,
@@ -41,6 +47,7 @@ annotation class ImagenGenerationConfigDsl
  *
  * @see imagenGenerationConfig
  */
+@Deprecated(IMAGEN_DEPRECATION_MESSAGE)
 @ImagenGenerationConfigDsl
 class ImagenGenerationConfigBuilder {
     /** A text prompt describing what to exclude from generated images. */
@@ -78,7 +85,8 @@ class ImagenGenerationConfigBuilder {
  * }
  * ```
  */
-fun imagenGenerationConfig(block: ImagenGenerationConfigBuilder.() -> Unit): ImagenGenerationConfig {
+@Deprecated(IMAGEN_DEPRECATION_MESSAGE)
+fun imagenGenerationConfig(block: ImagenGenerationConfigBuilder.() -> Unit): @Suppress("DEPRECATION") ImagenGenerationConfig {
     val builder = ImagenGenerationConfigBuilder()
     builder.block()
     return builder.build()

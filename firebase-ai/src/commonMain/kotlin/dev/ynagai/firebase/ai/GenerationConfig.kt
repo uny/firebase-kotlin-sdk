@@ -28,6 +28,7 @@ data class GenerationConfig(
     val responseModalities: List<ResponseModality>? = null,
     val presencePenalty: Float? = null,
     val frequencyPenalty: Float? = null,
+    val thinkingConfig: ThinkingConfig? = null,
 )
 
 /**
@@ -70,6 +71,8 @@ class GenerationConfigBuilder {
     var presencePenalty: Float? = null
     /** Penalizes tokens based on their frequency in the output. Range: -2.0 to 2.0. */
     var frequencyPenalty: Float? = null
+    /** Configuration for the model's thinking process. */
+    var thinkingConfig: ThinkingConfig? = null
 
     internal fun build(): GenerationConfig = GenerationConfig(
         temperature = temperature,
@@ -83,6 +86,7 @@ class GenerationConfigBuilder {
         responseModalities = responseModalities,
         presencePenalty = presencePenalty,
         frequencyPenalty = frequencyPenalty,
+        thinkingConfig = thinkingConfig,
     )
 }
 

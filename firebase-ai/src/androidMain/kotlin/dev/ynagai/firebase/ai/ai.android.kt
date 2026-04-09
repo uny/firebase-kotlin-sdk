@@ -40,6 +40,7 @@ actual class FirebaseAI internal constructor(
         )
     )
 
+    @Suppress("DEPRECATION")
     actual fun imagenModel(
         modelName: String,
         generationConfig: ImagenGenerationConfig?,

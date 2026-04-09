@@ -50,6 +50,8 @@ data class Candidate(
     val finishReason: FinishReason? = null,
     val safetyRatings: List<SafetyRating> = emptyList(),
     val citationMetadata: CitationMetadata? = null,
+    val groundingMetadata: GroundingMetadata? = null,
+    val urlContextMetadata: UrlContextMetadata? = null,
 )
 
 /**
@@ -100,6 +102,13 @@ data class UsageMetadata(
     val promptTokenCount: Int = 0,
     val candidatesTokenCount: Int = 0,
     val totalTokenCount: Int = 0,
+    val thoughtsTokenCount: Int = 0,
+    val toolUsePromptTokenCount: Int = 0,
+    val cachedContentTokenCount: Int = 0,
+    val promptTokensDetails: List<ModalityTokenCount> = emptyList(),
+    val candidatesTokensDetails: List<ModalityTokenCount> = emptyList(),
+    val toolUsePromptTokensDetails: List<ModalityTokenCount> = emptyList(),
+    val cacheTokensDetails: List<ModalityTokenCount> = emptyList(),
 )
 
 /**

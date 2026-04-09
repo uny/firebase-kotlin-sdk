@@ -12,6 +12,11 @@ package dev.ynagai.firebase.ai
  * val imageData = response.images.first().data
  * ```
  */
+@Deprecated(
+    "Imagen models are deprecated and will be shut down. " +
+        "Migrate to Gemini image generation models. " +
+        "See https://firebase.google.com/docs/ai-logic/generate-images-gemini",
+)
 expect class ImagenModel {
     /**
      * Generates images from a text prompt.
