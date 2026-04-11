@@ -6,11 +6,7 @@ package dev.ynagai.firebase.ai
  * @property images The list of generated images.
  * @property filteredReason The reason images were filtered, if any.
  */
-@Deprecated(
-    "Imagen models are deprecated and will be shut down. " +
-        "Migrate to Gemini image generation models. " +
-        "See https://firebase.google.com/docs/ai-logic/generate-images-gemini",
-)
+@Deprecated(IMAGEN_DEPRECATION_MESSAGE)
 data class ImagenGenerationResponse(
     val images: List<ImagenInlineImage> = emptyList(),
     val filteredReason: String? = null,
@@ -22,11 +18,7 @@ data class ImagenGenerationResponse(
  * @property data The raw image data as a byte array.
  * @property mimeType The MIME type of the image (e.g., "image/png", "image/jpeg").
  */
-@Deprecated(
-    "Imagen models are deprecated and will be shut down. " +
-        "Migrate to Gemini image generation models. " +
-        "See https://firebase.google.com/docs/ai-logic/generate-images-gemini",
-)
+@Deprecated(IMAGEN_DEPRECATION_MESSAGE)
 data class ImagenInlineImage(
     val data: ByteArray,
     val mimeType: String,

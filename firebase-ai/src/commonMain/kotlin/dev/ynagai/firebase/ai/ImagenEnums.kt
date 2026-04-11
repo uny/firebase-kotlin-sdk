@@ -1,6 +1,6 @@
 package dev.ynagai.firebase.ai
 
-private const val IMAGEN_DEPRECATION_MESSAGE =
+internal const val IMAGEN_DEPRECATION_MESSAGE =
     "Imagen models are deprecated and will be shut down. " +
         "Migrate to Gemini image generation models. " +
         "See https://firebase.google.com/docs/ai-logic/generate-images-gemini"

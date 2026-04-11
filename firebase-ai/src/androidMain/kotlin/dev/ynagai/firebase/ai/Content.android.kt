@@ -68,10 +68,10 @@ internal fun AndroidPart.toCommon(): Part = when (this) {
         code = code,
     )
     is AndroidCodeExecutionResultPart -> CodeExecutionResultPart(
-        outcome = when (outcome.lowercase()) {
-            "outcome_ok" -> CodeExecutionOutcome.OK
-            "outcome_failed" -> CodeExecutionOutcome.FAILED
-            "outcome_deadline_exceeded" -> CodeExecutionOutcome.DEADLINE_EXCEEDED
+        outcome = when {
+            outcome.equals("outcome_ok", ignoreCase = true) -> CodeExecutionOutcome.OK
+            outcome.equals("outcome_failed", ignoreCase = true) -> CodeExecutionOutcome.FAILED
+            outcome.equals("outcome_deadline_exceeded", ignoreCase = true) -> CodeExecutionOutcome.DEADLINE_EXCEEDED
             else -> CodeExecutionOutcome.UNSPECIFIED
         },
         output = output,

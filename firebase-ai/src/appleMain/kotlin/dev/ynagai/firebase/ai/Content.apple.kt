@@ -15,7 +15,7 @@ import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBTextPart
 
 @OptIn(ExperimentalForeignApi::class)
 internal fun Content.toApple(): KFBModelContent {
-    val appleParts = parts.map { part ->
+    val appleParts = parts.mapNotNull { part ->
         when (part) {
             is TextPart -> KFBTextPart(text = part.text)
             is InlineDataPart -> KFBInlineDataPart(
@@ -37,7 +37,7 @@ internal fun Content.toApple(): KFBModelContent {
             is ExecutableCodePart -> null // Response-only part; not sent to model
             is CodeExecutionResultPart -> null // Response-only part; not sent to model
         }
-    }.filterNotNull()
+    }
     return KFBModelContent(role = role ?: "user", parts = appleParts)
 }
 

@@ -82,11 +82,7 @@ expect class FirebaseAI {
      * )
      * ```
      */
-    @Deprecated(
-        "Imagen models are deprecated and will be shut down. " +
-            "Migrate to Gemini image generation models. " +
-            "See https://firebase.google.com/docs/ai-logic/generate-images-gemini",
-    )
+    @Deprecated(IMAGEN_DEPRECATION_MESSAGE)
     fun imagenModel(
         modelName: String,
         generationConfig: ImagenGenerationConfig? = null,
