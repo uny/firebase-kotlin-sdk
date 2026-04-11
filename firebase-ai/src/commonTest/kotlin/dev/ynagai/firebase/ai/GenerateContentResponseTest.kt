@@ -97,6 +97,30 @@ class GenerateContentResponseTest {
         assertEquals(0, metadata.promptTokenCount)
         assertEquals(0, metadata.candidatesTokenCount)
         assertEquals(0, metadata.totalTokenCount)
+        assertEquals(0, metadata.thoughtsTokenCount)
+        assertEquals(0, metadata.toolUsePromptTokenCount)
+        assertEquals(0, metadata.cachedContentTokenCount)
+        assertEquals(emptyList<ModalityTokenCount>(), metadata.promptTokensDetails)
+        assertEquals(emptyList<ModalityTokenCount>(), metadata.candidatesTokensDetails)
+        assertEquals(emptyList<ModalityTokenCount>(), metadata.toolUsePromptTokensDetails)
+        assertEquals(emptyList<ModalityTokenCount>(), metadata.cacheTokensDetails)
+    }
+
+    @Test
+    fun usageMetadataWithModalityDetails() {
+        val details = listOf(
+            ModalityTokenCount(ContentModality.TEXT, 100),
+            ModalityTokenCount(ContentModality.IMAGE, 50),
+        )
+        val metadata = UsageMetadata(
+            promptTokenCount = 150,
+            totalTokenCount = 300,
+            promptTokensDetails = details,
+        )
+        assertEquals(150, metadata.promptTokenCount)
+        assertEquals(2, metadata.promptTokensDetails.size)
+        assertEquals(ContentModality.TEXT, metadata.promptTokensDetails[0].modality)
+        assertEquals(100, metadata.promptTokensDetails[0].tokenCount)
     }
 
     @Test
@@ -105,6 +129,8 @@ class GenerateContentResponseTest {
         assertNull(candidate.finishReason)
         assertEquals(emptyList(), candidate.safetyRatings)
         assertNull(candidate.citationMetadata)
+        assertNull(candidate.groundingMetadata)
+        assertNull(candidate.urlContextMetadata)
     }
 
     @Test

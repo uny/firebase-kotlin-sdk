@@ -115,4 +115,42 @@ class ContentTest {
         assertEquals(a, b)
         assertEquals(a.hashCode(), b.hashCode())
     }
+
+    @Test
+    fun executableCodePartDataClassEquality() {
+        val a = ExecutableCodePart(language = "PYTHON", code = "print('hi')")
+        val b = ExecutableCodePart(language = "PYTHON", code = "print('hi')")
+        assertEquals(a, b)
+        assertEquals(a.hashCode(), b.hashCode())
+    }
+
+    @Test
+    fun executableCodePartInequality() {
+        val a = ExecutableCodePart(language = "PYTHON", code = "print('a')")
+        val b = ExecutableCodePart(language = "PYTHON", code = "print('b')")
+        assertNotEquals(a, b)
+    }
+
+    @Test
+    fun codeExecutionResultPartDataClassEquality() {
+        val a = CodeExecutionResultPart(outcome = CodeExecutionOutcome.OK, output = "42")
+        val b = CodeExecutionResultPart(outcome = CodeExecutionOutcome.OK, output = "42")
+        assertEquals(a, b)
+        assertEquals(a.hashCode(), b.hashCode())
+    }
+
+    @Test
+    fun codeExecutionResultPartDefaultOutput() {
+        val part = CodeExecutionResultPart(outcome = CodeExecutionOutcome.OK)
+        assertEquals("", part.output)
+    }
+
+    @Test
+    fun codeExecutionOutcomeValues() {
+        assertEquals(4, CodeExecutionOutcome.entries.size)
+        assertTrue(CodeExecutionOutcome.entries.contains(CodeExecutionOutcome.OK))
+        assertTrue(CodeExecutionOutcome.entries.contains(CodeExecutionOutcome.FAILED))
+        assertTrue(CodeExecutionOutcome.entries.contains(CodeExecutionOutcome.DEADLINE_EXCEEDED))
+        assertTrue(CodeExecutionOutcome.entries.contains(CodeExecutionOutcome.UNSPECIFIED))
+    }
 }

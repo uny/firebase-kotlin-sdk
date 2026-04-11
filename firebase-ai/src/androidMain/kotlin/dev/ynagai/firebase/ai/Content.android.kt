@@ -39,8 +39,8 @@ internal fun Content.toAndroid(): AndroidContent {
                         JsonObject(part.response.mapValues { (_, v) -> v.toJsonElement() }),
                     )
                 )
-                is ExecutableCodePart -> {}
-                is CodeExecutionResultPart -> {}
+                is ExecutableCodePart -> {} // Response-only part; not sent to model
+                is CodeExecutionResultPart -> {} // Response-only part; not sent to model
             }
         }
     }
@@ -68,10 +68,10 @@ internal fun AndroidPart.toCommon(): Part = when (this) {
         code = code,
     )
     is AndroidCodeExecutionResultPart -> CodeExecutionResultPart(
-        outcome = when {
-            outcome.contains("ok", ignoreCase = true) -> CodeExecutionOutcome.OK
-            outcome.contains("failed", ignoreCase = true) -> CodeExecutionOutcome.FAILED
-            outcome.contains("deadline", ignoreCase = true) -> CodeExecutionOutcome.DEADLINE_EXCEEDED
+        outcome = when (outcome.lowercase()) {
+            "outcome_ok" -> CodeExecutionOutcome.OK
+            "outcome_failed" -> CodeExecutionOutcome.FAILED
+            "outcome_deadline_exceeded" -> CodeExecutionOutcome.DEADLINE_EXCEEDED
             else -> CodeExecutionOutcome.UNSPECIFIED
         },
         output = output,

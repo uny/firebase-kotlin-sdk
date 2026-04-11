@@ -3,30 +3,10 @@
 firebase-kotlin-sdk 側で firebase-ios-sdk 12.12.0 / firebase-android-sdk 34.11.0 対応を行いました。
 以下は firebase-objc-sdk 側で対応が必要な項目です。
 
-## 必須: `KFBExecutableCodeLanguage` に `isEqual` と `rawValue` を追加
+## 対応済み: `KFBExecutableCodeLanguage` の `isEqual` / `rawValue`
 
-**現状:** `KFBExecutableCodeLanguage` は `isEqual(_:)` をオーバーライドしておらず、`rawValue` プロパティもない。  
-`static var python` は computed property のため、呼び出すたびに新しいインスタンスが生成され、`==` によるポインタ比較が失敗する。
-
-**Kotlin 側の回避策:** 言語を `"PYTHON"` にハードコードしている（`Content.apple.kt:72`）。
-
-**対応案:** 他の enum-like ラッパー（`KFBCodeExecutionOutcome` など）と同様に `isEqual` と `hash` をオーバーライドする。さらに `rawValue: String` を公開すると、Kotlin 側で `rawValue()` ベースのマッピングに統一できる。
-
-```swift
-// ExecutableCodePart.swift — KFBExecutableCodeLanguage
-@objc public var rawValue: String {
-    String(describing: value)
-}
-
-override public func isEqual(_ object: Any?) -> Bool {
-    guard let other = object as? ExecutableCodeLanguage else { return false }
-    return value == other.value
-}
-
-override public var hash: Int {
-    String(describing: value).hashValue
-}
-```
+firebase-objc-sdk 0.3.1 で `isEqual`、`hash`、`rawValue` が追加済み。  
+Kotlin 側は `part.language().rawValue()` で正常にマッピングしている（`Content.apple.kt`）。
 
 ## 推奨: `KFBURLRetrievalStatus` に `rawValue` を追加
 

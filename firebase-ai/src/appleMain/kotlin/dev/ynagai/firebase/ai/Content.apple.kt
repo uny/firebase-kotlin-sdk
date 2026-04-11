@@ -34,8 +34,8 @@ internal fun Content.toApple(): KFBModelContent {
                 name = part.name,
                 response = part.response as Map<Any?, *>,
             )
-            is ExecutableCodePart -> null
-            is CodeExecutionResultPart -> null
+            is ExecutableCodePart -> null // Response-only part; not sent to model
+            is CodeExecutionResultPart -> null // Response-only part; not sent to model
         }
     }.filterNotNull()
     return KFBModelContent(role = role ?: "user", parts = appleParts)
