@@ -1,8 +1,8 @@
 package dev.ynagai.firebase.ai
 
 import com.google.firebase.ai.type.ResponseModality as AndroidResponseModality
-import com.google.firebase.ai.type.ThinkingConfig as AndroidThinkingConfig
 import com.google.firebase.ai.type.generationConfig as androidGenerationConfig
+import com.google.firebase.ai.type.thinkingConfig as androidThinkingConfig
 
 internal fun GenerationConfig.toAndroid() = androidGenerationConfig {
     this@toAndroid.temperature?.let { temperature = it }
@@ -27,18 +27,15 @@ internal fun ResponseModality.toAndroid(): AndroidResponseModality = when (this)
     ResponseModality.AUDIO -> AndroidResponseModality.AUDIO
 }
 
-internal fun ThinkingConfig.toAndroid(): AndroidThinkingConfig {
-    val builder = AndroidThinkingConfig.Builder()
-    thinkingBudget?.let { builder.setThinkingBudget(it) }
-    thinkingLevel?.let {
-        val level = when (it) {
+internal fun ThinkingConfig.toAndroid() = androidThinkingConfig {
+    this@toAndroid.thinkingBudget?.let { thinkingBudget = it }
+    this@toAndroid.thinkingLevel?.let {
+        thinkingLevel = when (it) {
             ThinkingLevel.MINIMAL -> com.google.firebase.ai.type.ThinkingLevel.MINIMAL
             ThinkingLevel.LOW -> com.google.firebase.ai.type.ThinkingLevel.LOW
             ThinkingLevel.MEDIUM -> com.google.firebase.ai.type.ThinkingLevel.MEDIUM
             ThinkingLevel.HIGH -> com.google.firebase.ai.type.ThinkingLevel.HIGH
         }
-        builder.setThinkingLevel(level)
     }
-    includeThoughts?.let { builder.setIncludeThoughts(it) }
-    return builder.build()
+    this@toAndroid.includeThoughts?.let { includeThoughts = it }
 }

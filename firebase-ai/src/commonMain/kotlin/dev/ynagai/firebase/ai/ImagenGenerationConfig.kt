@@ -85,8 +85,9 @@ class ImagenGenerationConfigBuilder {
  * }
  * ```
  */
+@Suppress("DEPRECATION")
 @Deprecated(IMAGEN_DEPRECATION_MESSAGE)
-fun imagenGenerationConfig(block: ImagenGenerationConfigBuilder.() -> Unit): @Suppress("DEPRECATION") ImagenGenerationConfig {
+fun imagenGenerationConfig(block: ImagenGenerationConfigBuilder.() -> Unit): ImagenGenerationConfig {
     val builder = ImagenGenerationConfigBuilder()
     builder.block()
     return builder.build()
