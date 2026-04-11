@@ -17,11 +17,18 @@
 - `SafetySetting`, `HarmCategory`, `HarmBlockThreshold` — safety filtering
 - `CountTokensResponse` — token counting result
 - `GenerativeBackend` — backend selection (Google AI / Vertex AI)
-- `Tool`, `FunctionDeclaration`, `ToolConfig`, `Schema` — function calling / structured output
-- `ImagenModel` — image generation using Imagen
-- `ImagenGenerationConfig`, `ImagenImageFormat` — image generation configuration
-- `ImagenSafetySettings`, `ImagenSafetyFilterLevel`, `ImagenPersonFilterLevel` — image safety filtering
-- `ImagenGenerationResponse`, `ImagenInlineImage` — image generation response
+- `Tool` (sealed class) — `FunctionDeclarations`, `GoogleSearch`, `UrlContext`, `CodeExecution`
+- `FunctionDeclaration`, `ToolConfig`, `Schema` — function calling / structured output
+- `ThinkingConfig`, `ThinkingLevel` — model thinking configuration
+- `ExecutableCodePart`, `CodeExecutionResultPart`, `CodeExecutionOutcome` — code execution parts
+- `GroundingMetadata`, `GroundingChunk`, `WebGroundingChunk`, `GroundingSupport`, `Segment`, `SearchEntryPoint` — grounding metadata
+- `UrlContextMetadata`, `UrlMetadata`, `UrlRetrievalStatus` — URL context metadata
+- `ContentModality`, `ModalityTokenCount` — token usage by modality
+- `AudioTranscriptionConfig` — audio transcription in live sessions
+- `ImagenModel` (**deprecated**) — image generation using Imagen
+- `ImagenGenerationConfig`, `ImagenImageFormat` (**deprecated**) — image generation configuration
+- `ImagenSafetySettings`, `ImagenSafetyFilterLevel`, `ImagenPersonFilterLevel` (**deprecated**) — image safety filtering
+- `ImagenGenerationResponse`, `ImagenInlineImage` (**deprecated**) — image generation response
 - `LiveGenerativeModel` — real-time streaming model
 - `LiveSession` — bidirectional live session
 - `LiveGenerationConfig`, `SpeechConfig`, `Voice` — live generation configuration
@@ -43,6 +50,6 @@ ObjC prefix: `KFB` (fork-specific prefix for the AI module).
 
 ## Not Yet Implemented
 
-- Grounding / retrieval
-- Code execution
 - Cached content
+- `JsonSchema` / `generateObject` (structured output — Android only, not yet in iOS fork)
+- `GenerativeModelSession` (iOS-only Foundation Models API — not wrappable as common API)

@@ -4,13 +4,22 @@ import com.google.firebase.ai.type.BlockReason as AndroidBlockReason
 import com.google.firebase.ai.type.Candidate as AndroidCandidate
 import com.google.firebase.ai.type.Citation as AndroidCitation
 import com.google.firebase.ai.type.CitationMetadata as AndroidCitationMetadata
+import com.google.firebase.ai.type.ContentModality as AndroidContentModality
 import com.google.firebase.ai.type.FinishReason as AndroidFinishReason
 import com.google.firebase.ai.type.GenerateContentResponse as AndroidGenerateContentResponse
+import com.google.firebase.ai.type.GroundingMetadata as AndroidGroundingMetadata
+import com.google.firebase.ai.type.GroundingSupport as AndroidGroundingSupport
 import com.google.firebase.ai.type.HarmCategory as AndroidHarmCategory
 import com.google.firebase.ai.type.HarmProbability as AndroidHarmProbability
+import com.google.firebase.ai.type.ModalityTokenCount as AndroidModalityTokenCount
 import com.google.firebase.ai.type.PromptFeedback as AndroidPromptFeedback
 import com.google.firebase.ai.type.SafetyRating as AndroidSafetyRating
+import com.google.firebase.ai.type.Segment as AndroidSegment
+import com.google.firebase.ai.type.UrlContextMetadata as AndroidUrlContextMetadata
+import com.google.firebase.ai.type.UrlMetadata as AndroidUrlMetadata
+import com.google.firebase.ai.type.UrlRetrievalStatus as AndroidUrlRetrievalStatus
 import com.google.firebase.ai.type.UsageMetadata as AndroidUsageMetadata
+import com.google.firebase.ai.type.WebGroundingChunk as AndroidWebGroundingChunk
 
 internal fun AndroidGenerateContentResponse.toCommon(): GenerateContentResponse =
     GenerateContentResponse(
@@ -24,6 +33,8 @@ internal fun AndroidCandidate.toCommon(): Candidate = Candidate(
     finishReason = finishReason?.toCommon(),
     safetyRatings = safetyRatings.map { it.toCommon() },
     citationMetadata = citationMetadata?.toCommon(),
+    groundingMetadata = groundingMetadata?.toCommon(),
+    urlContextMetadata = urlContextMetadata?.toCommon(),
 )
 
 internal fun AndroidSafetyRating.toCommon(): SafetyRating = SafetyRating(
@@ -81,10 +92,31 @@ internal fun AndroidCitation.toCommon(): Citation = Citation(
 )
 
 internal fun AndroidUsageMetadata.toCommon(): UsageMetadata = UsageMetadata(
-    promptTokenCount = promptTokenCount ?: 0,
+    promptTokenCount = promptTokenCount,
     candidatesTokenCount = candidatesTokenCount ?: 0,
-    totalTokenCount = totalTokenCount ?: 0,
+    totalTokenCount = totalTokenCount,
+    thoughtsTokenCount = thoughtsTokenCount,
+    toolUsePromptTokenCount = toolUsePromptTokenCount,
+    cachedContentTokenCount = cachedContentTokenCount,
+    promptTokensDetails = promptTokensDetails.map { it.toCommon() },
+    candidatesTokensDetails = candidatesTokensDetails.map { it.toCommon() },
+    toolUsePromptTokensDetails = toolUsePromptTokensDetails.map { it.toCommon() },
+    cacheTokensDetails = cacheTokensDetails.map { it.toCommon() },
 )
+
+internal fun AndroidModalityTokenCount.toCommon(): ModalityTokenCount = ModalityTokenCount(
+    modality = modality.toCommon(),
+    tokenCount = tokenCount,
+)
+
+internal fun AndroidContentModality.toCommon(): ContentModality = when (this) {
+    AndroidContentModality.TEXT -> ContentModality.TEXT
+    AndroidContentModality.IMAGE -> ContentModality.IMAGE
+    AndroidContentModality.AUDIO -> ContentModality.AUDIO
+    AndroidContentModality.VIDEO -> ContentModality.VIDEO
+    AndroidContentModality.DOCUMENT -> ContentModality.DOCUMENT
+    else -> ContentModality.UNSPECIFIED
+}
 
 internal fun AndroidPromptFeedback.toCommon(): PromptFeedback = PromptFeedback(
     blockReason = blockReason?.toCommon(),
@@ -98,4 +130,48 @@ internal fun AndroidBlockReason.toCommon(): BlockReason = when (this) {
     AndroidBlockReason.BLOCKLIST -> BlockReason.BLOCKLIST
     AndroidBlockReason.PROHIBITED_CONTENT -> BlockReason.PROHIBITED_CONTENT
     else -> BlockReason.UNKNOWN
+}
+
+internal fun AndroidGroundingMetadata.toCommon(): GroundingMetadata = GroundingMetadata(
+    webSearchQueries = webSearchQueries,
+    searchEntryPoint = searchEntryPoint?.let { SearchEntryPoint(renderedContent = it.renderedContent) },
+    groundingChunks = groundingChunks.map { chunk ->
+        GroundingChunk(web = chunk.web?.toCommon())
+    },
+    groundingSupports = groundingSupports.map { it.toCommon() },
+)
+
+internal fun AndroidWebGroundingChunk.toCommon(): WebGroundingChunk = WebGroundingChunk(
+    uri = uri,
+    title = title,
+    domain = domain,
+)
+
+internal fun AndroidGroundingSupport.toCommon(): GroundingSupport = GroundingSupport(
+    segment = segment.toCommon(),
+    groundingChunkIndices = groundingChunkIndices,
+)
+
+internal fun AndroidSegment.toCommon(): Segment = Segment(
+    partIndex = partIndex,
+    startIndex = startIndex,
+    endIndex = endIndex,
+    text = text,
+)
+
+internal fun AndroidUrlContextMetadata.toCommon(): UrlContextMetadata = UrlContextMetadata(
+    urlMetadata = urlMetadata.map { it.toCommon() },
+)
+
+internal fun AndroidUrlMetadata.toCommon(): UrlMetadata = UrlMetadata(
+    retrievedUrl = retrievedUrl,
+    retrievalStatus = urlRetrievalStatus.toCommon(),
+)
+
+internal fun AndroidUrlRetrievalStatus.toCommon(): UrlRetrievalStatus = when (this) {
+    AndroidUrlRetrievalStatus.SUCCESS -> UrlRetrievalStatus.SUCCESS
+    AndroidUrlRetrievalStatus.ERROR -> UrlRetrievalStatus.ERROR
+    AndroidUrlRetrievalStatus.PAYWALL -> UrlRetrievalStatus.PAYWALL
+    AndroidUrlRetrievalStatus.UNSAFE -> UrlRetrievalStatus.UNSAFE
+    else -> UrlRetrievalStatus.UNSPECIFIED
 }

@@ -6,10 +6,14 @@ import com.google.firebase.ai.type.Schema as AndroidSchema
 import com.google.firebase.ai.type.Tool as AndroidTool
 import com.google.firebase.ai.type.ToolConfig as AndroidToolConfig
 
-internal fun Tool.toAndroid(): AndroidTool =
-    AndroidTool.functionDeclarations(
-        functionDeclarations?.map { it.toAndroid() } ?: emptyList(),
+internal fun Tool.toAndroid(): AndroidTool = when (this) {
+    is Tool.FunctionDeclarations -> AndroidTool.functionDeclarations(
+        declarations.map { it.toAndroid() },
     )
+    is Tool.GoogleSearch -> AndroidTool.googleSearch()
+    is Tool.UrlContext -> AndroidTool.urlContext()
+    is Tool.CodeExecution -> AndroidTool.codeExecution()
+}
 
 internal fun FunctionDeclaration.toAndroid(): AndroidFunctionDeclaration {
     val schemaMap = parameters.mapValues { (_, v) -> v.toAndroid() }

@@ -1,7 +1,9 @@
 package dev.ynagai.firebase.ai
 
+import com.google.firebase.ai.type.CodeExecutionResultPart as AndroidCodeExecutionResultPart
 import com.google.firebase.ai.type.content as androidContent
 import com.google.firebase.ai.type.Content as AndroidContent
+import com.google.firebase.ai.type.ExecutableCodePart as AndroidExecutableCodePart
 import com.google.firebase.ai.type.FileDataPart as AndroidFileDataPart
 import com.google.firebase.ai.type.FunctionCallPart as AndroidFunctionCallPart
 import com.google.firebase.ai.type.FunctionResponsePart as AndroidFunctionResponsePart
@@ -37,6 +39,8 @@ internal fun Content.toAndroid(): AndroidContent {
                         JsonObject(part.response.mapValues { (_, v) -> v.toJsonElement() }),
                     )
                 )
+                is ExecutableCodePart -> {} // Response-only part; not sent to model
+                is CodeExecutionResultPart -> {} // Response-only part; not sent to model
             }
         }
     }
@@ -58,6 +62,19 @@ internal fun AndroidPart.toCommon(): Part = when (this) {
     is AndroidFunctionResponsePart -> FunctionResponsePart(
         name = name,
         response = response.mapValues { (_, v) -> v.toAny() },
+    )
+    is AndroidExecutableCodePart -> ExecutableCodePart(
+        language = language,
+        code = code,
+    )
+    is AndroidCodeExecutionResultPart -> CodeExecutionResultPart(
+        outcome = when {
+            outcome.equals("outcome_ok", ignoreCase = true) -> CodeExecutionOutcome.OK
+            outcome.equals("outcome_failed", ignoreCase = true) -> CodeExecutionOutcome.FAILED
+            outcome.equals("outcome_deadline_exceeded", ignoreCase = true) -> CodeExecutionOutcome.DEADLINE_EXCEEDED
+            else -> CodeExecutionOutcome.UNSPECIFIED
+        },
+        output = output,
     )
     else -> throw IllegalArgumentException("Unknown AndroidPart type: ${this::class.simpleName}")
 }

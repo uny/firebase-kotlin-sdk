@@ -29,5 +29,8 @@ StartYourBridgeHere.swift
 captures/
 *.jks
 
+# --- Local docs ---
+docs/local/
+
 # --- Cursor IDE ---
 .cursor/

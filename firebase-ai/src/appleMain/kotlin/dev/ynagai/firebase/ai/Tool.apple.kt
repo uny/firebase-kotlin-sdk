@@ -8,10 +8,14 @@ import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBTool
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBToolConfig
 
 @OptIn(ExperimentalForeignApi::class)
-internal fun Tool.toApple(): KFBTool =
-    KFBTool.functionDeclarations(
-        functionDeclarations?.map { it.toApple() } ?: emptyList<KFBFunctionDeclaration>(),
+internal fun Tool.toApple(): KFBTool = when (this) {
+    is Tool.FunctionDeclarations -> KFBTool.functionDeclarations(
+        declarations.map { it.toApple() },
     )
+    is Tool.GoogleSearch -> KFBTool.googleSearchDefault()
+    is Tool.UrlContext -> KFBTool.urlContext()
+    is Tool.CodeExecution -> KFBTool.codeExecution()
+}
 
 @OptIn(ExperimentalForeignApi::class)
 @Suppress("UNCHECKED_CAST")

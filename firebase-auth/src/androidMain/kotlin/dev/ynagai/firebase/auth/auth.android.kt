@@ -111,8 +111,10 @@ actual class FirebaseAuth internal constructor(
 
     actual val idTokenChanges: Flow<FirebaseUser?>
         get() = callbackFlow {
-            val listener = AndroidFirebaseAuth.IdTokenListener { auth ->
-                trySend(auth.currentUser?.let { FirebaseUser(it) })
+            val listener = object : AndroidFirebaseAuth.IdTokenListener {
+                override fun onIdTokenChanged(auth: AndroidFirebaseAuth) {
+                    trySend(auth.currentUser?.let { FirebaseUser(it) })
+                }
             }
             android.addIdTokenListener(listener)
             awaitClose { android.removeIdTokenListener(listener) }

@@ -7,6 +7,7 @@ import platform.Foundation.NSNumber
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBFunctionCallPart
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBFunctionResponsePart
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBInlineDataPart
+import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBAudioTranscriptionConfig
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBLiveGenerationConfig
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBLiveServerMessage
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBResponseModality
@@ -24,8 +25,8 @@ internal fun LiveGenerationConfig.toApple(): KFBLiveGenerationConfig = KFBLiveGe
     frequencyPenalty = null,
     responseModalities = responseModality?.let { listOf(it.toAppleResponseModality()) },
     speech = speechConfig?.toApple(),
-    inputAudioTranscription = null,
-    outputAudioTranscription = null,
+    inputAudioTranscription = inputAudioTranscription?.let { KFBAudioTranscriptionConfig() },
+    outputAudioTranscription = outputAudioTranscription?.let { KFBAudioTranscriptionConfig() },
 )
 
 @OptIn(ExperimentalForeignApi::class)

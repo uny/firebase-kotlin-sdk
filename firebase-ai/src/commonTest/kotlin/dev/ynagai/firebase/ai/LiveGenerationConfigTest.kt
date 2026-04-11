@@ -115,4 +115,29 @@ class LiveGenerationConfigTest {
             SpeechConfig(Voice("Kore")),
         )
     }
+
+    @Test
+    fun audioTranscriptionDefaultsToNull() {
+        val config = liveGenerationConfig { }
+        assertNull(config.inputAudioTranscription)
+        assertNull(config.outputAudioTranscription)
+    }
+
+    @Test
+    fun inputAudioTranscriptionIsSet() {
+        val config = liveGenerationConfig {
+            inputAudioTranscription = AudioTranscriptionConfig()
+        }
+        assertNull(config.outputAudioTranscription)
+        assertEquals(AudioTranscriptionConfig::class, config.inputAudioTranscription!!::class)
+    }
+
+    @Test
+    fun outputAudioTranscriptionIsSet() {
+        val config = liveGenerationConfig {
+            outputAudioTranscription = AudioTranscriptionConfig()
+        }
+        assertNull(config.inputAudioTranscription)
+        assertEquals(AudioTranscriptionConfig::class, config.outputAudioTranscription!!::class)
+    }
 }

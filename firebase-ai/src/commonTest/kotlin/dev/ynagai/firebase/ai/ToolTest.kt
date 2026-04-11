@@ -2,7 +2,7 @@ package dev.ynagai.firebase.ai
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNull
+import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
 class ToolTest {
@@ -35,17 +35,30 @@ class ToolTest {
     }
 
     @Test
-    fun toolWithFunctionDeclarations() {
+    fun toolFunctionDeclarations() {
         val decl = FunctionDeclaration(name = "fn", description = "A function")
-        val tool = Tool(functionDeclarations = listOf(decl))
-        assertEquals(1, tool.functionDeclarations?.size)
-        assertEquals("fn", tool.functionDeclarations!![0].name)
+        val tool = Tool.functionDeclarations(listOf(decl))
+        assertIs<Tool.FunctionDeclarations>(tool)
+        assertEquals(1, (tool as Tool.FunctionDeclarations).declarations.size)
+        assertEquals("fn", tool.declarations[0].name)
     }
 
     @Test
-    fun toolDefaultIsNull() {
-        val tool = Tool()
-        assertNull(tool.functionDeclarations)
+    fun toolGoogleSearch() {
+        val tool = Tool.googleSearch()
+        assertIs<Tool.GoogleSearch>(tool)
+    }
+
+    @Test
+    fun toolUrlContext() {
+        val tool = Tool.urlContext()
+        assertIs<Tool.UrlContext>(tool)
+    }
+
+    @Test
+    fun toolCodeExecution() {
+        val tool = Tool.codeExecution()
+        assertIs<Tool.CodeExecution>(tool)
     }
 
     @Test
@@ -64,7 +77,7 @@ class ToolTest {
     fun functionCallingConfigDefaults() {
         val config = FunctionCallingConfig()
         assertEquals(FunctionCallingMode.AUTO, config.mode)
-        assertNull(config.allowedFunctionNames)
+        assertEquals(null, config.allowedFunctionNames)
     }
 
     @Test

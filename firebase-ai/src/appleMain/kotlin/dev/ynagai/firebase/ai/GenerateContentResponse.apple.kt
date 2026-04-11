@@ -6,12 +6,20 @@ import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBBlockReason
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBCandidate
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBCitation
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBCitationMetadata
+import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBContentModality
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBFinishReason
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBGenerateContentResponse
+import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBGroundingChunk
+import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBGroundingMetadata
+import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBGroundingSupport
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBHarmCategory
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBHarmProbability
+import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBModalityTokenCount
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBPromptFeedback
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBSafetyRating
+import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBURLContextMetadata
+import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBURLMetadata
+import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBURLRetrievalStatus
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBUsageMetadata
 
 @OptIn(ExperimentalForeignApi::class)
@@ -28,6 +36,8 @@ internal fun KFBCandidate.toCommon(): Candidate = Candidate(
     finishReason = finishReason()?.toCommonFinishReason(),
     safetyRatings = (safetyRatings() as? List<KFBSafetyRating>)?.map { it.toCommon() } ?: emptyList(),
     citationMetadata = citationMetadata()?.toCommon(),
+    groundingMetadata = groundingMetadata()?.toCommon(),
+    urlContextMetadata = urlContextMetadata()?.toCommon(),
 )
 
 @OptIn(ExperimentalForeignApi::class)
@@ -94,14 +104,93 @@ private fun KFBCitation.toCommon(): Citation = Citation(
 )
 
 @OptIn(ExperimentalForeignApi::class)
+@Suppress("UNCHECKED_CAST")
 internal fun KFBUsageMetadata.toCommon(): UsageMetadata = UsageMetadata(
     promptTokenCount = promptTokenCount().toInt(),
     candidatesTokenCount = candidatesTokenCount().toInt(),
     totalTokenCount = totalTokenCount().toInt(),
+    thoughtsTokenCount = thoughtsTokenCount().toInt(),
+    toolUsePromptTokenCount = toolUsePromptTokenCount().toInt(),
+    cachedContentTokenCount = cachedContentTokenCount().toInt(),
+    promptTokensDetails = (promptTokensDetails() as? List<KFBModalityTokenCount>)?.map { it.toCommon() } ?: emptyList(),
+    candidatesTokensDetails = (candidatesTokensDetails() as? List<KFBModalityTokenCount>)?.map { it.toCommon() } ?: emptyList(),
+    toolUsePromptTokensDetails = (toolUsePromptTokensDetails() as? List<KFBModalityTokenCount>)?.map { it.toCommon() } ?: emptyList(),
+    cacheTokensDetails = (cacheTokensDetails() as? List<KFBModalityTokenCount>)?.map { it.toCommon() } ?: emptyList(),
 )
+
+@OptIn(ExperimentalForeignApi::class)
+internal fun KFBModalityTokenCount.toCommon(): ModalityTokenCount = ModalityTokenCount(
+    modality = modality().toCommon(),
+    tokenCount = tokenCount().toInt(),
+)
+
+@OptIn(ExperimentalForeignApi::class)
+internal fun KFBContentModality.toCommon(): ContentModality = when (rawValue()) {
+    KFBContentModality.text().rawValue() -> ContentModality.TEXT
+    KFBContentModality.image().rawValue() -> ContentModality.IMAGE
+    KFBContentModality.audio().rawValue() -> ContentModality.AUDIO
+    KFBContentModality.video().rawValue() -> ContentModality.VIDEO
+    KFBContentModality.document().rawValue() -> ContentModality.DOCUMENT
+    else -> ContentModality.UNSPECIFIED
+}
 
 @OptIn(ExperimentalForeignApi::class)
 internal fun KFBPromptFeedback.toCommon(): PromptFeedback = PromptFeedback(
     blockReason = blockReason()?.toCommonBlockReason(),
     safetyRatings = (safetyRatings() as? List<KFBSafetyRating>)?.map { it.toCommon() } ?: emptyList(),
 )
+
+@OptIn(ExperimentalForeignApi::class)
+@Suppress("UNCHECKED_CAST")
+internal fun KFBGroundingMetadata.toCommon(): GroundingMetadata = GroundingMetadata(
+    webSearchQueries = (webSearchQueries() as? List<String>) ?: emptyList(),
+    searchEntryPoint = searchEntryPoint()?.let { SearchEntryPoint(renderedContent = it.renderedContent()) },
+    groundingChunks = (groundingChunks() as? List<KFBGroundingChunk>)?.map { it.toCommon() } ?: emptyList(),
+    groundingSupports = (groundingSupports() as? List<KFBGroundingSupport>)?.map { it.toCommon() } ?: emptyList(),
+)
+
+@OptIn(ExperimentalForeignApi::class)
+internal fun KFBGroundingChunk.toCommon(): GroundingChunk = GroundingChunk(
+    web = web()?.let {
+        WebGroundingChunk(
+            uri = it.uri(),
+            title = it.title(),
+            domain = it.domain(),
+        )
+    },
+)
+
+@OptIn(ExperimentalForeignApi::class)
+@Suppress("UNCHECKED_CAST")
+internal fun KFBGroundingSupport.toCommon(): GroundingSupport = GroundingSupport(
+    segment = segment().let {
+        Segment(
+            partIndex = it.partIndex().toInt(),
+            startIndex = it.startIndex().toInt(),
+            endIndex = it.endIndex().toInt(),
+            text = it.text(),
+        )
+    },
+    groundingChunkIndices = (groundingChunkIndices() as? List<NSNumber>)?.map { it.intValue } ?: emptyList(),
+)
+
+@OptIn(ExperimentalForeignApi::class)
+@Suppress("UNCHECKED_CAST")
+internal fun KFBURLContextMetadata.toCommon(): UrlContextMetadata = UrlContextMetadata(
+    urlMetadata = (urlMetadata() as? List<KFBURLMetadata>)?.map { it.toCommon() } ?: emptyList(),
+)
+
+@OptIn(ExperimentalForeignApi::class)
+internal fun KFBURLMetadata.toCommon(): UrlMetadata = UrlMetadata(
+    retrievedUrl = retrievedURL()?.absoluteString(),
+    retrievalStatus = retrievalStatus().toCommon(),
+)
+
+@OptIn(ExperimentalForeignApi::class)
+internal fun KFBURLRetrievalStatus.toCommon(): UrlRetrievalStatus = when (rawValue()) {
+    KFBURLRetrievalStatus.success().rawValue() -> UrlRetrievalStatus.SUCCESS
+    KFBURLRetrievalStatus.error().rawValue() -> UrlRetrievalStatus.ERROR
+    KFBURLRetrievalStatus.paywall().rawValue() -> UrlRetrievalStatus.PAYWALL
+    KFBURLRetrievalStatus.unsafe().rawValue() -> UrlRetrievalStatus.UNSAFE
+    else -> UrlRetrievalStatus.UNSPECIFIED
+}

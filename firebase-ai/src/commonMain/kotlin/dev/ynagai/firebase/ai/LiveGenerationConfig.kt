@@ -20,6 +20,8 @@ data class LiveGenerationConfig(
     val topK: Int? = null,
     val topP: Float? = null,
     val maxOutputTokens: Int? = null,
+    val inputAudioTranscription: AudioTranscriptionConfig? = null,
+    val outputAudioTranscription: AudioTranscriptionConfig? = null,
 )
 
 /**
@@ -55,6 +57,10 @@ class LiveGenerationConfigBuilder {
     var topP: Float? = null
     /** Maximum number of tokens in the response. */
     var maxOutputTokens: Int? = null
+    /** Configuration for input audio transcription. */
+    var inputAudioTranscription: AudioTranscriptionConfig? = null
+    /** Configuration for output audio transcription. */
+    var outputAudioTranscription: AudioTranscriptionConfig? = null
 
     internal fun build(): LiveGenerationConfig = LiveGenerationConfig(
         responseModality = responseModality,
@@ -63,6 +69,8 @@ class LiveGenerationConfigBuilder {
         topK = topK,
         topP = topP,
         maxOutputTokens = maxOutputTokens,
+        inputAudioTranscription = inputAudioTranscription,
+        outputAudioTranscription = outputAudioTranscription,
     )
 }
 

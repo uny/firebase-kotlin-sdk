@@ -142,4 +142,49 @@ class GenerationConfigTest {
         assertEquals(0.9f, copy.temperature)
         assertEquals(1024, copy.maxOutputTokens)
     }
+
+    @Test
+    fun thinkingConfigDefaultsToNull() {
+        val config = generationConfig { }
+        assertNull(config.thinkingConfig)
+    }
+
+    @Test
+    fun thinkingConfigWithBudget() {
+        val config = generationConfig {
+            thinkingConfig = ThinkingConfig(thinkingBudget = 1024)
+        }
+        assertEquals(1024, config.thinkingConfig?.thinkingBudget)
+        assertNull(config.thinkingConfig?.thinkingLevel)
+        assertNull(config.thinkingConfig?.includeThoughts)
+    }
+
+    @Test
+    fun thinkingConfigWithLevel() {
+        val config = generationConfig {
+            thinkingConfig = ThinkingConfig(thinkingLevel = ThinkingLevel.HIGH)
+        }
+        assertEquals(ThinkingLevel.HIGH, config.thinkingConfig?.thinkingLevel)
+        assertNull(config.thinkingConfig?.thinkingBudget)
+    }
+
+    @Test
+    fun thinkingConfigWithIncludeThoughts() {
+        val tc = ThinkingConfig(thinkingBudget = 512, includeThoughts = true)
+        assertEquals(512, tc.thinkingBudget)
+        assertEquals(true, tc.includeThoughts)
+    }
+
+    @Test
+    fun thinkingConfigDataClassEquality() {
+        val a = ThinkingConfig(thinkingLevel = ThinkingLevel.MEDIUM)
+        val b = ThinkingConfig(thinkingLevel = ThinkingLevel.MEDIUM)
+        assertEquals(a, b)
+        assertEquals(a.hashCode(), b.hashCode())
+    }
+
+    @Test
+    fun thinkingLevelValues() {
+        assertEquals(4, ThinkingLevel.entries.size)
+    }
 }

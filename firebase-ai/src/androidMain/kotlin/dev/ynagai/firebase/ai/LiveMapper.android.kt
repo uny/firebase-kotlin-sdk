@@ -11,6 +11,7 @@ import com.google.firebase.ai.type.LiveServerSetupComplete as AndroidLiveServerS
 import com.google.firebase.ai.type.LiveServerToolCall as AndroidLiveServerToolCall
 import com.google.firebase.ai.type.LiveServerToolCallCancellation as AndroidLiveServerToolCallCancellation
 import com.google.firebase.ai.type.PublicPreviewAPI
+import com.google.firebase.ai.type.AudioTranscriptionConfig as AndroidAudioTranscriptionConfig
 import com.google.firebase.ai.type.SpeechConfig as AndroidSpeechConfig
 import com.google.firebase.ai.type.Voice as AndroidVoice
 import com.google.firebase.ai.type.liveGenerationConfig as androidLiveGenerationConfig
@@ -31,6 +32,12 @@ internal fun LiveGenerationConfig.toAndroid(): AndroidLiveGenerationConfig =
         this@toAndroid.topK?.let { topK = it }
         this@toAndroid.topP?.let { topP = it }
         this@toAndroid.maxOutputTokens?.let { maxOutputTokens = it }
+        this@toAndroid.inputAudioTranscription?.let {
+            inputAudioTranscription = AndroidAudioTranscriptionConfig()
+        }
+        this@toAndroid.outputAudioTranscription?.let {
+            outputAudioTranscription = AndroidAudioTranscriptionConfig()
+        }
     }
 
 internal fun SpeechConfig.toAndroid(): AndroidSpeechConfig =

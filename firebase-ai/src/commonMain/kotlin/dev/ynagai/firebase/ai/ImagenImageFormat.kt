@@ -12,6 +12,7 @@ package dev.ynagai.firebase.ai
  * }
  * ```
  */
+@Deprecated(IMAGEN_DEPRECATION_MESSAGE)
 sealed class ImagenImageFormat {
     /** PNG image format. */
     data object Png : ImagenImageFormat()

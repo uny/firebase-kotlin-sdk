@@ -1,8 +1,14 @@
 package dev.ynagai.firebase.ai
 
+internal const val IMAGEN_DEPRECATION_MESSAGE =
+    "Imagen models are deprecated and will be shut down. " +
+        "Migrate to Gemini image generation models. " +
+        "See https://firebase.google.com/docs/ai-logic/generate-images-gemini"
+
 /**
  * Aspect ratios for Imagen image generation.
  */
+@Deprecated(IMAGEN_DEPRECATION_MESSAGE)
 enum class ImagenAspectRatio {
     /** 1:1 square aspect ratio. */
     SQUARE_1x1,
@@ -21,6 +27,7 @@ enum class ImagenAspectRatio {
  *
  * Controls how aggressively the model filters potentially unsafe content.
  */
+@Deprecated(IMAGEN_DEPRECATION_MESSAGE)
 enum class ImagenSafetyFilterLevel {
     /** Block content with low probability of being unsafe and above. */
     BLOCK_LOW_AND_ABOVE,
@@ -37,6 +44,7 @@ enum class ImagenSafetyFilterLevel {
  *
  * Controls whether generated images can contain people.
  */
+@Deprecated(IMAGEN_DEPRECATION_MESSAGE)
 enum class ImagenPersonFilterLevel {
     /** Block all images containing people. */
     BLOCK_ALL,

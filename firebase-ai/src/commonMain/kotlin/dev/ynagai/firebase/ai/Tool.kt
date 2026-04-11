@@ -3,11 +3,42 @@ package dev.ynagai.firebase.ai
 /**
  * A tool that the model may use to generate a response.
  *
- * @property functionDeclarations List of function declarations available to the model.
+ * Use the companion factory methods to create instances.
  */
-data class Tool(
-    val functionDeclarations: List<FunctionDeclaration>? = null,
-)
+sealed class Tool {
+    /**
+     * A tool with function declarations the model may call.
+     *
+     * @property declarations List of function declarations available to the model.
+     */
+    data class FunctionDeclarations(
+        val declarations: List<FunctionDeclaration>,
+    ) : Tool()
+
+    /** A tool that grounds the model's response with Google Search results. */
+    data object GoogleSearch : Tool()
+
+    /** A tool that provides URL context to the model for referenced URLs. */
+    data object UrlContext : Tool()
+
+    /** A tool that enables code execution by the model. */
+    data object CodeExecution : Tool()
+
+    companion object {
+        /** Creates a tool with the given function declarations. */
+        fun functionDeclarations(declarations: List<FunctionDeclaration>): Tool =
+            FunctionDeclarations(declarations)
+
+        /** Creates a tool that grounds the model with Google Search results. */
+        fun googleSearch(): Tool = GoogleSearch
+
+        /** Creates a tool that provides URL context to the model. */
+        fun urlContext(): Tool = UrlContext
+
+        /** Creates a tool that enables code execution by the model. */
+        fun codeExecution(): Tool = CodeExecution
+    }
+}
 
 /**
  * A declaration of a function that the model can call.

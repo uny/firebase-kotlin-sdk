@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package dev.ynagai.firebase.ai
 
 import com.google.firebase.ai.ImagenModel as AndroidImagenModel

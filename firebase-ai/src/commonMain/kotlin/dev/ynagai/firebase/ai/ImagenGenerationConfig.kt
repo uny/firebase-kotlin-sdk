@@ -22,6 +22,7 @@ package dev.ynagai.firebase.ai
  * }
  * ```
  */
+@Deprecated(IMAGEN_DEPRECATION_MESSAGE)
 data class ImagenGenerationConfig(
     val negativePrompt: String? = null,
     val numberOfImages: Int? = null,
@@ -41,6 +42,7 @@ annotation class ImagenGenerationConfigDsl
  *
  * @see imagenGenerationConfig
  */
+@Deprecated(IMAGEN_DEPRECATION_MESSAGE)
 @ImagenGenerationConfigDsl
 class ImagenGenerationConfigBuilder {
     /** A text prompt describing what to exclude from generated images. */
@@ -78,6 +80,8 @@ class ImagenGenerationConfigBuilder {
  * }
  * ```
  */
+@Suppress("DEPRECATION")
+@Deprecated(IMAGEN_DEPRECATION_MESSAGE)
 fun imagenGenerationConfig(block: ImagenGenerationConfigBuilder.() -> Unit): ImagenGenerationConfig {
     val builder = ImagenGenerationConfigBuilder()
     builder.block()

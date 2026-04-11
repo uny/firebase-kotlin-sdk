@@ -12,6 +12,7 @@ package dev.ynagai.firebase.ai
  * val imageData = response.images.first().data
  * ```
  */
+@Deprecated(IMAGEN_DEPRECATION_MESSAGE)
 expect class ImagenModel {
     /**
      * Generates images from a text prompt.
