@@ -20,11 +20,9 @@ gradle.projectsEvaluated {
         pluginManager.withPlugin("maven-publish") {
             extensions.configure<PublishingExtension> {
                 publications.withType<MavenPublication>().configureEach {
-                    val publication = this
-                    val toRemove = publication.artifacts.filter {
+                    artifacts.removeAll {
                         it.classifier == "swiftpm-metadata" && it.extension.isNullOrEmpty()
                     }
-                    toRemove.forEach { publication.artifacts.remove(it) }
                 }
             }
         }
