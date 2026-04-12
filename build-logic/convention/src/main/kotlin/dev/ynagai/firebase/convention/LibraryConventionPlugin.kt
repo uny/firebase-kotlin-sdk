@@ -5,6 +5,8 @@ import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.api.publish.PublishingExtension
+import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
@@ -55,6 +57,19 @@ class LibraryConventionPlugin : Plugin<Project> {
                     }
                 }
             }
+            // Remove SwiftPM metadata artifacts with empty extension that Maven Central rejects.
+            // Kotlin 2.4.0-Beta1 SwiftPM support publishes files like "artifact-swiftpm-metadata."
+            // with a trailing dot and no extension.
+            gradle.projectsEvaluated {
+                target.extensions.configure<PublishingExtension> {
+                    publications.withType<MavenPublication>().configureEach {
+                        artifacts.removeAll {
+                            it.classifier == "swiftpm-metadata" && it.extension.isNullOrEmpty()
+                        }
+                    }
+                }
+            }
+
             extensions.configure<MavenPublishBaseExtension> {
                 publishToMavenCentral(automaticRelease = true)
                 signAllPublications()
