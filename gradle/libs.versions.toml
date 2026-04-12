@@ -16,6 +16,7 @@ androidx-test-runner = "1.6.2"
 [libraries]
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
 firebase-android-ai = { module = "com.google.firebase:firebase-ai" }
+firebase-android-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-android-common = { module = "com.google.firebase:firebase-common" }
 firebase-android-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-android-firestore = { module = "com.google.firebase:firebase-firestore" }
