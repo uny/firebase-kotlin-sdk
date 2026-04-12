@@ -77,6 +77,9 @@ private fun Map<String, Any>.toBundle(): Bundle =
                 is Float -> putFloat(key, value)
                 is Double -> putDouble(key, value)
                 is Boolean -> putBoolean(key, value)
+                else -> throw IllegalArgumentException(
+                    "Unsupported event parameter type: ${value::class.simpleName} for key \"$key\""
+                )
             }
         }
     }
