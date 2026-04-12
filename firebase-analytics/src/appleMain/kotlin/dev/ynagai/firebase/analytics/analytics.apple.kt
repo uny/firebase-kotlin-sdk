@@ -24,6 +24,8 @@ import kotlin.coroutines.resumeWithException
 actual val Firebase.analytics: FirebaseAnalytics
     get() = FirebaseAnalytics()
 
+// FIRAnalytics is a class-method-only API with no multi-app support on iOS.
+// Always returns the default-app singleton regardless of which app is passed.
 @OptIn(ExperimentalForeignApi::class)
 actual fun Firebase.analytics(app: FirebaseApp): FirebaseAnalytics =
     FirebaseAnalytics()
