@@ -93,6 +93,7 @@ actual class FirebaseAnalytics internal constructor() {
 internal fun setConsentInternal(consentSettings: Map<Any?, Any>) {
     val cls = NSClassFromString("FIRAnalytics") as? NSObject ?: return
     val sel = NSSelectorFromString("setConsent:")
+    if (!cls.respondsToSelector(sel)) return
     val dict = NSDictionary.dictionaryWithDictionary(consentSettings)
     cls.performSelector(sel, withObject = dict)
 }
