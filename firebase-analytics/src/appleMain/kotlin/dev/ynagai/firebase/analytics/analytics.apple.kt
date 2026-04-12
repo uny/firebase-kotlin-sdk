@@ -2,8 +2,14 @@ package dev.ynagai.firebase.analytics
 
 import dev.ynagai.firebase.Firebase
 import dev.ynagai.firebase.FirebaseApp
+import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.suspendCancellableCoroutine
+import platform.Foundation.NSClassFromString
+import platform.Foundation.NSDictionary
+import platform.Foundation.NSSelectorFromString
+import platform.Foundation.dictionaryWithDictionary
+import platform.darwin.NSObject
 import swiftPMImport.dev.ynagai.firebase.firebase.analytics.FIRAnalytics
 import swiftPMImport.dev.ynagai.firebase.firebase.analytics.FIRConsentStatusDenied
 import swiftPMImport.dev.ynagai.firebase.firebase.analytics.FIRConsentStatusGranted
@@ -51,6 +57,7 @@ actual class FirebaseAnalytics internal constructor() {
     actual suspend fun getSessionId(): Long? =
         suspendCancellableCoroutine { continuation ->
             FIRAnalytics.sessionIDWithCompletion { sessionId, error ->
+                if (!continuation.isActive) return@sessionIDWithCompletion
                 if (error != null) {
                     continuation.resumeWithException(Exception(error.localizedDescription))
                 } else {
@@ -79,8 +86,14 @@ actual class FirebaseAnalytics internal constructor() {
 }
 
 // setConsent is defined in FIRAnalytics+Consent ObjC category which doesn't
-// commonize across iOS targets. Bridge via internal expect/actual.
-internal expect fun setConsentInternal(consentSettings: Map<Any?, Any>)
+// generate cinterop bindings in appleMain. Bridge via ObjC runtime reflection.
+@OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
+internal fun setConsentInternal(consentSettings: Map<Any?, Any>) {
+    val cls = NSClassFromString("FIRAnalytics") as? NSObject ?: return
+    val sel = NSSelectorFromString("setConsent:")
+    val dict = NSDictionary.dictionaryWithDictionary(consentSettings)
+    cls.performSelector(sel, withObject = dict)
+}
 
 @OptIn(ExperimentalForeignApi::class)
 internal fun ConsentType.toApple(): Any = when (this) {

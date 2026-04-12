@@ -54,9 +54,11 @@ actual class FirebaseAnalytics internal constructor(
 
     actual fun setConsent(consentSettings: Map<ConsentType, ConsentStatus>) {
         android.setConsent(
-            consentSettings.map { (type, status) ->
-                type.toAndroid() to status.toAndroid()
-            }.toMap()
+            buildMap {
+                consentSettings.forEach { (type, status) ->
+                    put(type.toAndroid(), status.toAndroid())
+                }
+            }
         )
     }
 
