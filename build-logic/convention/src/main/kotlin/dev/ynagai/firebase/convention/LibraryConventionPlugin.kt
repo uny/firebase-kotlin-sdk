@@ -65,16 +65,17 @@ class LibraryConventionPlugin : Plugin<Project> {
             // Fix: strip from the outgoing config first, then from the publication.
             // TODO: Remove when fixed upstream (https://youtrack.jetbrains.com/issue/KT-85476)
             gradle.projectsEvaluated {
-                val swiftpmClassifier = "swiftpm-metadata"
+                fun isSwiftpmMetadata(classifier: String?, extension: String) =
+                    classifier == "swiftpm-metadata" && extension.isEmpty()
                 target.configurations
                     .findByName("swiftPMDependenciesMetadataElements")
                     ?.outgoing?.artifacts?.removeIf {
-                        it.classifier == swiftpmClassifier && it.extension.isEmpty()
+                        isSwiftpmMetadata(it.classifier, it.extension)
                     }
                 target.extensions.configure<PublishingExtension> {
                     publications.withType<MavenPublication>().all {
                         artifacts.removeAll {
-                            it.classifier == swiftpmClassifier && it.extension.isEmpty()
+                            isSwiftpmMetadata(it.classifier, it.extension)
                         }
                     }
                 }
