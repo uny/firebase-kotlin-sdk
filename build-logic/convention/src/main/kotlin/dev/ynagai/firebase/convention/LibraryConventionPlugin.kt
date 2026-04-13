@@ -58,8 +58,8 @@ class LibraryConventionPlugin : Plugin<Project> {
                 }
             }
             // Kotlin 2.4.0-Beta1 SwiftPM support attaches an artifact with classifier
-            // "swiftpm-metadata" and an empty extension, producing filenames like
-            // "firebase-app-0.5.0-swiftpm-metadata." that Maven Central rejects.
+            // "swiftpm-metadata" and an empty extension (trailing dot, no file type)
+            // that Maven Central rejects.
             // Removing from publication.artifacts alone breaks GenerateModuleMetadata
             // because it derives componentArtifacts from the outgoing configuration.
             // Fix: strip from the outgoing config first, then from the publication.
