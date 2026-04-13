@@ -62,7 +62,6 @@ class LibraryConventionPlugin : Plugin<Project> {
             // that Maven Central rejects.
             // Removing from publication.artifacts alone breaks GenerateModuleMetadata
             // because it derives componentArtifacts from the outgoing configuration.
-            // Fix: strip from the outgoing config first, then from the publication.
             // TODO: Remove when fixed upstream (https://youtrack.jetbrains.com/issue/KT-85476)
             gradle.projectsEvaluated {
                 fun isSwiftpmMetadata(classifier: String?, extension: String) =
