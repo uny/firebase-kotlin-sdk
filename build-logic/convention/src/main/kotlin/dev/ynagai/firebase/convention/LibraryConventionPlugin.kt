@@ -5,6 +5,8 @@ import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.api.publish.PublishingExtension
+import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
@@ -55,6 +57,19 @@ class LibraryConventionPlugin : Plugin<Project> {
                     }
                 }
             }
+            // Kotlin 2.4.0-Beta1 SwiftPM support produces artifacts like "artifact-swiftpm-metadata."
+            // (trailing dot, no extension) that Maven Central rejects.
+            // TODO: Remove when fixed upstream (https://youtrack.jetbrains.com/issue/KT-85476)
+            gradle.projectsEvaluated {
+                target.extensions.configure<PublishingExtension> {
+                    publications.withType<MavenPublication>().all {
+                        artifacts.removeAll {
+                            it.classifier == "swiftpm-metadata" && it.extension.isEmpty()
+                        }
+                    }
+                }
+            }
+
             extensions.configure<MavenPublishBaseExtension> {
                 publishToMavenCentral(automaticRelease = true)
                 signAllPublications()
