@@ -69,7 +69,7 @@ class LibraryConventionPlugin : Plugin<Project> {
                 target.configurations
                     .findByName("swiftPMDependenciesMetadataElements")
                     ?.outgoing?.artifacts?.removeIf {
-                        it.classifier == swiftpmClassifier
+                        it.classifier == swiftpmClassifier && it.extension.isEmpty()
                     }
                 target.extensions.configure<PublishingExtension> {
                     publications.withType<MavenPublication>().all {
