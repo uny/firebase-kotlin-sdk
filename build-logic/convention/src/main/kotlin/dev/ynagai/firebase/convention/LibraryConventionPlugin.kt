@@ -57,10 +57,21 @@ class LibraryConventionPlugin : Plugin<Project> {
                     }
                 }
             }
-            // Kotlin 2.4.0-Beta1 SwiftPM support produces artifacts like "artifact-swiftpm-metadata."
-            // (trailing dot, no extension) that Maven Central rejects.
+            // Kotlin 2.4.0-Beta1 SwiftPM support attaches a "swiftpm-metadata" artifact
+            // with an empty extension, producing filenames like
+            // "firebase-app-0.5.0-swiftpm-metadata." that Maven Central rejects.
+            // Removing from publication.artifacts alone breaks GenerateModuleMetadata
+            // validation (it cross-checks against componentArtifacts derived from the
+            // outgoing configuration). Fix: strip the artifact from the outgoing Gradle
+            // configuration first (so the derivation chain excludes it), then from the
+            // publication.
             // TODO: Remove when fixed upstream (https://youtrack.jetbrains.com/issue/KT-85476)
             gradle.projectsEvaluated {
+                target.configurations
+                    .findByName("swiftPMDependenciesMetadataElements")
+                    ?.outgoing?.artifacts?.removeIf {
+                        it.classifier == "swiftpm-metadata"
+                    }
                 target.extensions.configure<PublishingExtension> {
                     publications.withType<MavenPublication>().all {
                         artifacts.removeAll {
