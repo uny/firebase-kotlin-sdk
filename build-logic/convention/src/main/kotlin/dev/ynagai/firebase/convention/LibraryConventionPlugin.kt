@@ -60,8 +60,8 @@ class LibraryConventionPlugin : Plugin<Project> {
             // Kotlin 2.4.0-Beta1 SwiftPM support produces artifacts like "artifact-swiftpm-metadata."
             // (trailing dot, no extension) that Maven Central rejects.
             // TODO: Remove when fixed upstream (https://youtrack.jetbrains.com/issue/KT-85476)
-            afterEvaluate {
-                extensions.configure<PublishingExtension> {
+            gradle.projectsEvaluated {
+                target.extensions.configure<PublishingExtension> {
                     publications.withType<MavenPublication>().all {
                         artifacts.removeAll {
                             it.classifier == "swiftpm-metadata" && it.extension.isEmpty()
