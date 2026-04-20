@@ -28,6 +28,12 @@ expect class OAuthProvider {
             accessToken: String? = null,
         ): AuthCredential
 
+        /**
+         * Returns an [AuthCredential] for the specified [providerId] using an ID token that was
+         * issued against a hashed nonce (e.g. Sign in with Apple). Firebase verifies the SHA-256
+         * hash of [rawNonce] matches the `nonce` claim in [idToken]; omitting the raw nonce causes
+         * sign-in to fail with `Nonce is missing in the request.`
+         */
         fun getCredential(
             providerId: String,
             idToken: String,
