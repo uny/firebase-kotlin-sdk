@@ -109,6 +109,29 @@ actual class OAuthProvider {
                     accessToken = accessToken,
                 )
             )
+
+        actual fun getCredential(
+            providerId: String,
+            idToken: String,
+            rawNonce: String,
+            accessToken: String?,
+        ): AuthCredential =
+            AuthCredential(
+                if (accessToken != null) {
+                    FIROAuthProvider.credentialWithProviderID(
+                        providerId,
+                        IDToken = idToken,
+                        rawNonce = rawNonce,
+                        accessToken = accessToken,
+                    )
+                } else {
+                    FIROAuthProvider.credentialWithProviderID(
+                        providerId,
+                        IDToken = idToken,
+                        rawNonce = rawNonce,
+                    )
+                }
+            )
     }
 }
 

@@ -120,6 +120,18 @@ actual class OAuthProvider {
             accessToken?.let { builder.setAccessToken(it) }
             return AuthCredential(builder.build())
         }
+
+        actual fun getCredential(
+            providerId: String,
+            idToken: String,
+            rawNonce: String,
+            accessToken: String?,
+        ): AuthCredential {
+            val builder = AndroidOAuthProvider.newCredentialBuilder(providerId)
+            builder.setIdTokenWithRawNonce(idToken, rawNonce)
+            accessToken?.let { builder.setAccessToken(it) }
+            return AuthCredential(builder.build())
+        }
     }
 }
 

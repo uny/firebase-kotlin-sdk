@@ -27,6 +27,13 @@ expect class OAuthProvider {
             idToken: String,
             accessToken: String? = null,
         ): AuthCredential
+
+        fun getCredential(
+            providerId: String,
+            idToken: String,
+            rawNonce: String,
+            accessToken: String? = null,
+        ): AuthCredential
     }
 }
 
