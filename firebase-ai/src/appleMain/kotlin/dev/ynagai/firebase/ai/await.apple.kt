@@ -126,6 +126,16 @@ internal fun NSError.toFirebaseAIException(): FirebaseAIException {
             underlyingDomain = underlyingDomain,
             underlyingCode = underlyingCode,
         )
+        // Explicit SERVER branch: the ObjC bridge may emit `serverError` without a
+        // 5xx status (e.g., network-layer failure), and we still want the typed
+        // subclass so `catch (ServerException)` works consistently across platforms.
+        FirebaseAIErrorType.SERVER -> ServerException(
+            message = msg,
+            httpStatusCode = httpStatus,
+            responseBody = responseBody,
+            underlyingDomain = underlyingDomain,
+            underlyingCode = underlyingCode,
+        )
         else -> if (httpStatus != null && httpStatus in 500..599) {
             ServerException(
                 message = msg,
