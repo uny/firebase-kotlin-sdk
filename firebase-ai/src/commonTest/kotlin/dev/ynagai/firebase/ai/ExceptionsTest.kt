@@ -83,5 +83,53 @@ class ExceptionsTest {
         val ex = FirebaseAIException()
         assertNull(ex.message)
         assertNull(ex.cause)
+        assertNull(ex.httpStatusCode)
+        assertNull(ex.responseBody)
+        assertNull(ex.errorType)
+        assertNull(ex.underlyingDomain)
+        assertNull(ex.underlyingCode)
+    }
+
+    @Test
+    fun firebaseAIExceptionCarriesHttpDetails() {
+        val ex = FirebaseAIException(
+            message = "boom",
+            httpStatusCode = 500,
+            responseBody = "{\"error\":\"oops\"}",
+            errorType = FirebaseAIErrorType.INTERNAL,
+            underlyingDomain = "com.google.firebase.firebaseai.BackendError",
+            underlyingCode = 500,
+        )
+        assertEquals(500, ex.httpStatusCode)
+        assertEquals("{\"error\":\"oops\"}", ex.responseBody)
+        assertEquals(FirebaseAIErrorType.INTERNAL, ex.errorType)
+        assertEquals("com.google.firebase.firebaseai.BackendError", ex.underlyingDomain)
+        assertEquals(500, ex.underlyingCode)
+    }
+
+    @Test
+    fun serverExceptionExposesHttpDetails() {
+        val ex = ServerException(
+            message = "Internal Server Error",
+            httpStatusCode = 500,
+            responseBody = "backend overloaded",
+        )
+        assertEquals(500, ex.httpStatusCode)
+        assertEquals("backend overloaded", ex.responseBody)
+        assertEquals(FirebaseAIErrorType.SERVER, ex.errorType)
+    }
+
+    @Test
+    fun responseStoppedExceptionCarriesFinishReason() {
+        val ex = ResponseStoppedException(message = "stopped", finishReason = "SAFETY")
+        assertEquals("SAFETY", ex.finishReason)
+        assertEquals(FirebaseAIErrorType.RESPONSE_STOPPED_EARLY, ex.errorType)
+    }
+
+    @Test
+    fun subclassesHaveErrorTypes() {
+        assertEquals(FirebaseAIErrorType.PROMPT_BLOCKED, PromptBlockedException("x").errorType)
+        assertEquals(FirebaseAIErrorType.INVALID_API_KEY, InvalidAPIKeyException("x").errorType)
+        assertEquals(FirebaseAIErrorType.QUOTA_EXCEEDED, QuotaExceededException("x").errorType)
     }
 }

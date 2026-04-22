@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/uny/firebase-objc-sdk.git",
       "state" : {
-        "revision" : "4febc0cf2a90a9c3bf1b3d18a1c05ed9f966f78a",
-        "version" : "0.3.1"
+        "revision" : "a12388d2d61f180b4f3efe92505604aeb0c3756c",
+        "version" : "0.4.0"
       }
     },
     {
