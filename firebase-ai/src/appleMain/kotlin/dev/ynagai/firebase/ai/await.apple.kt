@@ -86,32 +86,63 @@ internal fun NSError.toFirebaseAIException(): FirebaseAIException {
     val finishReason = info[KEY_FINISH_REASON] as? String
 
     val underlying = info[NSUnderlyingErrorKey] as? NSError
+    val underlyingDomain = underlying?.domain ?: domain
+    val underlyingCode = underlying?.code?.toInt() ?: code.toInt()
 
     // Preserve the raw localizedDescription. Consumers can format with
     // structured fields (httpStatusCode, underlyingDomain, ...) at the log site.
     val msg = localizedDescription
 
-    return when {
+    return when (errorType) {
         // PromptBlocked/ResponseStopped on iOS do not currently expose the
         // underlying GenerateContentResponse via NSError.userInfo, so `response`
         // stays null. Revisit if the ObjC bridge starts surfacing it.
-        errorType == FirebaseAIErrorType.PROMPT_BLOCKED -> PromptBlockedException(message = msg)
-        errorType == FirebaseAIErrorType.RESPONSE_STOPPED_EARLY -> ResponseStoppedException(
+        FirebaseAIErrorType.PROMPT_BLOCKED -> PromptBlockedException(
+            message = msg,
+            httpStatusCode = httpStatus,
+            responseBody = responseBody,
+            underlyingDomain = underlyingDomain,
+            underlyingCode = underlyingCode,
+        )
+        FirebaseAIErrorType.RESPONSE_STOPPED_EARLY -> ResponseStoppedException(
             message = msg,
             finishReason = finishReason,
+            httpStatusCode = httpStatus,
+            responseBody = responseBody,
+            underlyingDomain = underlyingDomain,
+            underlyingCode = underlyingCode,
         )
-        httpStatus != null && httpStatus in 500..599 -> ServerException(
+        FirebaseAIErrorType.INVALID_API_KEY -> InvalidAPIKeyException(
             message = msg,
             httpStatusCode = httpStatus,
             responseBody = responseBody,
+            underlyingDomain = underlyingDomain,
+            underlyingCode = underlyingCode,
         )
-        else -> GenerativeAIException(
+        FirebaseAIErrorType.QUOTA_EXCEEDED -> QuotaExceededException(
             message = msg,
             httpStatusCode = httpStatus,
             responseBody = responseBody,
-            errorType = errorType,
-            underlyingDomain = underlying?.domain ?: domain,
-            underlyingCode = underlying?.code?.toInt() ?: code.toInt(),
+            underlyingDomain = underlyingDomain,
+            underlyingCode = underlyingCode,
         )
+        else -> if (httpStatus != null && httpStatus in 500..599) {
+            ServerException(
+                message = msg,
+                httpStatusCode = httpStatus,
+                responseBody = responseBody,
+                underlyingDomain = underlyingDomain,
+                underlyingCode = underlyingCode,
+            )
+        } else {
+            GenerativeAIException(
+                message = msg,
+                httpStatusCode = httpStatus,
+                responseBody = responseBody,
+                errorType = errorType,
+                underlyingDomain = underlyingDomain,
+                underlyingCode = underlyingCode,
+            )
+        }
     }
 }

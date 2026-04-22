@@ -63,7 +63,18 @@ class GenerativeAIException(
 class PromptBlockedException(
     message: String? = null,
     val response: GenerateContentResponse? = null,
-) : FirebaseAIException(message, errorType = FirebaseAIErrorType.PROMPT_BLOCKED)
+    httpStatusCode: Int? = null,
+    responseBody: String? = null,
+    underlyingDomain: String? = null,
+    underlyingCode: Int? = null,
+) : FirebaseAIException(
+    message,
+    httpStatusCode = httpStatusCode,
+    responseBody = responseBody,
+    errorType = FirebaseAIErrorType.PROMPT_BLOCKED,
+    underlyingDomain = underlyingDomain,
+    underlyingCode = underlyingCode,
+)
 
 /**
  * Exception thrown when a response is stopped by the model.
@@ -74,7 +85,18 @@ class ResponseStoppedException(
     message: String? = null,
     val response: GenerateContentResponse? = null,
     val finishReason: String? = null,
-) : FirebaseAIException(message, errorType = FirebaseAIErrorType.RESPONSE_STOPPED_EARLY)
+    httpStatusCode: Int? = null,
+    responseBody: String? = null,
+    underlyingDomain: String? = null,
+    underlyingCode: Int? = null,
+) : FirebaseAIException(
+    message,
+    httpStatusCode = httpStatusCode,
+    responseBody = responseBody,
+    errorType = FirebaseAIErrorType.RESPONSE_STOPPED_EARLY,
+    underlyingDomain = underlyingDomain,
+    underlyingCode = underlyingCode,
+)
 
 /**
  * Exception thrown when the API key is invalid.
@@ -82,7 +104,19 @@ class ResponseStoppedException(
 class InvalidAPIKeyException(
     message: String? = null,
     cause: Throwable? = null,
-) : FirebaseAIException(message, cause, errorType = FirebaseAIErrorType.INVALID_API_KEY)
+    httpStatusCode: Int? = null,
+    responseBody: String? = null,
+    underlyingDomain: String? = null,
+    underlyingCode: Int? = null,
+) : FirebaseAIException(
+    message,
+    cause,
+    httpStatusCode = httpStatusCode,
+    responseBody = responseBody,
+    errorType = FirebaseAIErrorType.INVALID_API_KEY,
+    underlyingDomain = underlyingDomain,
+    underlyingCode = underlyingCode,
+)
 
 /**
  * Exception thrown when the API quota is exceeded.
@@ -90,7 +124,19 @@ class InvalidAPIKeyException(
 class QuotaExceededException(
     message: String? = null,
     cause: Throwable? = null,
-) : FirebaseAIException(message, cause, errorType = FirebaseAIErrorType.QUOTA_EXCEEDED)
+    httpStatusCode: Int? = null,
+    responseBody: String? = null,
+    underlyingDomain: String? = null,
+    underlyingCode: Int? = null,
+) : FirebaseAIException(
+    message,
+    cause,
+    httpStatusCode = httpStatusCode,
+    responseBody = responseBody,
+    errorType = FirebaseAIErrorType.QUOTA_EXCEEDED,
+    underlyingDomain = underlyingDomain,
+    underlyingCode = underlyingCode,
+)
 
 /**
  * Exception thrown when a server error occurs.
@@ -100,9 +146,13 @@ class ServerException(
     cause: Throwable? = null,
     httpStatusCode: Int? = null,
     responseBody: String? = null,
+    underlyingDomain: String? = null,
+    underlyingCode: Int? = null,
 ) : FirebaseAIException(
     message, cause,
     httpStatusCode = httpStatusCode,
     responseBody = responseBody,
     errorType = FirebaseAIErrorType.SERVER,
+    underlyingDomain = underlyingDomain,
+    underlyingCode = underlyingCode,
 )

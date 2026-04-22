@@ -132,4 +132,45 @@ class ExceptionsTest {
         assertEquals(FirebaseAIErrorType.INVALID_API_KEY, InvalidAPIKeyException("x").errorType)
         assertEquals(FirebaseAIErrorType.QUOTA_EXCEEDED, QuotaExceededException("x").errorType)
     }
+
+    @Test
+    fun subclassesForwardNativeMetadata() {
+        val server = ServerException(
+            message = "boom",
+            httpStatusCode = 503,
+            responseBody = "unavailable",
+            underlyingDomain = "FIRFirebaseAIErrorDomain",
+            underlyingCode = -12,
+        )
+        assertEquals(503, server.httpStatusCode)
+        assertEquals("unavailable", server.responseBody)
+        assertEquals("FIRFirebaseAIErrorDomain", server.underlyingDomain)
+        assertEquals(-12, server.underlyingCode)
+
+        val invalid = InvalidAPIKeyException(
+            message = "bad key",
+            httpStatusCode = 403,
+            underlyingDomain = "FIRFirebaseAIErrorDomain",
+            underlyingCode = 17,
+        )
+        assertEquals(403, invalid.httpStatusCode)
+        assertEquals("FIRFirebaseAIErrorDomain", invalid.underlyingDomain)
+        assertEquals(17, invalid.underlyingCode)
+
+        val quota = QuotaExceededException(
+            message = "too many",
+            httpStatusCode = 429,
+            underlyingCode = 8,
+        )
+        assertEquals(429, quota.httpStatusCode)
+        assertEquals(8, quota.underlyingCode)
+
+        val blocked = PromptBlockedException(
+            message = "blocked",
+            underlyingDomain = "FIRFirebaseAIErrorDomain",
+            underlyingCode = 3,
+        )
+        assertEquals("FIRFirebaseAIErrorDomain", blocked.underlyingDomain)
+        assertEquals(3, blocked.underlyingCode)
+    }
 }
