@@ -28,9 +28,13 @@ internal fun mapAndroidException(e: Throwable): Throwable = when (e) {
         ServerException(
             message = e.message,
             cause = e,
-            httpStatusCode = extractHttpStatus(e.message),
-            // Google's Android SDK does not expose the response body as a structured field.
+            // Google's Android SDK does not expose HTTP status or response body
+            // as structured fields; fall back to a best-effort message parser.
+            httpStatusCode = parseHttpStatusFromMessage(e.message),
         )
+    // Fallback for Android FirebaseAIException subclasses we don't map explicitly.
+    // underlyingDomain is only populated here — typed subclasses above preserve the
+    // original Android class via the `cause` chain instead.
     is com.google.firebase.ai.type.FirebaseAIException ->
         FirebaseAIException(
             message = e.message,
@@ -39,13 +43,6 @@ internal fun mapAndroidException(e: Throwable): Throwable = when (e) {
         )
     else -> e
 }
-
-// Fallback parser — the Android SDK's ServerException does not expose HTTP status
-// as a structured field. Prefer a structured accessor if a future SDK adds one.
-private val httpStatusRegex = Regex("""\b[45]\d{2}\b""")
-
-private fun extractHttpStatus(message: String?): Int? =
-    message?.let { httpStatusRegex.find(it)?.value?.toIntOrNull() }
 
 /**
  * Wraps a suspend block, catching Android Firebase AI exceptions and rethrowing

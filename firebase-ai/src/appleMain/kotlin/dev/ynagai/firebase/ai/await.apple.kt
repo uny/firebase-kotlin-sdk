@@ -3,7 +3,7 @@ package dev.ynagai.firebase.ai
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import platform.Foundation.NSError
-import platform.Foundation.NSLocalizedDescriptionKey
+import platform.Foundation.NSNumber
 import platform.Foundation.NSUnderlyingErrorKey
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -66,30 +66,35 @@ private const val KEY_HTTP_STATUS = "KFBHTTPStatusCode"
 private const val KEY_HTTP_BODY = "KFBHTTPResponseBody"
 private const val KEY_FINISH_REASON = "KFBFinishReason"
 
+/**
+ * Reads `userInfo` without an unchecked generic cast. `NSDictionary` bridges
+ * to `Map<Any?, *>` in Kotlin/Native and its keys are `NSString`, which
+ * compare equal to Kotlin `String` via bridging.
+ */
+@OptIn(ExperimentalForeignApi::class)
+private fun NSError.info(): Map<Any?, *> = userInfo
+
 @OptIn(ExperimentalForeignApi::class)
 internal fun NSError.toFirebaseAIException(): FirebaseAIException {
-    // NSError.userInfo keys are NSString, which bridge to Kotlin String.
-    @Suppress("UNCHECKED_CAST")
-    val info = userInfo as? Map<String, Any?> ?: emptyMap()
+    val info = info()
 
     val errorType = info[KEY_ERROR_TYPE] as? String
-    val httpStatus = (info[KEY_HTTP_STATUS] as? Number)?.toInt()
+    // NSNumber bridges to Kotlin Number; guard against non-numeric values.
+    val httpStatus = (info[KEY_HTTP_STATUS] as? NSNumber)?.intValue
+        ?.takeIf { it in 100..599 }
     val responseBody = info[KEY_HTTP_BODY] as? String
     val finishReason = info[KEY_FINISH_REASON] as? String
 
     val underlying = info[NSUnderlyingErrorKey] as? NSError
-    val underlyingDescription = underlying?.localizedDescription
-        ?: info[NSLocalizedDescriptionKey] as? String
 
-    val msg = buildString {
-        append(localizedDescription)
-        if (httpStatus != null) append(" [HTTP ").append(httpStatus).append("]")
-        if (underlyingDescription != null && underlyingDescription != localizedDescription) {
-            append(" (").append(underlyingDescription).append(")")
-        }
-    }
+    // Preserve the raw localizedDescription. Consumers can format with
+    // structured fields (httpStatusCode, underlyingDomain, ...) at the log site.
+    val msg = localizedDescription
 
     return when {
+        // PromptBlocked/ResponseStopped on iOS do not currently expose the
+        // underlying GenerateContentResponse via NSError.userInfo, so `response`
+        // stays null. Revisit if the ObjC bridge starts surfacing it.
         errorType == FirebaseAIErrorType.PROMPT_BLOCKED -> PromptBlockedException(message = msg)
         errorType == FirebaseAIErrorType.RESPONSE_STOPPED_EARLY -> ResponseStoppedException(
             message = msg,
