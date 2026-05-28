@@ -8,6 +8,7 @@ on:
 jobs:
   publish:
     runs-on: macos-latest
+    environment: release
     steps:
       - uses: actions/checkout@v6
 
