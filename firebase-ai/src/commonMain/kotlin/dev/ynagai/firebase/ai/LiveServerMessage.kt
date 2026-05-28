@@ -43,4 +43,17 @@ sealed interface LiveServerMessage {
      * A notification that the server is about to disconnect.
      */
     data object GoingAway : LiveServerMessage
+
+    /**
+     * An update of the session resumption state.
+     *
+     * Only sent if [SessionResumptionConfig] was set in the session setup.
+     *
+     * @property newHandle The new handle that represents the resumable state.
+     * @property resumable Whether the session can be resumed at this point.
+     */
+    data class SessionResumptionUpdate(
+        val newHandle: String? = null,
+        val resumable: Boolean? = null,
+    ) : LiveServerMessage
 }

@@ -8,8 +8,12 @@ import com.google.firebase.ai.type.PublicPreviewAPI
 actual class LiveGenerativeModel internal constructor(
     internal val android: AndroidLiveGenerativeModel,
 ) {
-    actual suspend fun connect(): LiveSession =
+    actual suspend fun connect(sessionResumption: SessionResumptionConfig?): LiveSession =
         wrapAndroidException {
-            LiveSession(android.connect())
+            if (sessionResumption != null) {
+                LiveSession(android.connect(sessionResumption.toAndroid()))
+            } else {
+                LiveSession(android.connect())
+            }
         }
 }

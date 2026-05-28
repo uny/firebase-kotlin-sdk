@@ -34,6 +34,7 @@ internal fun KFBGenerateContentResponse.toCommon(): GenerateContentResponse =
 internal fun KFBCandidate.toCommon(): Candidate = Candidate(
     content = content().toCommon(),
     finishReason = finishReason()?.toCommonFinishReason(),
+    finishMessage = finishMessage(),
     safetyRatings = (safetyRatings() as? List<KFBSafetyRating>)?.map { it.toCommon() } ?: emptyList(),
     citationMetadata = citationMetadata()?.toCommon(),
     groundingMetadata = groundingMetadata()?.toCommon(),
@@ -77,6 +78,16 @@ private fun KFBFinishReason.toCommonFinishReason(): FinishReason = when (rawValu
     KFBFinishReason.prohibitedContent().rawValue() -> FinishReason.PROHIBITED_CONTENT
     KFBFinishReason.spii().rawValue() -> FinishReason.SPII
     KFBFinishReason.malformedFunctionCall().rawValue() -> FinishReason.MALFORMED_FUNCTION_CALL
+    KFBFinishReason.imageSafety().rawValue() -> FinishReason.IMAGE_SAFETY
+    KFBFinishReason.imageProhibitedContent().rawValue() -> FinishReason.IMAGE_PROHIBITED_CONTENT
+    KFBFinishReason.imageOther().rawValue() -> FinishReason.IMAGE_OTHER
+    KFBFinishReason.noImage().rawValue() -> FinishReason.NO_IMAGE
+    KFBFinishReason.imageRecitation().rawValue() -> FinishReason.IMAGE_RECITATION
+    KFBFinishReason.language().rawValue() -> FinishReason.LANGUAGE
+    KFBFinishReason.unexpectedToolCall().rawValue() -> FinishReason.UNEXPECTED_TOOL_CALL
+    KFBFinishReason.tooManyToolCalls().rawValue() -> FinishReason.TOO_MANY_TOOL_CALLS
+    KFBFinishReason.missingThoughtSignature().rawValue() -> FinishReason.MISSING_THOUGHT_SIGNATURE
+    KFBFinishReason.malformedResponse().rawValue() -> FinishReason.MALFORMED_RESPONSE
     else -> FinishReason.UNKNOWN
 }
 
@@ -156,6 +167,13 @@ internal fun KFBGroundingChunk.toCommon(): GroundingChunk = GroundingChunk(
             uri = it.uri(),
             title = it.title(),
             domain = it.domain(),
+        )
+    },
+    maps = maps()?.let {
+        GoogleMapsGroundingChunk(
+            uri = it.url()?.absoluteString(),
+            title = it.title(),
+            placeId = it.placeID(),
         )
     },
 )

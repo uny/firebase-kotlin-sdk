@@ -31,6 +31,7 @@ internal fun AndroidGenerateContentResponse.toCommon(): GenerateContentResponse 
 internal fun AndroidCandidate.toCommon(): Candidate = Candidate(
     content = content.toCommon(),
     finishReason = finishReason?.toCommon(),
+    finishMessage = finishMessage,
     safetyRatings = safetyRatings.map { it.toCommon() },
     citationMetadata = citationMetadata?.toCommon(),
     groundingMetadata = groundingMetadata?.toCommon(),
@@ -77,6 +78,16 @@ internal fun AndroidFinishReason.toCommon(): FinishReason = when (this) {
     AndroidFinishReason.PROHIBITED_CONTENT -> FinishReason.PROHIBITED_CONTENT
     AndroidFinishReason.SPII -> FinishReason.SPII
     AndroidFinishReason.MALFORMED_FUNCTION_CALL -> FinishReason.MALFORMED_FUNCTION_CALL
+    AndroidFinishReason.IMAGE_SAFETY -> FinishReason.IMAGE_SAFETY
+    AndroidFinishReason.IMAGE_PROHIBITED_CONTENT -> FinishReason.IMAGE_PROHIBITED_CONTENT
+    AndroidFinishReason.IMAGE_OTHER -> FinishReason.IMAGE_OTHER
+    AndroidFinishReason.NO_IMAGE -> FinishReason.NO_IMAGE
+    AndroidFinishReason.IMAGE_RECITATION -> FinishReason.IMAGE_RECITATION
+    AndroidFinishReason.LANGUAGE -> FinishReason.LANGUAGE
+    AndroidFinishReason.UNEXPECTED_TOOL_CALL -> FinishReason.UNEXPECTED_TOOL_CALL
+    AndroidFinishReason.TOO_MANY_TOOL_CALLS -> FinishReason.TOO_MANY_TOOL_CALLS
+    AndroidFinishReason.MISSING_THOUGHT_SIGNATURE -> FinishReason.MISSING_THOUGHT_SIGNATURE
+    AndroidFinishReason.MALFORMED_RESPONSE -> FinishReason.MALFORMED_RESPONSE
     else -> FinishReason.UNKNOWN
 }
 
@@ -136,7 +147,12 @@ internal fun AndroidGroundingMetadata.toCommon(): GroundingMetadata = GroundingM
     webSearchQueries = webSearchQueries,
     searchEntryPoint = searchEntryPoint?.let { SearchEntryPoint(renderedContent = it.renderedContent) },
     groundingChunks = groundingChunks.map { chunk ->
-        GroundingChunk(web = chunk.web?.toCommon())
+        GroundingChunk(
+            web = chunk.web?.toCommon(),
+            maps = chunk.maps?.let {
+                GoogleMapsGroundingChunk(uri = it.uri, title = it.title, placeId = it.placeId)
+            },
+        )
     },
     groundingSupports = groundingSupports.map { it.toCommon() },
 )

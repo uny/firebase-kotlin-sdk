@@ -8,9 +8,12 @@ import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBFunctionCallPart
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBFunctionResponsePart
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBInlineDataPart
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBAudioTranscriptionConfig
+import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBContextWindowCompressionConfig
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBLiveGenerationConfig
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBLiveServerMessage
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBResponseModality
+import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBSessionResumptionConfig
+import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBSlidingWindow
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBSpeechConfig
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBTextPart
 
@@ -27,7 +30,25 @@ internal fun LiveGenerationConfig.toApple(): KFBLiveGenerationConfig = KFBLiveGe
     speech = speechConfig?.toApple(),
     inputAudioTranscription = inputAudioTranscription?.let { KFBAudioTranscriptionConfig() },
     outputAudioTranscription = outputAudioTranscription?.let { KFBAudioTranscriptionConfig() },
+    contextWindowCompression = contextWindowCompression?.toApple(),
 )
+
+@OptIn(ExperimentalForeignApi::class)
+internal fun ContextWindowCompressionConfig.toApple(): KFBContextWindowCompressionConfig =
+    KFBContextWindowCompressionConfig(
+        triggerTokens = triggerTokens?.let { NSNumber(int = it) },
+        slidingWindow = slidingWindow?.let {
+            KFBSlidingWindow(targetTokens = it.targetTokens?.let { t -> NSNumber(int = t) })
+        },
+    )
+
+@OptIn(ExperimentalForeignApi::class)
+internal fun SessionResumptionConfig.toApple(): KFBSessionResumptionConfig =
+    if (handle != null) {
+        KFBSessionResumptionConfig(handle = handle)
+    } else {
+        KFBSessionResumptionConfig()
+    }
 
 @OptIn(ExperimentalForeignApi::class)
 internal fun ResponseModality.toAppleResponseModality(): KFBResponseModality = when (this) {
@@ -99,6 +120,13 @@ internal fun KFBLiveServerMessage.toCommon(): LiveServerMessage {
 
     goingAwayNotice()?.let {
         return LiveServerMessage.GoingAway
+    }
+
+    sessionResumptionUpdate()?.let { update ->
+        return LiveServerMessage.SessionResumptionUpdate(
+            newHandle = update.newHandle(),
+            resumable = update.resumable(),
+        )
     }
 
     throw IllegalArgumentException("Unknown KFBLiveServerMessage type")

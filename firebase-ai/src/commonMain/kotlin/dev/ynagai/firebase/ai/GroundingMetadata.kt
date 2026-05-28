@@ -26,8 +26,25 @@ data class SearchEntryPoint(val renderedContent: String)
  * A chunk of grounding data.
  *
  * @property web The web grounding chunk, if this is a web-based source.
+ * @property maps The Google Maps grounding chunk, if this is a maps-based source.
  */
-data class GroundingChunk(val web: WebGroundingChunk? = null)
+data class GroundingChunk(
+    val web: WebGroundingChunk? = null,
+    val maps: GoogleMapsGroundingChunk? = null,
+)
+
+/**
+ * A grounding chunk from Google Maps.
+ *
+ * @property uri The URI of the place.
+ * @property title The title of the place.
+ * @property placeId The place resource name in `places/{place_id}` format.
+ */
+data class GoogleMapsGroundingChunk(
+    val uri: String? = null,
+    val title: String? = null,
+    val placeId: String? = null,
+)
 
 /**
  * A web-based grounding chunk with URL and title.

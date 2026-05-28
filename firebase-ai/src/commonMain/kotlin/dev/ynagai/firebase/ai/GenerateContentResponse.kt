@@ -48,6 +48,7 @@ data class GenerateContentResponse(
 data class Candidate(
     val content: Content = Content(),
     val finishReason: FinishReason? = null,
+    val finishMessage: String? = null,
     val safetyRatings: List<SafetyRating> = emptyList(),
     val citationMetadata: CitationMetadata? = null,
     val groundingMetadata: GroundingMetadata? = null,

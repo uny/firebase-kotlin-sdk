@@ -17,11 +17,12 @@
 - `SafetySetting`, `HarmCategory`, `HarmBlockThreshold` — safety filtering
 - `CountTokensResponse` — token counting result
 - `GenerativeBackend` — backend selection (Google AI / Vertex AI)
-- `Tool` (sealed class) — `FunctionDeclarations`, `GoogleSearch`, `UrlContext`, `CodeExecution`
-- `FunctionDeclaration`, `ToolConfig`, `Schema` — function calling / structured output
+- `Tool` (sealed class) — `FunctionDeclarations`, `GoogleSearch`, `UrlContext`, `CodeExecution`, `GoogleMaps`
+- `FunctionDeclaration`, `ToolConfig`, `RetrievalConfig`, `LatLng`, `Schema` — function calling / structured output
 - `ThinkingConfig`, `ThinkingLevel` — model thinking configuration
 - `ExecutableCodePart`, `CodeExecutionResultPart`, `CodeExecutionOutcome` — code execution parts
-- `GroundingMetadata`, `GroundingChunk`, `WebGroundingChunk`, `GroundingSupport`, `Segment`, `SearchEntryPoint` — grounding metadata
+- `ImageConfig`, `AspectRatio`, `ImageSize` — Gemini image generation configuration
+- `GroundingMetadata`, `GroundingChunk`, `WebGroundingChunk`, `GoogleMapsGroundingChunk`, `GroundingSupport`, `Segment`, `SearchEntryPoint` — grounding metadata
 - `UrlContextMetadata`, `UrlMetadata`, `UrlRetrievalStatus` — URL context metadata
 - `ContentModality`, `ModalityTokenCount` — token usage by modality
 - `AudioTranscriptionConfig` — audio transcription in live sessions
@@ -32,7 +33,9 @@
 - `LiveGenerativeModel` — real-time streaming model
 - `LiveSession` — bidirectional live session
 - `LiveGenerationConfig`, `SpeechConfig`, `Voice` — live generation configuration
-- `LiveServerMessage` — sealed interface for live server messages (Content, ToolCall, ToolCallCancellation, GoingAway)
+- `ContextWindowCompressionConfig`, `SlidingWindow` — live session context compression
+- `SessionResumptionConfig` — live session resumption
+- `LiveServerMessage` — sealed interface for live server messages (Content, ToolCall, ToolCallCancellation, GoingAway, SessionResumptionUpdate)
 - `FirebaseAIException` — base exception class and subclasses
 
 ## Platform Status

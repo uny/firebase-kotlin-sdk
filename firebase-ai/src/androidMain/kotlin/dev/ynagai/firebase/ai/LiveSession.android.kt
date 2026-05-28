@@ -51,6 +51,11 @@ actual class LiveSession internal constructor(
             android.sendFunctionResponse(functionList.map { it.toAndroidFunctionResponsePart() })
         }
 
+    actual suspend fun resumeSession(sessionResumption: SessionResumptionConfig?): Unit =
+        wrapAndroidException {
+            android.resumeSession(sessionResumption?.toAndroid())
+        }
+
     actual fun close() {
         CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
             runCatching { android.close() }
