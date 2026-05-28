@@ -48,6 +48,5 @@ Data classes are defined in `commonMain` (not `expect/actual`), with internal ma
 
 ## Gotchas
 
-- **Kotlin version**: Uses non-standard build (`titan`) for SwiftPM compatibility. Will update to standard after upstream support lands.
 - **Tests**: Tests are in `commonTest` source sets for each module.
 - **firebase-ai iOS**: Functional via cinterop fork, but some advanced features (image generation, audio/video, code execution, cached content) are not yet implemented.
