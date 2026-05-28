@@ -11,7 +11,6 @@ kotlin {
             implementation(libs.firebase.android.common)
         }
         commonMain.dependencies {
-            api(libs.kotlinx.datetime)
         }
     }
 }

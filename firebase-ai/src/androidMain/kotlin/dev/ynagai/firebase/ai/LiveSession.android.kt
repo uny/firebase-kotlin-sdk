@@ -53,7 +53,11 @@ actual class LiveSession internal constructor(
 
     actual suspend fun resumeSession(sessionResumption: SessionResumptionConfig?): Unit =
         wrapAndroidException {
-            android.resumeSession(sessionResumption?.toAndroid())
+            if (sessionResumption != null) {
+                android.resumeSession(sessionResumption.toAndroid())
+            } else {
+                android.resumeSession()
+            }
         }
 
     actual fun close() {
