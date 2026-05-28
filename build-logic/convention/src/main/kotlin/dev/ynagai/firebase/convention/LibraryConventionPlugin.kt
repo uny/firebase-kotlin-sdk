@@ -57,7 +57,7 @@ class LibraryConventionPlugin : Plugin<Project> {
                     }
                 }
             }
-            // Kotlin 2.4.0-Beta1 SwiftPM support attaches an artifact with classifier
+            // Kotlin's SwiftPM support attaches an artifact with classifier
             // "swiftpm-metadata" and an empty extension (trailing dot, no file type)
             // that Maven Central rejects.
             // Removing from publication.artifacts alone breaks GenerateModuleMetadata
