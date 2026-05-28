@@ -19,6 +19,32 @@ internal fun GenerationConfig.toAndroid() = androidGenerationConfig {
         responseModalities = it.map { modality -> modality.toAndroid() }
     }
     this@toAndroid.thinkingConfig?.let { thinkingConfig = it.toAndroid() }
+    this@toAndroid.imageConfig?.let { imageConfig = it.toAndroid() }
+}
+
+internal fun ImageConfig.toAndroid() = com.google.firebase.ai.type.imageConfig {
+    this@toAndroid.aspectRatio?.let {
+        aspectRatio = when (it) {
+            AspectRatio.SQUARE_1x1 -> com.google.firebase.ai.type.AspectRatio.SQUARE_1x1
+            AspectRatio.PORTRAIT_2x3 -> com.google.firebase.ai.type.AspectRatio.PORTRAIT_2x3
+            AspectRatio.LANDSCAPE_3x2 -> com.google.firebase.ai.type.AspectRatio.LANDSCAPE_3x2
+            AspectRatio.PORTRAIT_3x4 -> com.google.firebase.ai.type.AspectRatio.PORTRAIT_3x4
+            AspectRatio.LANDSCAPE_4x3 -> com.google.firebase.ai.type.AspectRatio.LANDSCAPE_4x3
+            AspectRatio.PORTRAIT_4x5 -> com.google.firebase.ai.type.AspectRatio.PORTRAIT_4x5
+            AspectRatio.LANDSCAPE_5x4 -> com.google.firebase.ai.type.AspectRatio.LANDSCAPE_5x4
+            AspectRatio.PORTRAIT_9x16 -> com.google.firebase.ai.type.AspectRatio.PORTRAIT_9x16
+            AspectRatio.LANDSCAPE_16x9 -> com.google.firebase.ai.type.AspectRatio.LANDSCAPE_16x9
+            AspectRatio.LANDSCAPE_21x9 -> com.google.firebase.ai.type.AspectRatio.LANDSCAPE_21x9
+        }
+    }
+    this@toAndroid.imageSize?.let {
+        imageSize = when (it) {
+            ImageSize.SIZE_512 -> com.google.firebase.ai.type.ImageSize.SIZE_512
+            ImageSize.SIZE_1K -> com.google.firebase.ai.type.ImageSize.SIZE_1K
+            ImageSize.SIZE_2K -> com.google.firebase.ai.type.ImageSize.SIZE_2K
+            ImageSize.SIZE_4K -> com.google.firebase.ai.type.ImageSize.SIZE_4K
+        }
+    }
 }
 
 internal fun ResponseModality.toAndroid(): AndroidResponseModality = when (this) {

@@ -68,6 +68,21 @@ actual class LiveSession internal constructor(
         }
     }
 
+    actual suspend fun resumeSession(sessionResumption: SessionResumptionConfig?) {
+        if (sessionResumption != null) {
+            await { callback ->
+                apple.resumeSessionWithSessionResumption(
+                    sessionResumption.toApple(),
+                    completionHandler = callback,
+                )
+            }
+        } else {
+            await { callback ->
+                apple.resumeSessionWithCompletionHandler(callback)
+            }
+        }
+    }
+
     actual fun close() {
         apple.closeWithCompletionHandler { }
     }

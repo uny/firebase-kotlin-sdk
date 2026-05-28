@@ -88,6 +88,26 @@ enum class FinishReason {
     SPII,
     /** Function call was malformed. */
     MALFORMED_FUNCTION_CALL,
+    /** Stopped because generated images contain safety violations. */
+    IMAGE_SAFETY,
+    /** Stopped because generated images have other prohibited content. */
+    IMAGE_PROHIBITED_CONTENT,
+    /** Stopped because of other miscellaneous image issue. */
+    IMAGE_OTHER,
+    /** The model was expected to generate an image, but none was generated. */
+    NO_IMAGE,
+    /** Image generation stopped due to recitation. */
+    IMAGE_RECITATION,
+    /** Flagged for using an unsupported language. */
+    LANGUAGE,
+    /** Model generated a tool call but no tools were enabled. */
+    UNEXPECTED_TOOL_CALL,
+    /** Model called too many tools consecutively. */
+    TOO_MANY_TOOL_CALLS,
+    /** Request has at least one thought signature missing. */
+    MISSING_THOUGHT_SIGNATURE,
+    /** Finished due to malformed response. */
+    MALFORMED_RESPONSE,
 }
 
 /**

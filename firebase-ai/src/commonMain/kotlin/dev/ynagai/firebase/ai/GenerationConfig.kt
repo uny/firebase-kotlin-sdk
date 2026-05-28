@@ -29,6 +29,7 @@ data class GenerationConfig(
     val presencePenalty: Float? = null,
     val frequencyPenalty: Float? = null,
     val thinkingConfig: ThinkingConfig? = null,
+    val imageConfig: ImageConfig? = null,
 )
 
 /**
@@ -73,6 +74,8 @@ class GenerationConfigBuilder {
     var frequencyPenalty: Float? = null
     /** Configuration for the model's thinking process. */
     var thinkingConfig: ThinkingConfig? = null
+    /** Configuration for generated images. */
+    var imageConfig: ImageConfig? = null
 
     internal fun build(): GenerationConfig = GenerationConfig(
         temperature = temperature,
@@ -87,6 +90,7 @@ class GenerationConfigBuilder {
         presencePenalty = presencePenalty,
         frequencyPenalty = frequencyPenalty,
         thinkingConfig = thinkingConfig,
+        imageConfig = imageConfig,
     )
 }
 

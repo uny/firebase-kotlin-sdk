@@ -63,6 +63,13 @@ expect class LiveSession {
     suspend fun sendFunctionResponses(functionList: List<FunctionResponsePart>)
 
     /**
+     * Resumes an existing live session with the server.
+     *
+     * @param sessionResumption Optional configuration for session resumption.
+     */
+    suspend fun resumeSession(sessionResumption: SessionResumptionConfig? = null)
+
+    /**
      * Closes the live session.
      */
     fun close()

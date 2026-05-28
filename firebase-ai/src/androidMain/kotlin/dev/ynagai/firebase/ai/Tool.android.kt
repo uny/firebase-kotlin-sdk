@@ -13,6 +13,7 @@ internal fun Tool.toAndroid(): AndroidTool = when (this) {
     is Tool.GoogleSearch -> AndroidTool.googleSearch()
     is Tool.UrlContext -> AndroidTool.urlContext()
     is Tool.CodeExecution -> AndroidTool.codeExecution()
+    is Tool.GoogleMaps -> AndroidTool.googleMaps()
 }
 
 internal fun FunctionDeclaration.toAndroid(): AndroidFunctionDeclaration {
@@ -57,7 +58,15 @@ internal fun Schema.toAndroid(): AndroidSchema = when (type) {
 
 internal fun ToolConfig.toAndroid(): AndroidToolConfig = AndroidToolConfig(
     functionCallingConfig = functionCallingConfig?.toAndroid(),
+    retrievalConfig = retrievalConfig?.toAndroid(),
 )
+
+internal fun RetrievalConfig.toAndroid() = com.google.firebase.ai.type.retrievalConfig {
+    this@toAndroid.latLng?.let {
+        latLng = com.google.firebase.ai.type.LatLng(it.latitude, it.longitude)
+    }
+    this@toAndroid.languageCode?.let { languageCode = it }
+}
 
 internal fun FunctionCallingConfig.toAndroid(): AndroidFunctionCallingConfig = when (mode) {
     FunctionCallingMode.AUTO -> AndroidFunctionCallingConfig.auto()

@@ -1,14 +1,13 @@
 [versions]
-agp = "9.1.0"
+agp = "9.1.1"
 android-compileSdk = "36"
 android-minSdk = "24"
-firebase-apple = "12.12.0"
-firebase-bom = "34.11.0"
-firebase-objc = "0.4.0"
+firebase-apple = "12.14.0"
+firebase-bom = "34.13.0"
+firebase-objc = "0.5.0"
 kotlin = "2.4.0-Beta1"
-kotlinx-coroutines = "1.10.2"
-kotlinx-datetime = "0.7.1-0.6.x-compat"
-kotlinx-serialization = "1.8.1"
+kotlinx-coroutines = "1.11.0"
+kotlinx-serialization = "1.11.0"
 publish = "0.36.0"
 androidx-test-core = "1.6.1"
 androidx-test-runner = "1.6.2"
@@ -25,7 +24,6 @@ androidx-test-runner = { module = "androidx.test:runner", version.ref = "android
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
-kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 plugin-android = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }

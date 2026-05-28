@@ -22,6 +22,7 @@ data class LiveGenerationConfig(
     val maxOutputTokens: Int? = null,
     val inputAudioTranscription: AudioTranscriptionConfig? = null,
     val outputAudioTranscription: AudioTranscriptionConfig? = null,
+    val contextWindowCompression: ContextWindowCompressionConfig? = null,
 )
 
 /**
@@ -61,6 +62,8 @@ class LiveGenerationConfigBuilder {
     var inputAudioTranscription: AudioTranscriptionConfig? = null
     /** Configuration for output audio transcription. */
     var outputAudioTranscription: AudioTranscriptionConfig? = null
+    /** Configuration for context window compression. */
+    var contextWindowCompression: ContextWindowCompressionConfig? = null
 
     internal fun build(): LiveGenerationConfig = LiveGenerationConfig(
         responseModality = responseModality,
@@ -71,6 +74,7 @@ class LiveGenerationConfigBuilder {
         maxOutputTokens = maxOutputTokens,
         inputAudioTranscription = inputAudioTranscription,
         outputAudioTranscription = outputAudioTranscription,
+        contextWindowCompression = contextWindowCompression,
     )
 }
 

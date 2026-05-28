@@ -15,6 +15,7 @@ internal fun Tool.toApple(): KFBTool = when (this) {
     is Tool.GoogleSearch -> KFBTool.googleSearchDefault()
     is Tool.UrlContext -> KFBTool.urlContext()
     is Tool.CodeExecution -> KFBTool.codeExecution()
+    is Tool.GoogleMaps -> KFBTool.googleMaps()
 }
 
 @OptIn(ExperimentalForeignApi::class)
@@ -110,7 +111,16 @@ internal fun Schema.toApple(): KFBSchema = when (type) {
 @OptIn(ExperimentalForeignApi::class)
 internal fun ToolConfig.toApple(): KFBToolConfig = KFBToolConfig(
     functionCallingConfig = functionCallingConfig?.toApple(),
+    retrievalConfig = retrievalConfig?.toApple(),
 )
+
+@OptIn(ExperimentalForeignApi::class)
+internal fun RetrievalConfig.toApple(): swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBRetrievalConfig =
+    swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBRetrievalConfig(
+        latitude = latLng?.let { platform.Foundation.NSNumber(double = it.latitude) },
+        longitude = latLng?.let { platform.Foundation.NSNumber(double = it.longitude) },
+        languageCode = languageCode,
+    )
 
 @OptIn(ExperimentalForeignApi::class)
 internal fun FunctionCallingConfig.toApple(): KFBFunctionCallingConfig = when (mode) {

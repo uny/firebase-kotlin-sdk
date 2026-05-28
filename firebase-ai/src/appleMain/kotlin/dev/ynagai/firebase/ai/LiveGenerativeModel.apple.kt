@@ -8,9 +8,13 @@ import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBLiveSession
 actual class LiveGenerativeModel internal constructor(
     internal val apple: KFBLiveGenerativeModel,
 ) {
-    actual suspend fun connect(): LiveSession {
+    actual suspend fun connect(sessionResumption: SessionResumptionConfig?): LiveSession {
         val result = awaitResult<KFBLiveSession> { callback ->
-            apple.connectWithCompletionHandler(callback)
+            if (sessionResumption != null) {
+                apple.connectWithSessionResumption(sessionResumption.toApple(), callback)
+            } else {
+                apple.connectWithCompletionHandler(callback)
+            }
         }
         return LiveSession(result)
     }

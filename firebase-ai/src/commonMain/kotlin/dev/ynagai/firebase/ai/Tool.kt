@@ -24,6 +24,9 @@ sealed class Tool {
     /** A tool that enables code execution by the model. */
     data object CodeExecution : Tool()
 
+    /** A tool that grounds the model's response with Google Maps. */
+    data object GoogleMaps : Tool()
+
     companion object {
         /** Creates a tool with the given function declarations. */
         fun functionDeclarations(declarations: List<FunctionDeclaration>): Tool =
@@ -37,6 +40,9 @@ sealed class Tool {
 
         /** Creates a tool that enables code execution by the model. */
         fun codeExecution(): Tool = CodeExecution
+
+        /** Creates a tool that grounds the model with Google Maps. */
+        fun googleMaps(): Tool = GoogleMaps
     }
 }
 
@@ -62,6 +68,29 @@ data class FunctionDeclaration(
  */
 data class ToolConfig(
     val functionCallingConfig: FunctionCallingConfig? = null,
+    val retrievalConfig: RetrievalConfig? = null,
+)
+
+/**
+ * Configuration for retrieval tools such as Google Maps grounding.
+ *
+ * @property latLng Location coordinates for personalized results.
+ * @property languageCode Language identifier for returned results.
+ */
+data class RetrievalConfig(
+    val latLng: LatLng? = null,
+    val languageCode: String? = null,
+)
+
+/**
+ * An object that represents a latitude/longitude pair.
+ *
+ * @property latitude The latitude in degrees. Range: [-90.0, +90.0].
+ * @property longitude The longitude in degrees. Range: [-180.0, +180.0].
+ */
+data class LatLng(
+    val latitude: Double,
+    val longitude: Double,
 )
 
 /**

@@ -20,7 +20,8 @@ expect class LiveGenerativeModel {
     /**
      * Connects to the server and establishes a live session.
      *
+     * @param sessionResumption Optional configuration for resuming a previous session.
      * @return A [LiveSession] for sending and receiving real-time content.
      */
-    suspend fun connect(): LiveSession
+    suspend fun connect(sessionResumption: SessionResumptionConfig? = null): LiveSession
 }
