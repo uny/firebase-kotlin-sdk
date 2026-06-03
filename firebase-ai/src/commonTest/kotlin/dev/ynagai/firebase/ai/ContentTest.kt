@@ -117,6 +117,25 @@ class ContentTest {
     }
 
     @Test
+    fun textPartDefaultsToNotThought() {
+        val part = TextPart("hello")
+        assertFalse(part.isThought)
+    }
+
+    @Test
+    fun textPartIsThought() {
+        val part = TextPart("reasoning", isThought = true)
+        assertTrue(part.isThought)
+    }
+
+    @Test
+    fun textPartInequalityWithDifferentIsThought() {
+        val a = TextPart("hello", isThought = false)
+        val b = TextPart("hello", isThought = true)
+        assertNotEquals(a, b)
+    }
+
+    @Test
     fun executableCodePartDataClassEquality() {
         val a = ExecutableCodePart(language = "PYTHON", code = "print('hi')")
         val b = ExecutableCodePart(language = "PYTHON", code = "print('hi')")

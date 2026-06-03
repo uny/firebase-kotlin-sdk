@@ -33,8 +33,12 @@ sealed interface Part
  * A text part of content.
  *
  * @property text The text content.
+ * @property isThought Whether this text is part of the model's thinking process (Gemini thinking).
  */
-data class TextPart(val text: String) : Part
+data class TextPart(
+    val text: String,
+    val isThought: Boolean = false,
+) : Part
 
 /**
  * An inline binary data part of content, used for images, audio, and video.

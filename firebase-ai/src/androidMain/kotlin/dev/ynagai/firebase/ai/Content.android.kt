@@ -24,6 +24,8 @@ internal fun Content.toAndroid(): AndroidContent {
     return androidContent(role ?: "user") {
         for (part in contentParts) {
             when (part) {
+                // isThought is response-only: the 3-arg AndroidTextPart constructor that
+                // carries it is internal in firebase-ai, so we cannot send thought back.
                 is TextPart -> text(part.text)
                 is InlineDataPart -> inlineData(part.data, part.mimeType)
                 is FileDataPart -> part(AndroidFileDataPart(part.mimeType, part.uri))
@@ -52,7 +54,7 @@ internal fun AndroidContent.toCommon(): Content = Content(
 )
 
 internal fun AndroidPart.toCommon(): Part = when (this) {
-    is AndroidTextPart -> TextPart(text)
+    is AndroidTextPart -> TextPart(text = text, isThought = isThought)
     is AndroidInlineDataPart -> InlineDataPart(mimeType, inlineData)
     is AndroidFileDataPart -> FileDataPart(mimeType, uri)
     is AndroidFunctionCallPart -> FunctionCallPart(
