@@ -73,6 +73,9 @@ internal fun AndroidLiveServerMessage.toCommon(): LiveServerMessage = when (this
             content = content?.toCommon(),
             isTurnComplete = turnComplete,
             wasInterrupted = interrupted,
+            isGenerationComplete = generationComplete,
+            inputTranscription = inputTranscription?.text,
+            outputTranscription = outputTranscription?.text,
         )
     }
     is AndroidLiveServerToolCall -> {
@@ -82,6 +85,7 @@ internal fun AndroidLiveServerMessage.toCommon(): LiveServerMessage = when (this
                     name = call.name,
                     args = call.args.mapValues { (_, v) -> v.toAny() },
                     id = call.id,
+                    isThought = call.isThought,
                 )
             },
         )
