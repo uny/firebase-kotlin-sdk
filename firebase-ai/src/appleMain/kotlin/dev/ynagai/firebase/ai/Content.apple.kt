@@ -47,7 +47,7 @@ internal fun KFBModelContent.toCommon(): Content = Content(
     role = role(),
     parts = parts()?.mapNotNull { part ->
         when (part) {
-            is KFBTextPart -> TextPart(text = part.text())
+            is KFBTextPart -> TextPart(text = part.text(), isThought = part.isThought())
             is KFBInlineDataPart -> InlineDataPart(
                 mimeType = part.mimeType(),
                 data = (part.data() as? NSData)?.toByteArray() ?: byteArrayOf(),
