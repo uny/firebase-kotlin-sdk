@@ -59,12 +59,7 @@ internal fun AndroidPart.toCommon(): Part = when (this) {
     is AndroidTextPart -> TextPart(text = text, isThought = isThought)
     is AndroidInlineDataPart -> InlineDataPart(mimeType, inlineData, displayName, isThought)
     is AndroidFileDataPart -> FileDataPart(mimeType, uri, isThought)
-    is AndroidFunctionCallPart -> FunctionCallPart(
-        name = name,
-        args = args.mapValues { (_, v) -> v.toAny() },
-        id = id,
-        isThought = isThought,
-    )
+    is AndroidFunctionCallPart -> toCommon()
     is AndroidFunctionResponsePart -> FunctionResponsePart(
         name = name,
         response = response.mapValues { (_, v) -> v.toAny() },
@@ -88,6 +83,13 @@ internal fun AndroidPart.toCommon(): Part = when (this) {
     )
     else -> throw IllegalArgumentException("Unknown AndroidPart type: ${this::class.simpleName}")
 }
+
+internal fun AndroidFunctionCallPart.toCommon(): FunctionCallPart = FunctionCallPart(
+    name = name,
+    args = args.mapValues { (_, v) -> v.toAny() },
+    id = id,
+    isThought = isThought,
+)
 
 private fun Any?.toJsonElement(): JsonElement = when (this) {
     null -> JsonNull

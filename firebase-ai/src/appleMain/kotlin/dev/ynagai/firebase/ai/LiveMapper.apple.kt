@@ -1,7 +1,6 @@
 package dev.ynagai.firebase.ai
 
 import kotlinx.cinterop.ExperimentalForeignApi
-import platform.Foundation.NSJSONSerialization
 import platform.Foundation.NSNumber
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBFunctionCallPart
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBFunctionResponsePart
@@ -85,12 +84,8 @@ internal fun KFBLiveServerMessage.toCommon(): LiveServerMessage {
     }
 
     toolCall()?.let { serverToolCall ->
-        val calls = (serverToolCall.functionCalls() as? List<KFBFunctionCallPart>)?.map { call ->
-            val args = call.argsData()?.let { data ->
-                NSJSONSerialization.JSONObjectWithData(data, 0u, null) as? Map<String, Any?>
-            } ?: emptyMap()
-            FunctionCallPart(name = call.name(), args = args, id = call.functionId(), isThought = call.isThought())
-        } ?: emptyList()
+        val calls = (serverToolCall.functionCalls() as? List<KFBFunctionCallPart>)
+            ?.map { it.toCommon() } ?: emptyList()
         return LiveServerMessage.ToolCall(functionCalls = calls)
     }
 

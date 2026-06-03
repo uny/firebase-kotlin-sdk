@@ -60,12 +60,7 @@ internal fun KFBModelContent.toCommon(): Content = Content(
                 uri = part.uri(),
                 isThought = part.isThought(),
             )
-            is KFBFunctionCallPart -> {
-                val args = part.argsData()?.let { data ->
-                    NSJSONSerialization.JSONObjectWithData(data, 0u, null) as? Map<String, Any?>
-                } ?: emptyMap()
-                FunctionCallPart(name = part.name(), args = args, id = part.functionId(), isThought = part.isThought())
-            }
+            is KFBFunctionCallPart -> part.toCommon()
             is KFBFunctionResponsePart -> {
                 val response = part.responseData()?.let { data ->
                     NSJSONSerialization.JSONObjectWithData(data, 0u, null) as? Map<String, Any?>
@@ -91,3 +86,12 @@ internal fun KFBModelContent.toCommon(): Content = Content(
         }
     } ?: emptyList(),
 )
+
+@OptIn(ExperimentalForeignApi::class)
+@Suppress("UNCHECKED_CAST")
+internal fun KFBFunctionCallPart.toCommon(): FunctionCallPart {
+    val args = argsData()?.let { data ->
+        NSJSONSerialization.JSONObjectWithData(data, 0u, null) as? Map<String, Any?>
+    } ?: emptyMap()
+    return FunctionCallPart(name = name(), args = args, id = functionId(), isThought = isThought())
+}
