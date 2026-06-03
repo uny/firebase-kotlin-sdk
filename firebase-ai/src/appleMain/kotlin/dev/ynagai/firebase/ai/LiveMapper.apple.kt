@@ -63,6 +63,7 @@ internal fun FunctionResponsePart.toAppleFunctionResponse(): KFBFunctionResponse
     KFBFunctionResponsePart(
         name = name,
         response = response as Map<Any?, *>,
+        functionId = id,
     )
 
 @OptIn(ExperimentalForeignApi::class)
