@@ -89,9 +89,12 @@ class ContentBuilder {
      *
      * @param name The name of the function to call.
      * @param args The arguments for the function call.
+     * @param id Optional id of this function call. Forward the model-provided id when echoing a
+     *           call back as conversation history so the model can correlate it — essential for
+     *           parallel calls to the same function.
      */
-    fun functionCall(name: String, args: Map<String, Any?>) {
-        parts.add(FunctionCallPart(name, args))
+    fun functionCall(name: String, args: Map<String, Any?>, id: String? = null) {
+        parts.add(FunctionCallPart(name, args, id = id))
     }
 
     /**
@@ -99,9 +102,12 @@ class ContentBuilder {
      *
      * @param name The name of the function that was called.
      * @param response The response data from the function.
+     * @param id Optional id of the [FunctionCallPart] this responds to. Forward the call's id here
+     *           so the model can correlate the response to the right call — essential for parallel
+     *           calls to the same function.
      */
-    fun functionResponse(name: String, response: Map<String, Any?>) {
-        parts.add(FunctionResponsePart(name, response))
+    fun functionResponse(name: String, response: Map<String, Any?>, id: String? = null) {
+        parts.add(FunctionResponsePart(name, response, id = id))
     }
 
     internal fun build(): List<Part> = parts.toList()
