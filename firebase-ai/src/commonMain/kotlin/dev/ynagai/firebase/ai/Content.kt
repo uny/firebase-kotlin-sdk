@@ -90,10 +90,14 @@ data class FileDataPart(
  *
  * @property name The name of the function to call.
  * @property args The arguments to pass to the function.
+ * @property id Unique identifier of this function call. Used by the model to correlate
+ *             a [FunctionResponsePart] back to the originating call — essential for parallel
+ *             calls to the same function. May be null when the backend does not provide one.
  */
 data class FunctionCallPart(
     val name: String,
     val args: Map<String, Any?> = emptyMap(),
+    val id: String? = null,
 ) : Part
 
 /**
@@ -101,10 +105,13 @@ data class FunctionCallPart(
  *
  * @property name The name of the function that was called.
  * @property response The response data from the function.
+ * @property id The id of the [FunctionCallPart] this responds to. Forward the call's id here
+ *             so the model can correlate the response to the right call.
  */
 data class FunctionResponsePart(
     val name: String,
     val response: Map<String, Any?> = emptyMap(),
+    val id: String? = null,
 ) : Part
 
 /**

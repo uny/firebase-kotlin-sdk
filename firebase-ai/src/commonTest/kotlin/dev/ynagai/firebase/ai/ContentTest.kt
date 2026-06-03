@@ -80,6 +80,33 @@ class ContentTest {
     }
 
     @Test
+    fun functionCallPartDefaultsToNullId() {
+        val part = FunctionCallPart("getWeather", mapOf("city" to "Tokyo"))
+        assertEquals(null, part.id)
+    }
+
+    @Test
+    fun functionCallPartPreservesId() {
+        val part = FunctionCallPart("getWeather", mapOf("city" to "Tokyo"), id = "call-1")
+        assertEquals("call-1", part.id)
+    }
+
+    @Test
+    fun functionCallPartInequalityWithDifferentId() {
+        val a = FunctionCallPart("getWeather", mapOf("city" to "Tokyo"), id = "call-1")
+        val b = FunctionCallPart("getWeather", mapOf("city" to "Tokyo"), id = "call-2")
+        assertNotEquals(a, b)
+    }
+
+    @Test
+    fun functionCallPartEqualityWithSameId() {
+        val a = FunctionCallPart("getWeather", mapOf("city" to "Tokyo"), id = "call-1")
+        val b = FunctionCallPart("getWeather", mapOf("city" to "Tokyo"), id = "call-1")
+        assertEquals(a, b)
+        assertEquals(a.hashCode(), b.hashCode())
+    }
+
+    @Test
     fun functionResponsePartDataClassEquality() {
         val a = FunctionResponsePart("getWeather", mapOf("temp" to 25))
         val b = FunctionResponsePart("getWeather", mapOf("temp" to 25))
@@ -91,6 +118,25 @@ class ContentTest {
     fun functionResponsePartDefaultResponse() {
         val part = FunctionResponsePart("fn")
         assertTrue(part.response.isEmpty())
+    }
+
+    @Test
+    fun functionResponsePartDefaultsToNullId() {
+        val part = FunctionResponsePart("getWeather", mapOf("temp" to 25))
+        assertEquals(null, part.id)
+    }
+
+    @Test
+    fun functionResponsePartPreservesId() {
+        val part = FunctionResponsePart("getWeather", mapOf("temp" to 25), id = "call-1")
+        assertEquals("call-1", part.id)
+    }
+
+    @Test
+    fun functionResponsePartInequalityWithDifferentId() {
+        val a = FunctionResponsePart("getWeather", mapOf("temp" to 25), id = "call-1")
+        val b = FunctionResponsePart("getWeather", mapOf("temp" to 25), id = "call-2")
+        assertNotEquals(a, b)
     }
 
     @Test

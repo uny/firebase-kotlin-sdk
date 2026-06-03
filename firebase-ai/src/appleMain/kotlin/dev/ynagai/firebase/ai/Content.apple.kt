@@ -29,10 +29,12 @@ internal fun Content.toApple(): KFBModelContent {
             is FunctionCallPart -> KFBFunctionCallPart(
                 name = part.name,
                 args = part.args as Map<Any?, *>,
+                id = part.id,
             )
             is FunctionResponsePart -> KFBFunctionResponsePart(
                 name = part.name,
                 response = part.response as Map<Any?, *>,
+                functionId = part.id,
             )
             is ExecutableCodePart -> null // Response-only part; not sent to model
             is CodeExecutionResultPart -> null // Response-only part; not sent to model
@@ -60,13 +62,13 @@ internal fun KFBModelContent.toCommon(): Content = Content(
                 val args = part.argsData()?.let { data ->
                     NSJSONSerialization.JSONObjectWithData(data, 0u, null) as? Map<String, Any?>
                 } ?: emptyMap()
-                FunctionCallPart(name = part.name(), args = args)
+                FunctionCallPart(name = part.name(), args = args, id = part.functionId())
             }
             is KFBFunctionResponsePart -> {
                 val response = part.responseData()?.let { data ->
                     NSJSONSerialization.JSONObjectWithData(data, 0u, null) as? Map<String, Any?>
                 } ?: emptyMap()
-                FunctionResponsePart(name = part.name(), response = response)
+                FunctionResponsePart(name = part.name(), response = response, id = part.functionId())
             }
             is KFBExecutableCodePart -> ExecutableCodePart(
                 language = part.language().rawValue(),

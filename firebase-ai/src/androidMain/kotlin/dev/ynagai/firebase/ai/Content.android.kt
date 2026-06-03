@@ -33,12 +33,14 @@ internal fun Content.toAndroid(): AndroidContent {
                     AndroidFunctionCallPart(
                         part.name,
                         part.args.mapValues { (_, v) -> v.toJsonElement() },
+                        part.id,
                     )
                 )
                 is FunctionResponsePart -> part(
                     AndroidFunctionResponsePart(
                         part.name,
                         JsonObject(part.response.mapValues { (_, v) -> v.toJsonElement() }),
+                        part.id,
                     )
                 )
                 is ExecutableCodePart -> {} // Response-only part; not sent to model
@@ -60,10 +62,12 @@ internal fun AndroidPart.toCommon(): Part = when (this) {
     is AndroidFunctionCallPart -> FunctionCallPart(
         name = name,
         args = args.mapValues { (_, v) -> v.toAny() },
+        id = id,
     )
     is AndroidFunctionResponsePart -> FunctionResponsePart(
         name = name,
         response = response.mapValues { (_, v) -> v.toAny() },
+        id = id,
     )
     is AndroidExecutableCodePart -> ExecutableCodePart(
         language = language,

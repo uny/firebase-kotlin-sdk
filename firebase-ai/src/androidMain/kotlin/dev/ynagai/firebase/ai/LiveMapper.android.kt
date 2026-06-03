@@ -81,6 +81,7 @@ internal fun AndroidLiveServerMessage.toCommon(): LiveServerMessage = when (this
                 FunctionCallPart(
                     name = call.name,
                     args = call.args.mapValues { (_, v) -> v.toAny() },
+                    id = call.id,
                 )
             },
         )

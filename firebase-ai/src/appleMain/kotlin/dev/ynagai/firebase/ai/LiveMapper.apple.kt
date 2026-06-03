@@ -107,7 +107,7 @@ internal fun KFBLiveServerMessage.toCommon(): LiveServerMessage {
             val args = call.argsData()?.let { data ->
                 NSJSONSerialization.JSONObjectWithData(data, 0u, null) as? Map<String, Any?>
             } ?: emptyMap()
-            FunctionCallPart(name = call.name(), args = args)
+            FunctionCallPart(name = call.name(), args = args, id = call.functionId())
         } ?: emptyList()
         return LiveServerMessage.ToolCall(functionCalls = calls)
     }
