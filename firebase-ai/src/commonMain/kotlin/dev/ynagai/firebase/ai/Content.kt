@@ -45,6 +45,10 @@ data class TextPart(
  *
  * @property mimeType The MIME type of the data (e.g., "image/png", "audio/mpeg", "video/mp4").
  * @property data The raw binary data.
+ * @property displayName An optional human-readable name for the data. Only populated on Android;
+ *                       always null on iOS, which does not expose it.
+ * @property isThought Whether this part is part of the model's thinking process (Gemini thinking).
+ *                     Response-only; ignored when sending content to the model.
  *
  * @sample
  * ```kotlin
@@ -57,6 +61,8 @@ data class TextPart(
 data class InlineDataPart(
     val mimeType: String,
     val data: ByteArray,
+    val displayName: String? = null,
+    val isThought: Boolean = false,
 ) : Part {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -64,12 +70,16 @@ data class InlineDataPart(
         other as InlineDataPart
         if (mimeType != other.mimeType) return false
         if (!data.contentEquals(other.data)) return false
+        if (displayName != other.displayName) return false
+        if (isThought != other.isThought) return false
         return true
     }
 
     override fun hashCode(): Int {
         var result = mimeType.hashCode()
         result = 31 * result + data.contentHashCode()
+        result = 31 * result + (displayName?.hashCode() ?: 0)
+        result = 31 * result + isThought.hashCode()
         return result
     }
 }
@@ -79,10 +89,13 @@ data class InlineDataPart(
  *
  * @property mimeType The MIME type of the file (e.g., "image/png", "application/pdf").
  * @property uri The URI of the file.
+ * @property isThought Whether this part is part of the model's thinking process (Gemini thinking).
+ *                     Response-only; ignored when sending content to the model.
  */
 data class FileDataPart(
     val mimeType: String,
     val uri: String,
+    val isThought: Boolean = false,
 ) : Part
 
 /**
@@ -90,10 +103,17 @@ data class FileDataPart(
  *
  * @property name The name of the function to call.
  * @property args The arguments to pass to the function.
+ * @property id Unique identifier of this function call. Used by the model to correlate
+ *             a [FunctionResponsePart] back to the originating call — essential for parallel
+ *             calls to the same function. May be null when the backend does not provide one.
+ * @property isThought Whether this part is part of the model's thinking process (Gemini thinking).
+ *                     Response-only; ignored when sending content to the model.
  */
 data class FunctionCallPart(
     val name: String,
     val args: Map<String, Any?> = emptyMap(),
+    val id: String? = null,
+    val isThought: Boolean = false,
 ) : Part
 
 /**
@@ -101,10 +121,16 @@ data class FunctionCallPart(
  *
  * @property name The name of the function that was called.
  * @property response The response data from the function.
+ * @property id The id of the [FunctionCallPart] this responds to. Forward the call's id here
+ *             so the model can correlate the response to the right call.
+ * @property isThought Whether this part is part of the model's thinking process (Gemini thinking).
+ *                     Response-only; ignored when sending content to the model.
  */
 data class FunctionResponsePart(
     val name: String,
     val response: Map<String, Any?> = emptyMap(),
+    val id: String? = null,
+    val isThought: Boolean = false,
 ) : Part
 
 /**
@@ -112,10 +138,13 @@ data class FunctionResponsePart(
  *
  * @property language The programming language of the code.
  * @property code The source code string.
+ * @property isThought Whether this part is part of the model's thinking process (Gemini thinking).
+ *                     Response-only; ignored when sending content to the model.
  */
 data class ExecutableCodePart(
     val language: String,
     val code: String,
+    val isThought: Boolean = false,
 ) : Part
 
 /**
@@ -133,8 +162,11 @@ enum class CodeExecutionOutcome {
  *
  * @property outcome The outcome of the code execution.
  * @property output The output produced by the code execution.
+ * @property isThought Whether this part is part of the model's thinking process (Gemini thinking).
+ *                     Response-only; ignored when sending content to the model.
  */
 data class CodeExecutionResultPart(
     val outcome: CodeExecutionOutcome,
     val output: String = "",
+    val isThought: Boolean = false,
 ) : Part

@@ -68,6 +68,22 @@ class ContentBuilderTest {
     }
 
     @Test
+    fun functionCallPartDefaultsToNullId() {
+        val result = content {
+            functionCall("getWeather", mapOf("city" to "Tokyo"))
+        }
+        assertEquals(null, (result.parts[0] as FunctionCallPart).id)
+    }
+
+    @Test
+    fun functionCallPartForwardsId() {
+        val result = content {
+            functionCall("getWeather", mapOf("city" to "Tokyo"), id = "call-1")
+        }
+        assertEquals("call-1", (result.parts[0] as FunctionCallPart).id)
+    }
+
+    @Test
     fun functionResponsePartIsAdded() {
         val result = content(role = "function") {
             functionResponse("getWeather", mapOf("temp" to 25))
@@ -77,6 +93,22 @@ class ContentBuilderTest {
         val part = result.parts[0] as FunctionResponsePart
         assertEquals("getWeather", part.name)
         assertEquals(mapOf<String, Any?>("temp" to 25), part.response)
+    }
+
+    @Test
+    fun functionResponsePartDefaultsToNullId() {
+        val result = content(role = "function") {
+            functionResponse("getWeather", mapOf("temp" to 25))
+        }
+        assertEquals(null, (result.parts[0] as FunctionResponsePart).id)
+    }
+
+    @Test
+    fun functionResponsePartForwardsId() {
+        val result = content(role = "function") {
+            functionResponse("getWeather", mapOf("temp" to 25), id = "call-1")
+        }
+        assertEquals("call-1", (result.parts[0] as FunctionResponsePart).id)
     }
 
     @Test

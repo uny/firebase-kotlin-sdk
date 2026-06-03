@@ -48,6 +48,22 @@ class LiveServerMessageTest {
         assertNull(message.content)
         assertEquals(false, message.isTurnComplete)
         assertEquals(false, message.wasInterrupted)
+        assertEquals(false, message.isGenerationComplete)
+        assertNull(message.inputTranscription)
+        assertNull(message.outputTranscription)
+    }
+
+    @Test
+    fun contentMessageWithTranscriptions() {
+        val message = LiveServerMessage.Content(
+            content = null,
+            isGenerationComplete = true,
+            inputTranscription = "hello there",
+            outputTranscription = "hi, how can I help?",
+        )
+        assertTrue(message.isGenerationComplete)
+        assertEquals("hello there", message.inputTranscription)
+        assertEquals("hi, how can I help?", message.outputTranscription)
     }
 
     @Test

@@ -29,10 +29,12 @@ internal fun Content.toApple(): KFBModelContent {
             is FunctionCallPart -> KFBFunctionCallPart(
                 name = part.name,
                 args = part.args as Map<Any?, *>,
+                id = part.id,
             )
             is FunctionResponsePart -> KFBFunctionResponsePart(
                 name = part.name,
                 response = part.response as Map<Any?, *>,
+                functionId = part.id,
             )
             is ExecutableCodePart -> null // Response-only part; not sent to model
             is CodeExecutionResultPart -> null // Response-only part; not sent to model
@@ -51,26 +53,24 @@ internal fun KFBModelContent.toCommon(): Content = Content(
             is KFBInlineDataPart -> InlineDataPart(
                 mimeType = part.mimeType(),
                 data = (part.data() as? NSData)?.toByteArray() ?: byteArrayOf(),
+                isThought = part.isThought(),
             )
             is KFBFileDataPart -> FileDataPart(
                 mimeType = part.mimeType(),
                 uri = part.uri(),
+                isThought = part.isThought(),
             )
-            is KFBFunctionCallPart -> {
-                val args = part.argsData()?.let { data ->
-                    NSJSONSerialization.JSONObjectWithData(data, 0u, null) as? Map<String, Any?>
-                } ?: emptyMap()
-                FunctionCallPart(name = part.name(), args = args)
-            }
+            is KFBFunctionCallPart -> part.toCommon()
             is KFBFunctionResponsePart -> {
                 val response = part.responseData()?.let { data ->
                     NSJSONSerialization.JSONObjectWithData(data, 0u, null) as? Map<String, Any?>
                 } ?: emptyMap()
-                FunctionResponsePart(name = part.name(), response = response)
+                FunctionResponsePart(name = part.name(), response = response, id = part.functionId(), isThought = part.isThought())
             }
             is KFBExecutableCodePart -> ExecutableCodePart(
                 language = part.language().rawValue(),
                 code = part.code(),
+                isThought = part.isThought(),
             )
             is KFBCodeExecutionResultPart -> CodeExecutionResultPart(
                 outcome = when (part.outcome().rawValue()) {
@@ -80,8 +80,18 @@ internal fun KFBModelContent.toCommon(): Content = Content(
                     else -> CodeExecutionOutcome.UNSPECIFIED
                 },
                 output = part.output() ?: "",
+                isThought = part.isThought(),
             )
             else -> null
         }
     } ?: emptyList(),
 )
+
+@OptIn(ExperimentalForeignApi::class)
+@Suppress("UNCHECKED_CAST")
+internal fun KFBFunctionCallPart.toCommon(): FunctionCallPart {
+    val args = argsData()?.let { data ->
+        NSJSONSerialization.JSONObjectWithData(data, 0u, null) as? Map<String, Any?>
+    } ?: emptyMap()
+    return FunctionCallPart(name = name(), args = args, id = functionId(), isThought = isThought())
+}

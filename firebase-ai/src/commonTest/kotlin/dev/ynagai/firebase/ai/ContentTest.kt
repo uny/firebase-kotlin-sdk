@@ -33,6 +33,30 @@ class ContentTest {
     }
 
     @Test
+    fun inlineDataPartDefaultsToNullDisplayNameAndNotThought() {
+        val part = InlineDataPart("image/png", byteArrayOf(1, 2, 3))
+        assertEquals(null, part.displayName)
+        assertFalse(part.isThought)
+    }
+
+    @Test
+    fun inlineDataPartInequalityWithDifferentDisplayName() {
+        val data = byteArrayOf(1, 2, 3)
+        val a = InlineDataPart("image/png", data, displayName = "a.png")
+        val b = InlineDataPart("image/png", data, displayName = "b.png")
+        assertNotEquals(a, b)
+    }
+
+    @Test
+    fun inlineDataPartInequalityWithDifferentIsThought() {
+        val data = byteArrayOf(1, 2, 3)
+        val a = InlineDataPart("image/png", data, isThought = false)
+        val b = InlineDataPart("image/png", data, isThought = true)
+        assertNotEquals(a, b)
+        assertNotEquals(a.hashCode(), b.hashCode())
+    }
+
+    @Test
     fun inlineDataPartNotEqualToNull() {
         val part = InlineDataPart("image/png", byteArrayOf(1))
         assertFalse(part.equals(null))
@@ -80,6 +104,33 @@ class ContentTest {
     }
 
     @Test
+    fun functionCallPartDefaultsToNullId() {
+        val part = FunctionCallPart("getWeather", mapOf("city" to "Tokyo"))
+        assertEquals(null, part.id)
+    }
+
+    @Test
+    fun functionCallPartPreservesId() {
+        val part = FunctionCallPart("getWeather", mapOf("city" to "Tokyo"), id = "call-1")
+        assertEquals("call-1", part.id)
+    }
+
+    @Test
+    fun functionCallPartInequalityWithDifferentId() {
+        val a = FunctionCallPart("getWeather", mapOf("city" to "Tokyo"), id = "call-1")
+        val b = FunctionCallPart("getWeather", mapOf("city" to "Tokyo"), id = "call-2")
+        assertNotEquals(a, b)
+    }
+
+    @Test
+    fun functionCallPartEqualityWithSameId() {
+        val a = FunctionCallPart("getWeather", mapOf("city" to "Tokyo"), id = "call-1")
+        val b = FunctionCallPart("getWeather", mapOf("city" to "Tokyo"), id = "call-1")
+        assertEquals(a, b)
+        assertEquals(a.hashCode(), b.hashCode())
+    }
+
+    @Test
     fun functionResponsePartDataClassEquality() {
         val a = FunctionResponsePart("getWeather", mapOf("temp" to 25))
         val b = FunctionResponsePart("getWeather", mapOf("temp" to 25))
@@ -91,6 +142,25 @@ class ContentTest {
     fun functionResponsePartDefaultResponse() {
         val part = FunctionResponsePart("fn")
         assertTrue(part.response.isEmpty())
+    }
+
+    @Test
+    fun functionResponsePartDefaultsToNullId() {
+        val part = FunctionResponsePart("getWeather", mapOf("temp" to 25))
+        assertEquals(null, part.id)
+    }
+
+    @Test
+    fun functionResponsePartPreservesId() {
+        val part = FunctionResponsePart("getWeather", mapOf("temp" to 25), id = "call-1")
+        assertEquals("call-1", part.id)
+    }
+
+    @Test
+    fun functionResponsePartInequalityWithDifferentId() {
+        val a = FunctionResponsePart("getWeather", mapOf("temp" to 25), id = "call-1")
+        val b = FunctionResponsePart("getWeather", mapOf("temp" to 25), id = "call-2")
+        assertNotEquals(a, b)
     }
 
     @Test
@@ -133,6 +203,25 @@ class ContentTest {
         val a = TextPart("hello", isThought = false)
         val b = TextPart("hello", isThought = true)
         assertNotEquals(a, b)
+    }
+
+    @Test
+    fun partsDefaultToNotThought() {
+        assertFalse(FileDataPart("application/pdf", "gs://b/f.pdf").isThought)
+        assertFalse(FunctionCallPart("fn").isThought)
+        assertFalse(FunctionResponsePart("fn").isThought)
+        assertFalse(ExecutableCodePart("PYTHON", "print('hi')").isThought)
+        assertFalse(CodeExecutionResultPart(CodeExecutionOutcome.OK).isThought)
+    }
+
+    @Test
+    fun partsPreserveIsThought() {
+        assertTrue(FunctionCallPart("fn", isThought = true).isThought)
+        assertTrue(ExecutableCodePart("PYTHON", "x", isThought = true).isThought)
+        assertNotEquals(
+            FunctionCallPart("fn", isThought = false),
+            FunctionCallPart("fn", isThought = true),
+        )
     }
 
     @Test

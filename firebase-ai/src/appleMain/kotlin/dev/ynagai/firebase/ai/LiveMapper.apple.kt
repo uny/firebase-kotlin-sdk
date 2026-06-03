@@ -1,12 +1,9 @@
 package dev.ynagai.firebase.ai
 
 import kotlinx.cinterop.ExperimentalForeignApi
-import platform.Foundation.NSData
-import platform.Foundation.NSJSONSerialization
 import platform.Foundation.NSNumber
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBFunctionCallPart
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBFunctionResponsePart
-import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBInlineDataPart
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBAudioTranscriptionConfig
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBContextWindowCompressionConfig
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBLiveGenerationConfig
@@ -15,7 +12,6 @@ import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBResponseModality
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBSessionResumptionConfig
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBSlidingWindow
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBSpeechConfig
-import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBTextPart
 
 @OptIn(ExperimentalForeignApi::class)
 internal fun LiveGenerationConfig.toApple(): KFBLiveGenerationConfig = KFBLiveGenerationConfig(
@@ -66,6 +62,7 @@ internal fun FunctionResponsePart.toAppleFunctionResponse(): KFBFunctionResponse
     KFBFunctionResponsePart(
         name = name,
         response = response as Map<Any?, *>,
+        functionId = id,
     )
 
 @OptIn(ExperimentalForeignApi::class)
@@ -73,42 +70,22 @@ internal fun FunctionResponsePart.toAppleFunctionResponse(): KFBFunctionResponse
 internal fun KFBLiveServerMessage.toCommon(): LiveServerMessage {
     // Use nullable property accessors to determine message type
     content()?.let { serverContent ->
-        val modelTurn = serverContent.modelTurn()
-        val parts = modelTurn?.parts()?.mapNotNull { part ->
-            when (part) {
-                is KFBTextPart -> TextPart(text = part.text())
-                is KFBInlineDataPart -> InlineDataPart(
-                    mimeType = part.mimeType(),
-                    data = (part.data() as? NSData)?.toByteArray() ?: byteArrayOf(),
-                )
-                is KFBFunctionCallPart -> {
-                    val args = part.argsData()?.let { data ->
-                        NSJSONSerialization.JSONObjectWithData(data, 0u, null) as? Map<String, Any?>
-                    } ?: emptyMap()
-                    FunctionCallPart(name = part.name(), args = args)
-                }
-                else -> null
-            }
-        } ?: emptyList()
-        val content = if (parts.isNotEmpty()) {
-            Content(role = modelTurn?.role(), parts = parts)
-        } else {
-            null
-        }
+        // Reuse the shared KFBModelContent mapper so every part type (and id/isThought) is
+        // preserved consistently; keep the null-when-empty semantics for content.
+        val content = serverContent.modelTurn()?.toCommon()?.takeIf { it.parts.isNotEmpty() }
         return LiveServerMessage.Content(
             content = content,
             isTurnComplete = serverContent.isTurnComplete(),
             wasInterrupted = serverContent.wasInterrupted(),
+            isGenerationComplete = serverContent.isGenerationComplete(),
+            inputTranscription = serverContent.inputAudioTranscription()?.text(),
+            outputTranscription = serverContent.outputAudioTranscription()?.text(),
         )
     }
 
     toolCall()?.let { serverToolCall ->
-        val calls = (serverToolCall.functionCalls() as? List<KFBFunctionCallPart>)?.map { call ->
-            val args = call.argsData()?.let { data ->
-                NSJSONSerialization.JSONObjectWithData(data, 0u, null) as? Map<String, Any?>
-            } ?: emptyMap()
-            FunctionCallPart(name = call.name(), args = args)
-        } ?: emptyList()
+        val calls = (serverToolCall.functionCalls() as? List<KFBFunctionCallPart>)
+            ?.map { it.toCommon() } ?: emptyList()
         return LiveServerMessage.ToolCall(functionCalls = calls)
     }
 

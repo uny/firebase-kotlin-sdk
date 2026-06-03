@@ -19,14 +19,6 @@ import com.google.firebase.ai.type.AudioTranscriptionConfig as AndroidAudioTrans
 import com.google.firebase.ai.type.SpeechConfig as AndroidSpeechConfig
 import com.google.firebase.ai.type.Voice as AndroidVoice
 import com.google.firebase.ai.type.liveGenerationConfig as androidLiveGenerationConfig
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonNull
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.booleanOrNull
-import kotlinx.serialization.json.doubleOrNull
-import kotlinx.serialization.json.longOrNull
 
 internal fun LiveGenerationConfig.toAndroid(): AndroidLiveGenerationConfig =
     androidLiveGenerationConfig {
@@ -73,16 +65,14 @@ internal fun AndroidLiveServerMessage.toCommon(): LiveServerMessage = when (this
             content = content?.toCommon(),
             isTurnComplete = turnComplete,
             wasInterrupted = interrupted,
+            isGenerationComplete = generationComplete,
+            inputTranscription = inputTranscription?.text,
+            outputTranscription = outputTranscription?.text,
         )
     }
     is AndroidLiveServerToolCall -> {
         LiveServerMessage.ToolCall(
-            functionCalls = functionCalls.map { call ->
-                FunctionCallPart(
-                    name = call.name,
-                    args = call.args.mapValues { (_, v) -> v.toAny() },
-                )
-            },
+            functionCalls = functionCalls.map { it.toCommon() },
         )
     }
     is AndroidLiveServerToolCallCancellation -> {
@@ -102,11 +92,4 @@ internal fun AndroidLiveServerMessage.toCommon(): LiveServerMessage = when (this
         )
     }
     else -> throw IllegalArgumentException("Unknown LiveServerMessage type: ${this::class.simpleName}")
-}
-
-private fun JsonElement.toAny(): Any? = when (this) {
-    is JsonNull -> null
-    is JsonPrimitive -> if (isString) content else booleanOrNull ?: longOrNull ?: doubleOrNull ?: content
-    is JsonObject -> mapValues { (_, v) -> v.toAny() }
-    is JsonArray -> map { it.toAny() }
 }

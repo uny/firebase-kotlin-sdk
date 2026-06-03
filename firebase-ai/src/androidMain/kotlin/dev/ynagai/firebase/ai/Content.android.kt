@@ -33,12 +33,14 @@ internal fun Content.toAndroid(): AndroidContent {
                     AndroidFunctionCallPart(
                         part.name,
                         part.args.mapValues { (_, v) -> v.toJsonElement() },
+                        part.id,
                     )
                 )
                 is FunctionResponsePart -> part(
                     AndroidFunctionResponsePart(
                         part.name,
                         JsonObject(part.response.mapValues { (_, v) -> v.toJsonElement() }),
+                        part.id,
                     )
                 )
                 is ExecutableCodePart -> {} // Response-only part; not sent to model
@@ -55,19 +57,19 @@ internal fun AndroidContent.toCommon(): Content = Content(
 
 internal fun AndroidPart.toCommon(): Part = when (this) {
     is AndroidTextPart -> TextPart(text = text, isThought = isThought)
-    is AndroidInlineDataPart -> InlineDataPart(mimeType, inlineData)
-    is AndroidFileDataPart -> FileDataPart(mimeType, uri)
-    is AndroidFunctionCallPart -> FunctionCallPart(
-        name = name,
-        args = args.mapValues { (_, v) -> v.toAny() },
-    )
+    is AndroidInlineDataPart -> InlineDataPart(mimeType, inlineData, displayName, isThought)
+    is AndroidFileDataPart -> FileDataPart(mimeType, uri, isThought)
+    is AndroidFunctionCallPart -> toCommon()
     is AndroidFunctionResponsePart -> FunctionResponsePart(
         name = name,
         response = response.mapValues { (_, v) -> v.toAny() },
+        id = id,
+        isThought = isThought,
     )
     is AndroidExecutableCodePart -> ExecutableCodePart(
         language = language,
         code = code,
+        isThought = isThought,
     )
     is AndroidCodeExecutionResultPart -> CodeExecutionResultPart(
         outcome = when {
@@ -77,9 +79,17 @@ internal fun AndroidPart.toCommon(): Part = when (this) {
             else -> CodeExecutionOutcome.UNSPECIFIED
         },
         output = output,
+        isThought = isThought,
     )
     else -> throw IllegalArgumentException("Unknown AndroidPart type: ${this::class.simpleName}")
 }
+
+internal fun AndroidFunctionCallPart.toCommon(): FunctionCallPart = FunctionCallPart(
+    name = name,
+    args = args.mapValues { (_, v) -> v.toAny() },
+    id = id,
+    isThought = isThought,
+)
 
 private fun Any?.toJsonElement(): JsonElement = when (this) {
     null -> JsonNull

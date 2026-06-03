@@ -81,4 +81,5 @@ private fun FunctionResponsePart.toAndroidFunctionResponsePart(): AndroidFunctio
     AndroidFunctionResponsePart(
         name = name,
         response = JsonObject(response.mapValues { (_, v) -> v.toJsonElement() }),
+        id = id,
     )
