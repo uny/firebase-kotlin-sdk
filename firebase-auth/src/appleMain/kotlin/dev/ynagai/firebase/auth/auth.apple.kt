@@ -16,7 +16,6 @@ import platform.Foundation.NSError
 import platform.Foundation.NSURL
 import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIRActionCodeSettings
 import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIRAuth
-import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIRUser
 
 @OptIn(ExperimentalForeignApi::class)
 actual val Firebase.auth: FirebaseAuth
@@ -151,7 +150,7 @@ actual class FirebaseAuth internal constructor(
     actual val authStateChanges: Flow<FirebaseUser?>
         get() = callbackFlow {
             val handle = apple.addAuthStateDidChangeListener { _, user ->
-                trySend((user as? FIRUser)?.let { FirebaseUser(it) })
+                trySend(user?.let { FirebaseUser(it) })
             }
             awaitClose { apple.removeAuthStateDidChangeListener(handle) }
         }
@@ -159,7 +158,7 @@ actual class FirebaseAuth internal constructor(
     actual val idTokenChanges: Flow<FirebaseUser?>
         get() = callbackFlow {
             val handle = apple.addIDTokenDidChangeListener { _, user ->
-                trySend((user as? FIRUser)?.let { FirebaseUser(it) })
+                trySend(user?.let { FirebaseUser(it) })
             }
             awaitClose { apple.removeIDTokenDidChangeListener(handle) }
         }
@@ -185,5 +184,5 @@ internal fun ActionCodeSettings.toApple(): FIRActionCodeSettings =
             setAndroidPackageName(it, installIfNotAvailable = androidInstallIfNotAvailable, minimumVersion = androidMinimumVersion)
         }
         iOSBundleId?.let { setIOSBundleID(it) }
-        dynamicLinkDomain?.let { setLinkDomain(it) }
+        linkDomain?.let { setLinkDomain(it) }
     }

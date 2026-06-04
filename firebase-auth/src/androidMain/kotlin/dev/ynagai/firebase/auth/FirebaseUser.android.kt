@@ -36,7 +36,7 @@ actual class FirebaseUser internal constructor(
     actual val providerData: List<UserInfo>
         get() = android.providerData.map { info ->
             UserInfo(
-                uid = info.uid ?: "",
+                uid = info.uid,
                 providerId = info.providerId,
                 displayName = info.displayName,
                 email = info.email,

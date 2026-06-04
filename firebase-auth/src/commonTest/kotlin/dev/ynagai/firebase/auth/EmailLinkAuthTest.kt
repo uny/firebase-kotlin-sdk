@@ -15,7 +15,7 @@ class EmailLinkAuthTest {
             androidInstallIfNotAvailable = true,
             androidMinimumVersion = "21",
             iOSBundleId = "com.example.app.ios",
-            dynamicLinkDomain = "example.page.link",
+            linkDomain = "example.page.link",
         )
         assertEquals("https://example.com/finishSignUp", settings.url)
         assertTrue(settings.handleCodeInApp)
@@ -23,7 +23,7 @@ class EmailLinkAuthTest {
         assertTrue(settings.androidInstallIfNotAvailable)
         assertEquals("21", settings.androidMinimumVersion)
         assertEquals("com.example.app.ios", settings.iOSBundleId)
-        assertEquals("example.page.link", settings.dynamicLinkDomain)
+        assertEquals("example.page.link", settings.linkDomain)
     }
 
     @Test
