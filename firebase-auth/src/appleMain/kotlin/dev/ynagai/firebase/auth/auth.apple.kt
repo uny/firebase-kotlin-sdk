@@ -176,13 +176,18 @@ private fun Long.toActionCodeOperation(): ActionCodeOperation = when (this) {
 }
 
 @OptIn(ExperimentalForeignApi::class)
-internal fun ActionCodeSettings.toApple(): FIRActionCodeSettings =
-    FIRActionCodeSettings().apply {
-        setURL(NSURL(string = url))
-        setHandleCodeInApp(handleCodeInApp)
-        androidPackageName?.let {
-            setAndroidPackageName(it, installIfNotAvailable = androidInstallIfNotAvailable, minimumVersion = androidMinimumVersion)
-        }
-        iOSBundleId?.let { setIOSBundleID(it) }
-        linkDomain?.let { setLinkDomain(it) }
+internal fun ActionCodeSettings.toApple(): FIRActionCodeSettings {
+    // Set values on a named local instead of `apply`: inside `apply` the FIRActionCodeSettings is the
+    // implicit receiver, so bare `handleCodeInApp`/`androidPackageName`/`linkDomain` would resolve to
+    // the native object's own properties (always unset here) rather than this settings object's values.
+    // (`url`/`iOSBundleId` happen to survive only because the native names differ: `URL`/`iOSBundleID`.)
+    val settings = FIRActionCodeSettings()
+    settings.setURL(NSURL(string = url))
+    settings.setHandleCodeInApp(handleCodeInApp)
+    androidPackageName?.let {
+        settings.setAndroidPackageName(it, installIfNotAvailable = androidInstallIfNotAvailable, minimumVersion = androidMinimumVersion)
     }
+    iOSBundleId?.let { settings.setIOSBundleID(it) }
+    linkDomain?.let { settings.setLinkDomain(it) }
+    return settings
+}
