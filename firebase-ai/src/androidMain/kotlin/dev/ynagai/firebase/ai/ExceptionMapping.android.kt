@@ -16,8 +16,8 @@ internal fun mapAndroidException(e: Throwable): Throwable = when (e) {
         val resp = e.response
         ResponseStoppedException(
             message = e.message,
-            response = resp?.toCommon(),
-            finishReason = resp?.candidates?.firstOrNull()?.finishReason?.name,
+            response = resp.toCommon(),
+            finishReason = resp.candidates.firstOrNull()?.finishReason?.name,
         )
     }
     is AndroidInvalidAPIKeyException ->

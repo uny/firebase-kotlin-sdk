@@ -17,7 +17,7 @@ class ActionCodeSettingsTest {
         assertFalse(settings.androidInstallIfNotAvailable)
         assertNull(settings.androidMinimumVersion)
         assertNull(settings.iOSBundleId)
-        assertNull(settings.dynamicLinkDomain)
+        assertNull(settings.linkDomain)
     }
 
     @Test
@@ -29,7 +29,7 @@ class ActionCodeSettingsTest {
             androidInstallIfNotAvailable = true,
             androidMinimumVersion = "21",
             iOSBundleId = "com.example.app.ios",
-            dynamicLinkDomain = "example.page.link",
+            linkDomain = "example.page.link",
         )
         assertEquals("https://example.com/action", settings.url)
         assertTrue(settings.handleCodeInApp)
@@ -37,7 +37,7 @@ class ActionCodeSettingsTest {
         assertTrue(settings.androidInstallIfNotAvailable)
         assertEquals("21", settings.androidMinimumVersion)
         assertEquals("com.example.app.ios", settings.iOSBundleId)
-        assertEquals("example.page.link", settings.dynamicLinkDomain)
+        assertEquals("example.page.link", settings.linkDomain)
     }
 
     @Test

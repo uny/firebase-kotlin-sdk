@@ -131,13 +131,15 @@ private fun Int.toActionCodeOperation(): ActionCodeOperation = when (this) {
     else -> ActionCodeOperation.UNKNOWN
 }
 
-internal fun ActionCodeSettings.toAndroid(): AndroidActionCodeSettings =
-    AndroidActionCodeSettings.newBuilder()
+internal fun ActionCodeSettings.toAndroid(): AndroidActionCodeSettings {
+    // Build setters on a named local instead of `apply`: inside `apply` the builder is the
+    // implicit receiver, so `iOSBundleId`/`linkDomain` would resolve to the builder's own
+    // getters (always unset here) rather than this settings object's values.
+    val builder = AndroidActionCodeSettings.newBuilder()
         .setUrl(url)
         .setHandleCodeInApp(handleCodeInApp)
-        .apply {
-            androidPackageName?.let { setAndroidPackageName(it, androidInstallIfNotAvailable, androidMinimumVersion) }
-            iOSBundleId?.let { setIOSBundleId(it) }
-            dynamicLinkDomain?.let { setDynamicLinkDomain(it) }
-        }
-        .build()
+    androidPackageName?.let { builder.setAndroidPackageName(it, androidInstallIfNotAvailable, androidMinimumVersion) }
+    iOSBundleId?.let { builder.setIOSBundleId(it) }
+    linkDomain?.let { builder.setLinkDomain(it) }
+    return builder.build()
+}

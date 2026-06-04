@@ -108,8 +108,8 @@ internal fun KFBCitationMetadata.toCommon(): CitationMetadata = CitationMetadata
 
 @OptIn(ExperimentalForeignApi::class)
 private fun KFBCitation.toCommon(): Citation = Citation(
-    startIndex = (startIndex() as? NSNumber)?.intValue,
-    endIndex = (endIndex() as? NSNumber)?.intValue,
+    startIndex = startIndex().toInt(),
+    endIndex = endIndex().toInt(),
     uri = uri(),
     license = license(),
 )

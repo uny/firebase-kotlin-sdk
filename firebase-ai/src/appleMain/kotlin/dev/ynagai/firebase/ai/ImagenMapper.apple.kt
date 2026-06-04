@@ -3,7 +3,6 @@
 package dev.ynagai.firebase.ai
 
 import kotlinx.cinterop.ExperimentalForeignApi
-import platform.Foundation.NSData
 import platform.Foundation.NSNumber
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBImagenAspectRatio
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBImagenGenerationConfig
@@ -72,6 +71,6 @@ internal fun KFBImagenGenerationResponse.toCommon(): ImagenGenerationResponse =
 @OptIn(ExperimentalForeignApi::class)
 internal fun KFBImagenInlineImage.toCommon(): ImagenInlineImage =
     ImagenInlineImage(
-        data = (data() as NSData).toByteArray(),
+        data = data().toByteArray(),
         mimeType = mimeType(),
     )

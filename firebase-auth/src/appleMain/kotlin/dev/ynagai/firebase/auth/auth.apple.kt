@@ -16,7 +16,6 @@ import platform.Foundation.NSError
 import platform.Foundation.NSURL
 import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIRActionCodeSettings
 import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIRAuth
-import swiftPMImport.dev.ynagai.firebase.firebase.auth.FIRUser
 
 @OptIn(ExperimentalForeignApi::class)
 actual val Firebase.auth: FirebaseAuth
@@ -151,7 +150,7 @@ actual class FirebaseAuth internal constructor(
     actual val authStateChanges: Flow<FirebaseUser?>
         get() = callbackFlow {
             val handle = apple.addAuthStateDidChangeListener { _, user ->
-                trySend((user as? FIRUser)?.let { FirebaseUser(it) })
+                trySend(user?.let { FirebaseUser(it) })
             }
             awaitClose { apple.removeAuthStateDidChangeListener(handle) }
         }
@@ -159,7 +158,7 @@ actual class FirebaseAuth internal constructor(
     actual val idTokenChanges: Flow<FirebaseUser?>
         get() = callbackFlow {
             val handle = apple.addIDTokenDidChangeListener { _, user ->
-                trySend((user as? FIRUser)?.let { FirebaseUser(it) })
+                trySend(user?.let { FirebaseUser(it) })
             }
             awaitClose { apple.removeIDTokenDidChangeListener(handle) }
         }
@@ -177,13 +176,18 @@ private fun Long.toActionCodeOperation(): ActionCodeOperation = when (this) {
 }
 
 @OptIn(ExperimentalForeignApi::class)
-internal fun ActionCodeSettings.toApple(): FIRActionCodeSettings =
-    FIRActionCodeSettings().apply {
-        setURL(NSURL(string = url))
-        setHandleCodeInApp(handleCodeInApp)
-        androidPackageName?.let {
-            setAndroidPackageName(it, installIfNotAvailable = androidInstallIfNotAvailable, minimumVersion = androidMinimumVersion)
-        }
-        iOSBundleId?.let { setIOSBundleID(it) }
-        dynamicLinkDomain?.let { setLinkDomain(it) }
+internal fun ActionCodeSettings.toApple(): FIRActionCodeSettings {
+    // Set values on a named local instead of `apply`: inside `apply` the FIRActionCodeSettings is the
+    // implicit receiver, so bare `handleCodeInApp`/`androidPackageName`/`linkDomain` would resolve to
+    // the native object's own properties (always unset here) rather than this settings object's values.
+    // (`url`/`iOSBundleId` happen to survive only because the native names differ: `URL`/`iOSBundleID`.)
+    val settings = FIRActionCodeSettings()
+    settings.setURL(NSURL(string = url))
+    settings.setHandleCodeInApp(handleCodeInApp)
+    androidPackageName?.let {
+        settings.setAndroidPackageName(it, installIfNotAvailable = androidInstallIfNotAvailable, minimumVersion = androidMinimumVersion)
     }
+    iOSBundleId?.let { settings.setIOSBundleID(it) }
+    linkDomain?.let { settings.setLinkDomain(it) }
+    return settings
+}

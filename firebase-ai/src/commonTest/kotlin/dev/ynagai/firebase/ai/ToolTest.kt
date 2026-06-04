@@ -39,7 +39,7 @@ class ToolTest {
         val decl = FunctionDeclaration(name = "fn", description = "A function")
         val tool = Tool.functionDeclarations(listOf(decl))
         assertIs<Tool.FunctionDeclarations>(tool)
-        assertEquals(1, (tool as Tool.FunctionDeclarations).declarations.size)
+        assertEquals(1, tool.declarations.size)
         assertEquals("fn", tool.declarations[0].name)
     }
 

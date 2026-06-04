@@ -82,6 +82,7 @@ expect class FirebaseAI {
      * )
      * ```
      */
+    @Suppress("DEPRECATION")
     @Deprecated(IMAGEN_DEPRECATION_MESSAGE)
     fun imagenModel(
         modelName: String,

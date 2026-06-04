@@ -16,20 +16,20 @@ class SetOptionsTest {
     fun mergeFieldsWithListReturnsCorrectFields() {
         val options = SetOptions.mergeFields(listOf("name", "age"))
         assertIs<SetOptions.MergeFields>(options)
-        assertEquals(listOf("name", "age"), (options as SetOptions.MergeFields).fields)
+        assertEquals(listOf("name", "age"), options.fields)
     }
 
     @Test
     fun mergeFieldsWithVarargsReturnsCorrectFields() {
         val options = SetOptions.mergeFields("name", "age")
         assertIs<SetOptions.MergeFields>(options)
-        assertEquals(listOf("name", "age"), (options as SetOptions.MergeFields).fields)
+        assertEquals(listOf("name", "age"), options.fields)
     }
 
     @Test
     fun mergeFieldsWithEmptyListReturnsEmptyFields() {
         val options = SetOptions.mergeFields(emptyList())
         assertIs<SetOptions.MergeFields>(options)
-        assertEquals(emptyList(), (options as SetOptions.MergeFields).fields)
+        assertEquals(emptyList(), options.fields)
     }
 }

@@ -22,6 +22,7 @@ package dev.ynagai.firebase.ai
  * }
  * ```
  */
+@Suppress("DEPRECATION")
 @Deprecated(IMAGEN_DEPRECATION_MESSAGE)
 data class ImagenGenerationConfig(
     val negativePrompt: String? = null,
@@ -42,6 +43,7 @@ annotation class ImagenGenerationConfigDsl
  *
  * @see imagenGenerationConfig
  */
+@Suppress("DEPRECATION")
 @Deprecated(IMAGEN_DEPRECATION_MESSAGE)
 @ImagenGenerationConfigDsl
 class ImagenGenerationConfigBuilder {

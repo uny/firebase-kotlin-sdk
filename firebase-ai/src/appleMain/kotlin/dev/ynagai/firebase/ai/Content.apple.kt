@@ -1,7 +1,6 @@
 package dev.ynagai.firebase.ai
 
 import kotlinx.cinterop.ExperimentalForeignApi
-import platform.Foundation.NSData
 import platform.Foundation.NSJSONSerialization
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBFileDataPart
 import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBFunctionCallPart
@@ -47,12 +46,12 @@ internal fun Content.toApple(): KFBModelContent {
 @Suppress("UNCHECKED_CAST")
 internal fun KFBModelContent.toCommon(): Content = Content(
     role = role(),
-    parts = parts()?.mapNotNull { part ->
+    parts = parts().mapNotNull { part ->
         when (part) {
             is KFBTextPart -> TextPart(text = part.text(), isThought = part.isThought())
             is KFBInlineDataPart -> InlineDataPart(
                 mimeType = part.mimeType(),
-                data = (part.data() as? NSData)?.toByteArray() ?: byteArrayOf(),
+                data = part.data().toByteArray(),
                 isThought = part.isThought(),
             )
             is KFBFileDataPart -> FileDataPart(
@@ -84,7 +83,7 @@ internal fun KFBModelContent.toCommon(): Content = Content(
             )
             else -> null
         }
-    } ?: emptyList(),
+    },
 )
 
 @OptIn(ExperimentalForeignApi::class)
