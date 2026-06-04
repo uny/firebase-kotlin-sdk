@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package dev.ynagai.firebase.ai
 
 /**
@@ -6,7 +8,6 @@ package dev.ynagai.firebase.ai
  * @property images The list of generated images.
  * @property filteredReason The reason images were filtered, if any.
  */
-@Suppress("DEPRECATION")
 @Deprecated(IMAGEN_DEPRECATION_MESSAGE)
 data class ImagenGenerationResponse(
     val images: List<ImagenInlineImage> = emptyList(),
@@ -19,7 +20,6 @@ data class ImagenGenerationResponse(
  * @property data The raw image data as a byte array.
  * @property mimeType The MIME type of the image (e.g., "image/png", "image/jpeg").
  */
-@Suppress("DEPRECATION")
 @Deprecated(IMAGEN_DEPRECATION_MESSAGE)
 data class ImagenInlineImage(
     val data: ByteArray,

@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package dev.ynagai.firebase.ai
 
 /**
@@ -12,7 +14,6 @@ package dev.ynagai.firebase.ai
  * }
  * ```
  */
-@Suppress("DEPRECATION")
 @Deprecated(IMAGEN_DEPRECATION_MESSAGE)
 sealed class ImagenImageFormat {
     /** PNG image format. */

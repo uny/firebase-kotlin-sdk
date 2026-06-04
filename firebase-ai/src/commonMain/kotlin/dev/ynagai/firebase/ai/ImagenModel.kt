@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package dev.ynagai.firebase.ai
 
 /**
@@ -12,7 +14,6 @@ package dev.ynagai.firebase.ai
  * val imageData = response.images.first().data
  * ```
  */
-@Suppress("DEPRECATION")
 @Deprecated(IMAGEN_DEPRECATION_MESSAGE)
 expect class ImagenModel {
     /**
