@@ -22,6 +22,10 @@ actual fun Firebase.ai(
 actual class FirebaseAI internal constructor(
     internal val apple: KFBFirebaseAI,
 ) {
+    // TODO(hybrid-inference): wire onDeviceConfig through once `uny/firebase-objc-sdk` publishes
+    //  a Hybrid Inference / on-device wrapper (tracked alongside spike/hybrid-inference there).
+    //  Until then, a non-null onDeviceConfig is accepted for source compatibility but has no
+    //  effect and silently falls back to in-cloud inference, matching upstream's IN_CLOUD default.
     actual fun generativeModel(
         modelName: String,
         generationConfig: GenerationConfig?,
@@ -29,6 +33,7 @@ actual class FirebaseAI internal constructor(
         systemInstruction: Content?,
         tools: List<Tool>?,
         toolConfig: ToolConfig?,
+        onDeviceConfig: OnDeviceConfig?,
     ): GenerativeModel = GenerativeModel(
         apple.generativeModelWithModelName(
             modelName = modelName,

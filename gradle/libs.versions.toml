@@ -3,7 +3,8 @@ agp = "9.2.1"
 android-compileSdk = "36"
 android-minSdk = "24"
 firebase-apple = "12.14.0"
-firebase-bom = "34.14.0"
+firebase-bom = "34.15.0"
+firebase-ai-ondevice = "16.0.0-beta03"
 firebase-objc = "0.5.0"
 kotlin = "2.4.0"
 kotlinx-coroutines = "1.11.0"
@@ -15,6 +16,7 @@ androidx-test-runner = "1.7.0"
 [libraries]
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
 firebase-android-ai = { module = "com.google.firebase:firebase-ai" }
+firebase-android-ai-ondevice = { module = "com.google.firebase:firebase-ai-ondevice", version.ref = "firebase-ai-ondevice" }
 firebase-android-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-android-common = { module = "com.google.firebase:firebase-common" }
 firebase-android-auth = { module = "com.google.firebase:firebase-auth" }

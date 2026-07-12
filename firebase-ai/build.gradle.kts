@@ -18,6 +18,9 @@ kotlin {
     sourceSets {
         androidMain.dependencies {
             implementation(libs.firebase.android.ai)
+            // Hybrid Inference (experimental, no-SLA): on-device fallback for firebase-ai.
+            // https://firebase.google.com/docs/ai-logic/hybrid/android/get-started
+            implementation(libs.firebase.android.ai.ondevice)
             implementation(libs.kotlinx.serialization.json)
         }
         commonMain.dependencies {

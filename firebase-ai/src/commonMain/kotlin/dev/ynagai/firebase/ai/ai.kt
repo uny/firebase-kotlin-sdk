@@ -52,6 +52,10 @@ expect class FirebaseAI {
      * @param generationConfig Optional configuration for content generation (temperature, max tokens, etc.).
      * @param safetySettings Optional list of safety settings to control content filtering.
      * @param systemInstruction Optional system instruction to guide the model's behavior.
+     * @param onDeviceConfig Optional [Hybrid Inference](https://firebase.google.com/docs/ai-logic/hybrid/android/get-started)
+     * configuration to opt into on-device inference. **Experimental, Android-only** (no-SLA); on
+     * Apple targets this parameter currently has no effect. Defaults to `null`, which keeps the
+     * existing in-cloud-only behavior.
      * @return A configured [GenerativeModel] instance.
      */
     fun generativeModel(
@@ -61,6 +65,7 @@ expect class FirebaseAI {
         systemInstruction: Content? = null,
         tools: List<Tool>? = null,
         toolConfig: ToolConfig? = null,
+        onDeviceConfig: OnDeviceConfig? = null,
     ): GenerativeModel
 
     /**

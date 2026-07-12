@@ -22,6 +22,7 @@ actual fun Firebase.ai(
 actual class FirebaseAI internal constructor(
     internal val android: AndroidFirebaseAI
 ) {
+    @OptIn(PublicPreviewAPI::class)
     actual fun generativeModel(
         modelName: String,
         generationConfig: GenerationConfig?,
@@ -29,15 +30,28 @@ actual class FirebaseAI internal constructor(
         systemInstruction: Content?,
         tools: List<Tool>?,
         toolConfig: ToolConfig?,
+        onDeviceConfig: OnDeviceConfig?,
     ): GenerativeModel = GenerativeModel(
-        android.generativeModel(
-            modelName = modelName,
-            generationConfig = generationConfig?.toAndroid(),
-            safetySettings = safetySettings?.map { it.toAndroid() },
-            systemInstruction = systemInstruction?.toAndroid(),
-            tools = tools?.map { it.toAndroid() },
-            toolConfig = toolConfig?.toAndroid(),
-        )
+        if (onDeviceConfig == null) {
+            android.generativeModel(
+                modelName = modelName,
+                generationConfig = generationConfig?.toAndroid(),
+                safetySettings = safetySettings?.map { it.toAndroid() },
+                systemInstruction = systemInstruction?.toAndroid(),
+                tools = tools?.map { it.toAndroid() },
+                toolConfig = toolConfig?.toAndroid(),
+            )
+        } else {
+            android.generativeModel(
+                modelName = modelName,
+                generationConfig = generationConfig?.toAndroid(),
+                safetySettings = safetySettings?.map { it.toAndroid() },
+                systemInstruction = systemInstruction?.toAndroid(),
+                tools = tools?.map { it.toAndroid() },
+                toolConfig = toolConfig?.toAndroid(),
+                onDeviceConfig = onDeviceConfig.toAndroid(),
+            )
+        }
     )
 
     @Suppress("DEPRECATION")
