@@ -55,6 +55,8 @@ kotlin {
             implementation(libs.firebase.ai)
             implementation(libs.firebase.auth)
             implementation(libs.firebase.firestore)
+            // Firebase Analytics: see "Firebase Analytics & Advertising ID" below
+            // (advertising-ID collection is opt-in via firebase-analytics-advertising).
         }
     }
 }
@@ -72,7 +74,9 @@ See each module's README for detailed usage and examples:
 
 `firebase-analytics` does **not** collect the advertising ID by default — no IDFA on
 iOS and no AAID on Android. For most apps this is the right default: analytics keeps
-working, and you avoid the App Tracking Transparency / advertising-ID surface entirely.
+working, and this Firebase Analytics configuration stays off the advertising-ID surface,
+so it needs no App Tracking Transparency prompt on its own. (Other SDKs or app code that
+use the IDFA / AdSupport APIs may still require App Tracking Transparency.)
 
 ```kotlin
 commonMain.dependencies {
