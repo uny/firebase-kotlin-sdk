@@ -23,7 +23,7 @@ kotlin {
             // 広告 ID(AAID)の収集を無効化するため play-services-ads-identifier を除外する
             // （iOS 側で IdentitySupport を外すのと対称）。収集が必要な場合は
             // firebase-analytics-advertising が再導入する。
-            implementation(libs.firebase.android.analytics) {
+            implementation(libs.firebase.android.analytics.get().module.toString()) {
                 exclude(group = "com.google.android.gms", module = "play-services-ads-identifier")
             }
         }
