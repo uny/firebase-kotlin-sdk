@@ -5,6 +5,7 @@ android-minSdk = "24"
 firebase-apple = "12.14.0"
 firebase-bom = "34.14.0"
 firebase-objc = "0.5.0"
+gms-ads-identifier = "18.2.0"
 kotlin = "2.4.0"
 kotlinx-coroutines = "1.11.0"
 kotlinx-serialization = "1.11.0"
@@ -19,6 +20,7 @@ firebase-android-analytics = { module = "com.google.firebase:firebase-analytics"
 firebase-android-common = { module = "com.google.firebase:firebase-common" }
 firebase-android-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-android-firestore = { module = "com.google.firebase:firebase-firestore" }
+play-services-ads-identifier = { module = "com.google.android.gms:play-services-ads-identifier", version.ref = "gms-ads-identifier" }
 androidx-test-core = { module = "androidx.test:core", version.ref = "androidx-test-core" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test-runner" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }

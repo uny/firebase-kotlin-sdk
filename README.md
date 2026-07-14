@@ -12,6 +12,8 @@ A Kotlin Multiplatform SDK for Firebase, with a focus on Firebase AI (Generative
 |--------|-------------|-------------|
 | `firebase-app` | Core Firebase App initialization | [![75%](https://img.shields.io/badge/-75%25-orange?style=flat-square)](/firebase-app/src/commonMain/kotlin/dev/ynagai/firebase/) |
 | `firebase-ai` | Firebase AI (Generative AI with Gemini) | [![80%](https://img.shields.io/badge/-80%25-green?style=flat-square)](/firebase-ai/src/commonMain/kotlin/dev/ynagai/firebase/ai/) |
+| `firebase-analytics` | Firebase Analytics (no advertising-ID collection by default) | [![80%](https://img.shields.io/badge/-80%25-green?style=flat-square)](/firebase-analytics/src/commonMain/kotlin/dev/ynagai/firebase/analytics/) |
+| `firebase-analytics-advertising` | Opt-in advertising-ID (IDFA/AAID) collection for `firebase-analytics` | — |
 | `firebase-auth` | Firebase Authentication | [![90%](https://img.shields.io/badge/-90%25-green?style=flat-square)](/firebase-auth/src/commonMain/kotlin/dev/ynagai/firebase/auth/) |
 | `firebase-firestore` | Cloud Firestore (real-time database) | [![80%](https://img.shields.io/badge/-80%25-green?style=flat-square)](/firebase-firestore/src/commonMain/kotlin/dev/ynagai/firebase/firestore/) |
 | `firebase-common` | Shared utilities and types | — |
@@ -34,8 +36,11 @@ firebase-kotlin-sdk = "0.10.0"
 [libraries]
 firebase-app = { module = "dev.ynagai.firebase:firebase-app", version.ref = "firebase-kotlin-sdk" }
 firebase-ai = { module = "dev.ynagai.firebase:firebase-ai", version.ref = "firebase-kotlin-sdk" }
+firebase-analytics = { module = "dev.ynagai.firebase:firebase-analytics", version.ref = "firebase-kotlin-sdk" }
 firebase-auth = { module = "dev.ynagai.firebase:firebase-auth", version.ref = "firebase-kotlin-sdk" }
 firebase-firestore = { module = "dev.ynagai.firebase:firebase-firestore", version.ref = "firebase-kotlin-sdk" }
+# Opt-in: only add if you need advertising-ID (IDFA/AAID) collection.
+firebase-analytics-advertising = { module = "dev.ynagai.firebase:firebase-analytics-advertising", version.ref = "firebase-kotlin-sdk" }
 ```
 
 ### Dependencies
@@ -62,6 +67,30 @@ See each module's README for detailed usage and examples:
 - **[Firebase AI](firebase-ai/README.md)** — Generative AI with Gemini (text generation, streaming, chat, content DSL)
 - **[Firebase Auth](firebase-auth/README.md)** — Authentication (email/password, social providers, phone, MFA)
 - **[Firebase Firestore](firebase-firestore/README.md)** — Cloud Firestore (CRUD, queries, real-time listeners, transactions)
+
+### Firebase Analytics & Advertising ID
+
+`firebase-analytics` does **not** collect the advertising ID by default — no IDFA on
+iOS and no AAID on Android. For most apps this is the right default: analytics keeps
+working, and you avoid the App Tracking Transparency / advertising-ID surface entirely.
+
+```kotlin
+commonMain.dependencies {
+    implementation(libs.firebase.analytics)
+}
+```
+
+Only if you need advertising attribution (Google Ads, remarketing audiences, etc.),
+additionally depend on `firebase-analytics-advertising`. It has no API — linking it
+is enough to enable advertising-ID collection on both platforms. If you add it, update
+your **App Store privacy** and **Play Data safety** declarations accordingly.
+
+```kotlin
+commonMain.dependencies {
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.analytics.advertising) // opt-in: enables IDFA / AAID
+}
+```
 
 ## Platform Setup
 
