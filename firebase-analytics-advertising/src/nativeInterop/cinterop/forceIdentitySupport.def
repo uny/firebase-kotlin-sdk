@@ -1,0 +1,15 @@
+# Link-only force-reference: keeps the advertising-ID support alive on iOS.
+#
+# GoogleAppMeasurementIdentitySupport is a static archive whose AdId class
+# (APMPlatformIdentitySupport) is detected by GoogleAppMeasurement at RUNTIME
+# (NSClassFromString) — there is no link-time reference to it. Without forcing
+# the symbol, Kotlin/Native's linker dead-strips the archive member and IDFA
+# collection is silently NOT enabled in the consumer binary, defeating this
+# module's sole purpose. `-u` on the class symbol forces the member to be
+# linked. Propagated to the consumer's final binary via this cinterop klib.
+#
+# NOTE: the symbol name is a GoogleAppMeasurement internal; recheck on a
+# firebase-apple version bump. If it ever disappears the consumer link fails
+# loudly (undefined symbol) rather than silently regressing.
+package = dev.ynagai.firebase.analytics.advertising.forcelink
+linkerOpts = -u _OBJC_CLASS_$_APMPlatformIdentitySupport

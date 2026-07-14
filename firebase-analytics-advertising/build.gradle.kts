@@ -17,6 +17,16 @@ kotlin {
         )
     }
 
+    // iOS: force-link the IdentitySupport AdId member so Kotlin/Native does not
+    // dead-strip it (it is only detected at runtime; nothing references it at
+    // link time). See forceIdentitySupport.def. Without this the module is a
+    // no-op on iOS and IDFA is never re-enabled.
+    listOf(iosArm64(), iosSimulatorArm64()).forEach { target ->
+        target.compilations.getByName("main").cinterops.create("forceIdentitySupport") {
+            defFile(project.file("src/nativeInterop/cinterop/forceIdentitySupport.def"))
+        }
+    }
+
     sourceSets {
         androidMain.dependencies {
             // Android の広告 ID(AAID)収集を再導入する（firebase-analytics 側で除外した分）。
