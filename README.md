@@ -96,6 +96,17 @@ commonMain.dependencies {
 }
 ```
 
+> **Android note:** the advertising ID is not *collected* by default, but the Play
+> Services measurement libraries still merge the `com.google.android.gms.permission.AD_ID`
+> manifest permission (matching Firebase's own default). If you want a fully clean
+> manifest, add the following to your **app** manifest — but be aware it also removes
+> `AD_ID` for any other SDK that legitimately needs it:
+>
+> ```xml
+> <uses-permission android:name="com.google.android.gms.permission.AD_ID"
+>     tools:node="remove" />
+> ```
+
 ## Platform Setup
 
 ### Android
