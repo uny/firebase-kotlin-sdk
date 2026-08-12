@@ -1,7 +1,16 @@
 package dev.ynagai.firebase.analytics
 
+import kotlinx.cinterop.ExperimentalForeignApi
+import swiftPMImport.dev.ynagai.firebase.firebase.analytics.FIRConsentStatusDenied
+import swiftPMImport.dev.ynagai.firebase.firebase.analytics.FIRConsentStatusGranted
+import swiftPMImport.dev.ynagai.firebase.firebase.analytics.FIRConsentTypeAdPersonalization
+import swiftPMImport.dev.ynagai.firebase.firebase.analytics.FIRConsentTypeAdStorage
+import swiftPMImport.dev.ynagai.firebase.firebase.analytics.FIRConsentTypeAdUserData
+import swiftPMImport.dev.ynagai.firebase.firebase.analytics.FIRConsentTypeAnalyticsStorage
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
+@OptIn(ExperimentalForeignApi::class)
 class FirebaseAnalyticsConsentTest {
 
     // Regression: setConsent used to be bridged through
@@ -20,5 +29,27 @@ class FirebaseAnalyticsConsentTest {
                 ConsentType.ANALYTICS_STORAGE to ConsentStatus.GRANTED,
             ),
         )
+    }
+
+    // FIRAnalytics exposes no consent getter, so the dictionary handed to
+    // setConsent cannot be read back. Pin the mapping instead: a wrong constant
+    // collapses two keys into one, and setConsent then silently drops a consent
+    // type without crashing.
+    @Test
+    fun consentTypesMapToTheirOwnAppleConstants() {
+        assertEquals<Any?>(FIRConsentTypeAdStorage, ConsentType.AD_STORAGE.toApple())
+        assertEquals<Any?>(FIRConsentTypeAdUserData, ConsentType.AD_USER_DATA.toApple())
+        assertEquals<Any?>(FIRConsentTypeAdPersonalization, ConsentType.AD_PERSONALIZATION.toApple())
+        assertEquals<Any?>(FIRConsentTypeAnalyticsStorage, ConsentType.ANALYTICS_STORAGE.toApple())
+        assertEquals(
+            ConsentType.entries.size,
+            ConsentType.entries.map { it.toApple() }.toSet().size,
+        )
+    }
+
+    @Test
+    fun consentStatusesMapToTheirOwnAppleConstants() {
+        assertEquals<Any?>(FIRConsentStatusGranted, ConsentStatus.GRANTED.toApple())
+        assertEquals<Any?>(FIRConsentStatusDenied, ConsentStatus.DENIED.toApple())
     }
 }
