@@ -31,10 +31,23 @@ class FirebaseAnalyticsConsentTest {
         )
     }
 
-    // FIRAnalytics exposes no consent getter, so the dictionary handed to
-    // setConsent cannot be read back. Pin the mapping instead: a wrong constant
-    // collapses two keys into one, and setConsent then silently drops a consent
-    // type without crashing.
+    // The dictionary is write-only from Kotlin, so pin it before it is handed
+    // over. Inverting key and value, or dropping an entry, is accepted by
+    // FIRAnalytics without crashing and silently loses every consent setting.
+    @Test
+    fun consentMapIsKeyedByTypeAndValuedByStatus() {
+        val mapped = mapOf(
+            ConsentType.AD_STORAGE to ConsentStatus.DENIED,
+            ConsentType.ANALYTICS_STORAGE to ConsentStatus.GRANTED,
+        ).toApple()
+
+        assertEquals(2, mapped.size)
+        assertEquals<Any?>(FIRConsentStatusDenied, mapped[FIRConsentTypeAdStorage])
+        assertEquals<Any?>(FIRConsentStatusGranted, mapped[FIRConsentTypeAnalyticsStorage])
+    }
+
+    // A wrong constant collapses two keys into one, so setConsent drops a
+    // consent type without crashing.
     @Test
     fun consentTypesMapToTheirOwnAppleConstants() {
         assertEquals<Any?>(FIRConsentTypeAdStorage, ConsentType.AD_STORAGE.toApple())

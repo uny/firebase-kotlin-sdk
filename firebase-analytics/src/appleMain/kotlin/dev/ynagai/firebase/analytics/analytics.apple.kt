@@ -69,19 +69,23 @@ actual class FirebaseAnalytics internal constructor() {
     }
 
     actual fun setConsent(consentSettings: Map<ConsentType, ConsentStatus>) {
-        FIRAnalytics.setConsent(
-            buildMap<Any?, Any> {
-                consentSettings.forEach { (type, status) ->
-                    put(type.toApple(), status.toApple())
-                }
-            },
-        )
+        FIRAnalytics.setConsent(consentSettings.toApple())
     }
 
     actual fun setSessionTimeoutDuration(milliseconds: Long) {
         FIRAnalytics.setSessionTimeoutInterval(milliseconds.toDouble() / 1000.0)
     }
 }
+
+// FIRAnalytics exposes no consent getter, so the dictionary handed to
+// setConsent cannot be read back. Kept separate so appleTest can assert on it.
+@OptIn(ExperimentalForeignApi::class)
+internal fun Map<ConsentType, ConsentStatus>.toApple(): Map<Any?, Any> =
+    buildMap<Any?, Any> {
+        this@toApple.forEach { (type, status) ->
+            put(type.toApple(), status.toApple())
+        }
+    }
 
 @OptIn(ExperimentalForeignApi::class)
 internal fun ConsentType.toApple(): Any = when (this) {
