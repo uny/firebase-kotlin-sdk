@@ -31,7 +31,7 @@ Add to your `gradle/libs.versions.toml`:
 
 ```toml
 [versions]
-firebase-kotlin-sdk = "0.11.0"
+firebase-kotlin-sdk = "0.11.1"
 
 [libraries]
 firebase-app = { module = "dev.ynagai.firebase:firebase-app", version.ref = "firebase-kotlin-sdk" }
