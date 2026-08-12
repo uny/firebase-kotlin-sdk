@@ -2,14 +2,8 @@ package dev.ynagai.firebase.analytics
 
 import dev.ynagai.firebase.Firebase
 import dev.ynagai.firebase.FirebaseApp
-import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.suspendCancellableCoroutine
-import platform.Foundation.NSClassFromString
-import platform.Foundation.NSDictionary
-import platform.Foundation.NSSelectorFromString
-import platform.Foundation.dictionaryWithDictionary
-import platform.darwin.NSObject
 import swiftPMImport.dev.ynagai.firebase.firebase.analytics.FIRAnalytics
 import swiftPMImport.dev.ynagai.firebase.firebase.analytics.FIRConsentStatusDenied
 import swiftPMImport.dev.ynagai.firebase.firebase.analytics.FIRConsentStatusGranted
@@ -17,6 +11,7 @@ import swiftPMImport.dev.ynagai.firebase.firebase.analytics.FIRConsentTypeAdPers
 import swiftPMImport.dev.ynagai.firebase.firebase.analytics.FIRConsentTypeAdStorage
 import swiftPMImport.dev.ynagai.firebase.firebase.analytics.FIRConsentTypeAdUserData
 import swiftPMImport.dev.ynagai.firebase.firebase.analytics.FIRConsentTypeAnalyticsStorage
+import swiftPMImport.dev.ynagai.firebase.firebase.analytics.setConsent
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -74,28 +69,18 @@ actual class FirebaseAnalytics internal constructor() {
     }
 
     actual fun setConsent(consentSettings: Map<ConsentType, ConsentStatus>) {
-        val mapped = buildMap<Any?, Any> {
-            consentSettings.forEach { (type, status) ->
-                put(type.toApple(), status.toApple())
-            }
-        }
-        setConsentInternal(mapped)
+        FIRAnalytics.setConsent(
+            buildMap<Any?, Any> {
+                consentSettings.forEach { (type, status) ->
+                    put(type.toApple(), status.toApple())
+                }
+            },
+        )
     }
 
     actual fun setSessionTimeoutDuration(milliseconds: Long) {
         FIRAnalytics.setSessionTimeoutInterval(milliseconds.toDouble() / 1000.0)
     }
-}
-
-// setConsent is defined in FIRAnalytics+Consent ObjC category which doesn't
-// generate cinterop bindings in appleMain. Bridge via ObjC runtime reflection.
-@OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
-internal fun setConsentInternal(consentSettings: Map<Any?, Any>) {
-    val cls = NSClassFromString("FIRAnalytics") as? NSObject ?: return
-    val sel = NSSelectorFromString("setConsent:")
-    if (!cls.respondsToSelector(sel)) return
-    val dict = NSDictionary.dictionaryWithDictionary(consentSettings)
-    cls.performSelector(sel, withObject = dict)
 }
 
 @OptIn(ExperimentalForeignApi::class)
