@@ -69,7 +69,8 @@ expect class FirebaseAI {
      * @param modelName The name of the Imagen model to use (e.g., "imagen-3.0-generate-002").
      * @param generationConfig Optional configuration for image generation.
      * @param safetySettings Optional safety settings for image generation.
-     * @return A configured [ImagenModel] instance.
+     * @return A configured [ImagenModel] instance. On Apple platforms its
+     *   [ImagenModel.generateImages] always throws [FirebaseAIException].
      *
      * @sample
      * ```kotlin
