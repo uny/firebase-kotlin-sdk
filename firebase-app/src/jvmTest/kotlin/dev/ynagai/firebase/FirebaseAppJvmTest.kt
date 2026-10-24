@@ -28,7 +28,24 @@ class FirebaseAppJvmTest {
     fun initializeTwiceWithSameNameFails() = runTest {
         val name = "jvm-test-duplicate"
         val app = Firebase.initialize(options = options, name = name)
-        assertFailsWith<IllegalStateException> { Firebase.initialize(options = options, name = name) }
-        app.delete()
+        try {
+            assertFailsWith<IllegalStateException> { Firebase.initialize(options = options, name = name) }
+        } finally {
+            app.delete()
+        }
+    }
+
+    @Test
+    fun deletingStaleInstanceKeepsNewerAppWithSameName() = runTest {
+        val name = "jvm-test-stale-delete"
+        val stale = Firebase.initialize(options = options, name = name)
+        stale.delete()
+        val current = Firebase.initialize(options = options, name = name)
+        try {
+            stale.delete()
+            assertEquals(current, Firebase.app(name))
+        } finally {
+            current.delete()
+        }
     }
 }

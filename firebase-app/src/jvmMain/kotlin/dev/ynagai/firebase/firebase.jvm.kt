@@ -32,6 +32,6 @@ actual class FirebaseApp internal constructor(
     actual val options: FirebaseOptions,
 ) {
     actual suspend fun delete() {
-        synchronized(apps) { apps.remove(name) }
+        synchronized(apps) { apps.remove(name, this) }
     }
 }

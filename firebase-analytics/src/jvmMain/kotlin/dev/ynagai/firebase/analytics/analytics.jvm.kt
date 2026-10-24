@@ -7,13 +7,13 @@ import dev.ynagai.firebase.app
 // JVM has no official Firebase client SDK. This target is a no-op fake intended for desktop
 // previews and tests: every call is accepted and nothing is recorded or sent.
 
+// Like the Android SDK, the default instance requires an initialized default app.
 actual val Firebase.analytics: FirebaseAnalytics
-    get() = FirebaseAnalytics(app)
+    get() = app.let { FirebaseAnalytics() }
 
-actual fun Firebase.analytics(app: FirebaseApp): FirebaseAnalytics = FirebaseAnalytics(app)
+actual fun Firebase.analytics(app: FirebaseApp): FirebaseAnalytics = FirebaseAnalytics()
 
-@Suppress("UNUSED_PARAMETER")
-actual class FirebaseAnalytics internal constructor(app: FirebaseApp) {
+actual class FirebaseAnalytics internal constructor() {
     actual fun logEvent(name: String, params: Map<String, Any>?) = Unit
 
     actual fun setUserId(id: String?) = Unit

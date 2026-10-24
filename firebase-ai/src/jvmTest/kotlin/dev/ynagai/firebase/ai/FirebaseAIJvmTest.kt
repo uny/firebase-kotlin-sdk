@@ -17,13 +17,15 @@ class FirebaseAIJvmTest {
             options = FirebaseOptions(apiKey = "fake-api-key", applicationId = "fake-app-id"),
             name = "jvm-test-ai",
         )
-        val model = Firebase.ai(app).generativeModel("gemini-test")
+        try {
+            val model = Firebase.ai(app).generativeModel("gemini-test")
 
-        val error = assertFailsWith<FirebaseAIException> { model.generateContent("hello") }
-        assertEquals(FirebaseAIErrorType.INTERNAL, error.errorType)
-        assertFailsWith<FirebaseAIException> { model.generateContentStream("hello").collect() }
-        assertFailsWith<FirebaseAIException> { model.startChat().sendMessage("hello") }
-
-        app.delete()
+            val error = assertFailsWith<FirebaseAIException> { model.generateContent("hello") }
+            assertEquals(FirebaseAIErrorType.INTERNAL, error.errorType)
+            assertFailsWith<FirebaseAIException> { model.generateContentStream("hello").collect() }
+            assertFailsWith<FirebaseAIException> { model.startChat().sendMessage("hello") }
+        } finally {
+            app.delete()
+        }
     }
 }
