@@ -2,18 +2,14 @@
 
 package dev.ynagai.firebase.ai
 
-import kotlinx.cinterop.ExperimentalForeignApi
-import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBImagenGenerationResponse
-import swiftPMImport.dev.ynagai.firebase.firebase.ai.KFBImagenModel
-
-@OptIn(ExperimentalForeignApi::class)
-actual class ImagenModel internal constructor(
-    internal val apple: KFBImagenModel,
-) {
-    actual suspend fun generateImages(prompt: String): ImagenGenerationResponse {
-        val result = awaitResult<KFBImagenGenerationResponse> { callback ->
-            apple.generateImagesWithPrompt(prompt, completionHandler = callback)
-        }
-        return result.toCommon()
-    }
+/**
+ * FirebaseAILogic 12.18.0 removed the Imagen API, so there is no native model to call on
+ * Apple platforms. [generateImages] always throws.
+ */
+actual class ImagenModel internal constructor() {
+    actual suspend fun generateImages(prompt: String): ImagenGenerationResponse =
+        throw FirebaseAIException(
+            "Imagen is not available on Apple platforms: FirebaseAILogic removed the Imagen API " +
+                "after the Imagen models were shut down. Use Gemini image generation instead.",
+        )
 }

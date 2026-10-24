@@ -50,4 +50,4 @@ Data classes are defined in `commonMain` (not `expect/actual`), with internal ma
 ## Gotchas
 
 - **Tests**: Tests are in `commonTest` source sets for each module.
-- **firebase-ai iOS**: Functional via cinterop fork, but some advanced features (image generation, audio/video, code execution, cached content) are not yet implemented.
+- **firebase-ai iOS**: Functional via cinterop fork, but some advanced features (audio/video, code execution, cached content) are not yet implemented. Imagen is unavailable on Apple for good (FirebaseAILogic 12.18.0 removed it); `ImagenModel.generateImages` throws there.

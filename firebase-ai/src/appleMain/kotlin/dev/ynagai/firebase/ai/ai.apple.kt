@@ -46,14 +46,7 @@ actual class FirebaseAI internal constructor(
         modelName: String,
         generationConfig: ImagenGenerationConfig?,
         safetySettings: ImagenSafetySettings?,
-    ): ImagenModel = ImagenModel(
-        apple.imagenModelWithModelName(
-            modelName = modelName,
-            generationConfig = generationConfig?.toApple(),
-            safetySettings = safetySettings?.toApple(),
-            requestOptions = null,
-        ),
-    )
+    ): ImagenModel = ImagenModel()
 
     actual fun liveModel(
         modelName: String,
