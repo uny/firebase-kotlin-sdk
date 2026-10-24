@@ -26,7 +26,7 @@
 - `UrlContextMetadata`, `UrlMetadata`, `UrlRetrievalStatus` — URL context metadata
 - `ContentModality`, `ModalityTokenCount` — token usage by modality
 - `AudioTranscriptionConfig` — audio transcription in live sessions
-- `ImagenModel` (**deprecated**) — image generation using Imagen
+- `ImagenModel` (**deprecated**) — image generation using Imagen; Android only (on Apple, `generateImages` always throws because FirebaseAILogic 12.18.0 removed Imagen)
 - `ImagenGenerationConfig`, `ImagenImageFormat` (**deprecated**) — image generation configuration
 - `ImagenSafetySettings`, `ImagenSafetyFilterLevel`, `ImagenPersonFilterLevel` (**deprecated**) — image safety filtering
 - `ImagenGenerationResponse`, `ImagenInlineImage` (**deprecated**) — image generation response

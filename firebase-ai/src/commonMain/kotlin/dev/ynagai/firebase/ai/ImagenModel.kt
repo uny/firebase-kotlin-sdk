@@ -5,6 +5,9 @@ package dev.ynagai.firebase.ai
  *
  * Obtain an instance using [FirebaseAI.imagenModel].
  *
+ * On Apple platforms [generateImages] always throws [FirebaseAIException]:
+ * FirebaseAILogic 12.18.0 removed the Imagen API.
+ *
  * @sample
  * ```kotlin
  * val model = Firebase.ai().imagenModel("imagen-3.0-generate-002")
