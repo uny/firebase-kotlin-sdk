@@ -22,6 +22,11 @@ A Kotlin Multiplatform SDK for Firebase, with a focus on Firebase AI (Generative
 
 - Android
 - iOS (arm64, simulatorArm64)
+- JVM (`firebase-app`, `firebase-ai`, `firebase-analytics` only) — **a fake, not a Firebase client.**
+  Firebase has no official JVM client SDK, so the JVM target exists only so that apps can add a
+  `jvm()` target for desktop previews (e.g. Compose Hot Reload) and JVM tests. `firebase-app` keeps
+  initialized apps in memory, `firebase-analytics` accepts every call and does nothing, and every
+  `firebase-ai` request fails with `FirebaseAIException` (`errorType = internalError`).
 
 ## Installation
 

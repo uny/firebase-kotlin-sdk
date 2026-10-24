@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     id("dev.ynagai.firebase.library")
 }
@@ -5,6 +7,13 @@ plugins {
 kotlin {
     androidLibrary {
         namespace = "dev.ynagai.firebase.analytics"
+    }
+
+    // No official Firebase client exists for JVM; jvmMain is a fake for desktop previews and tests.
+    jvm {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_21)
+        }
     }
 
     swiftPMDependencies {
