@@ -44,4 +44,12 @@ jobs:
         run: ./gradlew assemble check --build-cache
 
       - name: Check SwiftPM lock is unchanged
-        run: git diff --exit-code -- .swiftpm-locks
+        run: |
+          # Untracked files count too: a new lock bucket must be committed as well.
+          changes=$(git status --porcelain -- .swiftpm-locks)
+          if [ -n "$changes" ]; then
+            echo "$changes"
+            git diff -- .swiftpm-locks
+            echo "::error::The build changed .swiftpm-locks. Regenerate the lock with ./gradlew fetchSyntheticImportProjectPackages --no-parallel and commit it."
+            exit 1
+          fi
