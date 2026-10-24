@@ -18,7 +18,13 @@ local.properties
 xcuserdata/
 DerivedData/
 .swiftpm/
-.swiftpm-locks/
+# .swiftpm-locks/ is committed on purpose: it holds the Kotlin Gradle plugin's shared SwiftPM
+# lock (Package.resolved), which pins firebase-ios-sdk so fresh checkouts and CI resolve the same
+# graph as local builds. Its own .gitignore excludes the checkout. Only Package.resolved is
+# load-bearing; the manifests and stub sources below are regenerated on every build.
+.swiftpm-locks/*/swiftImport/Package.swift
+.swiftpm-locks/*/swiftImport/Sources/
+.swiftpm-locks/*/swiftImport/subpackages/
 Pods/
 .build/
 

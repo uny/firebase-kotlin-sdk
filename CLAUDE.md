@@ -45,6 +45,7 @@ Data classes are defined in `commonMain` (not `expect/actual`), with internal ma
 - cinterop bindings: `swiftPMImport.firebase.kotlin.sdk...`
 - ObjC naming: watch for prefixes (`FIR`, `KFB`)
 - `firebase-ai` iOS uses a **fork** of firebase-ios-sdk that exposes ObjC headers for Vertex AI
+- SwiftPM lock: `.swiftpm-locks/default/swiftImport/Package.resolved` (shared by all modules; KGP ignores per-module `Package.resolved`). After bumping `firebase-apple` / `firebase-objc`, run `./gradlew fetchSyntheticImportProjectPackages --no-parallel` and commit the updated lock — CI fails if the build changes it
 
 ## Gotchas
 
